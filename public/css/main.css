@@ -1,0 +1,31 @@
+﻿        .btnAccordChooseOper {
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: 0.4s;
+        }
+
+        button {
+            background: transparent;
+            border: none;
+        }
+
+        span {
+            cursor: default;
+            border: none;
+        }
+
+   .pTextCollector {
+    text-indent: 20px;  
+   }
+
+body {
+  font-family: Verdana;
+    font-size: 13px;
+}
+   form {
+    border: 1px solid black; /* Невидимая рамка */
+   }
+

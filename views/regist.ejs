@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%=title %></title>
+</head>
+
+<body>
+    <a href="/">Главная страница</a><br>
+    <a href="/login">Вход</a><br>
+
+    <p><%=message %></p>
+    <form action="http://localhost:8000/registration/" method="POST">
+        <input type="email" name="email" placeholder="Введите e-mail:" required /><br>
+        <input type='password' name="password" placeholder="Введите пароль"
+            pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required><br>
+        <input type='password' placeholder="Введите пароль ещё раз"
+            pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required><br>
+        <input type="submit" id='btn1' value="Регистрация">
+        <input type="reset" id='btn2' value="Очистить">
+    </form>
+    <br><br>
+    <footer>&copy;SmartMedInterface</footer>
+    <script src="/js/regist.js" defer></script>
+</body>
+<html>

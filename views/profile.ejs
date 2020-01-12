@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%=title %></title>
+</head>
+<body>
+    <a href="/">Главная страница</a><br>
+    <a href="/programs">Программы</a><br>
+    <a href="/logout">Logout</a><br>
+    <p><%=message %></p>
+    <form action="#">
+                <input id="name" placeholder="Имя" pattern="^[А-Я][а-яА-Я0-9-_\.]{1,20}$" required><br><br>
+                <input id="patronymic" placeholder="Отчество" pattern="^[А-Я][а-яА-Я0-9-_\.]{1,20}$" required><br><br>
+                <input id="surname" placeholder="Фамилия" pattern="^[А-Я][а-яА-Я0-9-_\.]{1,20}$" required><br><br>
+                <input id="chief" placeholder="Руководитель"><br><br>
+                <textarea id="org" placeholder="Название организации" data-tooltip="Всплывающая подсказка" ></textarea><br>
+                <textarea id="depart" placeholder="Название подразделения"></textarea><br><br>
+                </div>
+
+                <input type="submit" id='btn1' value="Принять">
+                <input type="reset" id='btn2' value="Очистить форму">
+            </form>
+            <input type="button" id='btn3' value="Редактировать профиль"><br>
+            <input type="button" id='btn4' value="Удалить профиль">        
+            <br><br>
+    <footer>&copy;SmartMedInterface</footer>
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/js/profile.js" defer></script>
+</body>
+<html>

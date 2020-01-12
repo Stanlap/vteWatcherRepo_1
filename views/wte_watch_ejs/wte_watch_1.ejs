@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%=title %></title>
+</head>
+<body>
+    <!-- <a href="/">Главная страница</a><br> -->
+    <a href="/programs">Программы</a><br>
+    <a href="/logout">Logout</a><br>
+    <p><%=message %></p>
+
+    <div id='divProfileOfPatient'>
+        Антропометрические данные пациента:<br><br>
+        <!--        Возраст <input type='number' id='age'><br>-->
+        Дата рождения <input type='date' id='dateOfBirth'><br>
+        Вес <input type='number' id='weight'><br>
+        Рост <input type='number' id='height'><br>
+        <label for='chkMale'><input type='checkbox' id='chkMale'> мужской пол </label>
+        <p>Медицинский профиль пациента:</p>
+        <select id='slctMedicalProfileOfPatient' multiple>
+            <option value='1'>Терапия</option>
+            <option value='2'>Фибрилляция предсердий</option>
+            <option value='3'>Общая хирургия</option>
+            <option value='4'>Травматология и ортопедия</option>
+            <option value='5'>Нейрохирургия</option>
+            <option value='6'>Сердечно-сосудистая хирургия</option>
+            <option value='7'>Урология</option>
+            <option value='8'>Комбустиология</option>
+            <option value='9'>Онкология</option>
+            <option value='10'>Акушерство и гинекология</option>
+            <option value='11' hidden>пусто</option>
+        </select>
+        <div id='divObstOrGynProfile' hidden>
+            <p>Профиль пациента в рамках специальности:</p>
+            <label for='rdoObstProfile' class='clsObstRFOrGynProfile'> <input type='radio' name='rdoObstOrGynProfile' id='rdoObstProfile' value='0'> Акушерский <br></label>
+            <label for='rdoGynProfile' class='clsObstRFOrGynProfile'> <input type='radio' name='rdoObstOrGynProfile' id='rdoGynProfile' value='1'> Гинекологический <br></label>
+        </div>
+        <div id='divPregnancyOrChildbirth' hidden>
+            <p>Период наблюдения женщины:</p>
+            <label for='rdoPregnancyPeriod' class='lblPregnancyOrChildbirth'> <input type='radio' name='rdoPregnancyOrChildbirth' id='rdoPregnancyPeriod' value='0'> беременность </label>
+            <input type='number' id='inpWeekOfPregnancy' placeholder='срок в неделях' hidden> <br>
+            <label for='rdoChildbirthPeriod' class='lblPregnancyOrChildbirth'>
+                <input type='radio' name='rdoPregnancyOrChildbirth' id='rdoChildbirthPeriod' value='1'> роды и ранний послеродовый период<br><br></label>
+            <div id='divDateOfChildbirth' hidden>
+                Дата родов:
+                <button id='btnChildbirthYesterday'>Вчера</button>
+                <button id='btnChildbirthToday'>Сегодня</button>
+                <button id='btnChildbirthSomeDate'>Другая дата:</button>
+                <input type='date' id='inpDateOfChildbirth' hidden>
+            </div>
+        </div><br>
+        <label for='chkIsOrNoSurg' class='lblIsOrNoSurg' hidden><input type='checkbox' id='chkIsOrNoSurg'> Оперативное лечение:<br></label>
+        <div id='divChooseKindOfOper' hidden>
+            <p>Выбрать операцию:</p>
+            <button class='btnAccordChooseOper btnGenSurgOper' hidden>Общая хирургия</button>
+            <div class='divGenSurgOper' hidden>
+                <select size='15' multiple>
+                    <option value='0'> плановая холецистэктомия</option>
+                    <option value='0'> неосложненная аппендэктомия</option>
+                    <option value='0'> грыжесечение</option>
+                    <option value='1'> гастрэктомия</option>
+                    <option value='1'> резекция печени</option>
+                    <option value='1'> панкреатодуоденальная резекция</option>
+                    <option value='1'></option>
+                    <option value='1'> колэктомия</option>
+                    <option value='1'> резекция желудка или кишечника</option>
+                    <option value='1'> осложненная аппендэктомия</option>
+                    <option value='1'> холецистэктомия по экстренным показаниям</option>
+                    <option value='1'> пульмонэктомия или расширенная резекция легкого</option>
+                    <option value='1'> ампутация бедра</option>
+                    <option value='1'> бариатрические операции</option>
+                    <option value='1'> лапароскопическое вмешательство (длительностью &gt; 45 мин.)</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnTraumOrthOper' hidden>Травматология и ортопедия</button>
+            <div class='divTraumOrthOper' hidden>
+                <select size='9' multiple>
+                    <option value='1'> ампутация бедра</option>
+                    <option value='0'> вмешательство по поводу деформации стопы</option>
+                    <option value='2'> эндоскопические операции на суставах нижней конечности</option>
+                    <option value='0'> операции на мягких тканях нижних конечностей с последующей иммобилизацией</option>
+                    <option value='1'> остеотомии и остеосинтез таза</option>
+                    <option value='1'> остеотомии и остеосинтез голени</option>
+                    <option value='3'> эндопротезирование тазобедренного, коленного суставов</option>
+                    <option value='3'> операции при переломах бедра</option>
+                    <option value='1'> операции на позвоночном столбе</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnNeurosurgOper' hidden>Нейрохирургия</button>
+            <div class='divNeurosurgOper' hidden>
+                <select size='2' multiple>
+                    <option value='1'> операции на головном и спинном мозге</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnCardiovascOper' hidden>Сердечно-сосудистая хирургия</button>
+            <div class='divCardiovascOper' hidden>
+                <select size='6' multiple>
+                    <option value='0'> флебэктомия</option>
+                    <option value='0'> стволовая лазерная или радиочастотная облитерация</option>
+                    <option value='0'> кроссэктомия при восходящем тромбофлебите поверхностных вен</option>
+                    <option value='1'> артериальная реконструкция</option>
+                    <option value='1'> аорто-коронарное шунтирование</option>
+                    <option value='1'> другая операция на сердце</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnUrolOper' hidden>Урология</button>
+            <div class='divUrolOper' hidden>
+                <select size='4' multiple>
+                    <option value='0'> трансуретральная аденомэктомия</option>
+                    <option value='1'> чреспузырная аденомэктомия</option>
+                    <option value='1'> экстирпация мочевого пузыря</option>
+                    <option value='1'> нефрэктомия с лимфоаденэктомией и/или удалением опухолевого тромба из нижней полой вены</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnCombustOper' hidden>Комбустиология</button>
+            <div class='divCombustOper' hidden>
+                <select size='4' multiple>
+                    <option value='0'> некрэктомия ожоговых ран на площади до 10% поверхности тела</option>
+                    <option value='0'> аутодермопластика до 15% поверхности тела</option>
+                    <option value='1'> некрэктомия ожоговых ран на площади свыше 10% поверхности тела</option>
+                    <option value='1'> аутодермопластика свыше 15% поверхности тела</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper' hidden>Онкология</button>
+            <button class='btnAccordChooseOper btnObsGynOper' hidden>Акушерство и гинекология</button>
+            <div class='divObsGynOper' hidden>
+                <select size='4' multiple>
+                    <option value='0'> аборт</option>
+                    <option value='1'> кесарево сечение плановое </option>
+                    <option value='1'> кесарево сечение в родах</option>
+                    <option value='1'> ампутация матки</option>
+                    <option value='1'> экстирпация матки</option>
+                </select>
+            </div>
+        </div><br>
+        <div id='divCreateKindOfOper' hidden>
+            <label for='chkCreateKindOfOper' class='lblCreateKindOfOper'> <input type='checkbox' id='chkCreateKindOfOper'> Создать профиль операции самостоятельно:<br><br></label>
+        </div>
+        <div id='divSmallOrLargeOper' hidden>
+            <label for='rdoSmallOper' class='lblSmallOrLargeOper'>
+                <input type='radio' name='rdoSmallOrLargeOper' id='rdoSmallOper' value='0'>Малая <span>&hellip;</span><span class='comments' hidden> Может быть проведена без госпитализации больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной травмы.</span><br></label>
+            <label for='rdoLargeOper' class='lblSmallOrLargeOper'><input type='radio' name='rdoSmallOrLargeOper' id='rdoLargeOper' value='1'>Большая <span>&hellip;</span><span class='comments' hidden> Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут</span><br></label>
+        </div>
+        <label for='chkTimeOfSurg' class='lblTimeOfSurg' hidden><input type='checkbox' id='chkTimeOfSurg' value='1000000000000000'> длительность операции &gt; 60 минут<br></label>
+
+            <div id='divDateOfOper' hidden>
+                Дата операции:
+                <button id='btnOperYesterday'>Вчера</button>
+                <button id='btnOperToday'>Сегодня</button>
+                <button id='btnOperTomorrow'>Завтра</button>
+                <button id='btnOperSomeDate'>Другая дата:</button>
+                <input type='date' id='inpDateOfOper' hidden>
+            </div><br>
+
+
+        <label for='chkCalculateRiskOfBleeding'><input type='checkbox' id='chkCalculateRiskOfBleeding' checked /> Вычислять риск кровотечения при профилактике ВТЭО<br></label>
+    </div>
+    <div id='divAllRF'>
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>артериальная гипертензия <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000010000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsAtrFibrRF'>
+                    <label for='chkSystemicHypertension'><input type='checkbox' id='chkSystemicHypertension' data-hasMarked='0' value='1000000000000000' /><span hidden> артериальная гипертензия</span> 1 степени</label><span> &hellip;</span><span class='comments' hidden>, АД постоянно &gt; 140/90 мм рт. ст., либо контролируемая гипертония на медикаментах</span><br>
+                </div>
+                <div class='divSingleLvlRF clsFibrBleedingRF'>
+                    <label for='chkSystemicHypertension2Stage'><input type='checkbox' id='chkSystemicHypertension2Stage' data-hasMarked='0' value='1000001000000000' /><span hidden> артериальная гипертензия</span> 2 степени</label><span> &hellip;</span><span class='comments' hidden> систолическое АД &gt; 160 мм рт. ст.</span><br>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkUncontrolledSystemicHypertension'><input type='checkbox' id='chkUncontrolledSystemicHypertension' data-hasMarked='0' value='1000000001000100' /> неконтролируемая артериальная гипертензия</label><span> &hellip;</span><span class='comments' hidden> (артериальное давление> 200 мм рт.ст. систолическое или > 120 мм рт.ст. диастолическое)</span><br>
+                </div>
+            </div>
+        </div>
+
+        <div class='divGroupLvlRF clsCombustRF'>
+            <div class='divTogglerRF'>
+                <label>термическая травма <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkBurnsSuperficialLess20Percent'><input type='checkbox' class='chkBurnsSuperficial_1 chkBurns_1' id='chkBurnsSuperficialLess20Percent' value='1000000000020000'> ожоги поверхностные, площадью &lt; 20% поверхности тела</label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkBurnsSuperficialMore20Percent'><input type='checkbox' class='chkBurnsSuperficial_1 chkBurns_2' id='chkBurnsSuperficialMore20Percent' value='1000000000030000'> <span><span hidden>ожоги поверхностные, площадью</span> &gt; 20% поверхности тела</span><br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkBurnsDeepLess10Percent'><input type='checkbox' class='chkBurnsDeep_1 chkBurns_1' id='chkBurnsDeepLess10Percent' value='1000000000020000'> ожоги глубокие, площадью &lt; 10% поверхности тела<br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkBurnsDeepMore20Percent'><input type='checkbox' class='chkBurnsDeep_1 chkBurns_1' id='chkBurnseepMore10Percent' value='1000000000030000'> ожоги глубокие, площадью от 10% до 20% поверхности тела<br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkBurnsDeepMore20Percent'><input type='checkbox' class='chkBurnsDeep_1 chkBurns_2' id='chkBurnseepMore10Percent' value='1000000000030000'> ожоги глубокие, площадью &gt; 20% поверхности тела<br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkThermalInhalationInjury_1_2'><input type='checkbox' class='chkThermalInhalationInjury_1' id='chkThermalInhalationInjury_1' value='1000000000020000'> термоингаляционная травма I степени<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkThermalInhalationInjury_2' class='clsSurgRF'><input type='checkbox' class='chkThermalInhalationInjury_1' id='chkThermalInhalationInjury_2' value='100000020000000'> термоингаляционная травма II степени<br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkThermalInhalationInjury_3'><input type='checkbox' class='chkThermalInhalationInjury_1' id='chkThermalInhalationInjury_3' value='1000000300000000'> термоингаляционная травма III степени<br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkFrostbite_2_4'><input type='checkbox' id='chkFrostbite_2_4' value='1000000000030000'> отморожение II–IV степени<br></label>
+                </div>
+                <div class='divSingleLvlRF clsCombustRF'>
+                    <label for='chkComplOfBurnDisease' class='clsSurgRF clsCombustRF'><input type='checkbox' id='chkComplOfBurnDisease' value='1000000300000000'> осложнения ожоговой болезни</label><span> &hellip;</span><span class='comments' hidden>: шок, острая токсемия и септикотоксемия.</span><br>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsOncoRF'>
+            <div class='divTogglerRF'>
+                <label>злокачественное новообразование <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF chkObstComorbidities' value='1000000020000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsSurgRF clsOncoRF'>
+                    <label for='chkWasNeoplasm' id='lblWasNeoplasm' class='clsSurgRF clsOncoRF'><input type='checkbox' id='chkWasNeoplasm' value='1000000000000000'> злокачественное новообразование в анамнезе</label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF clsOncoRF'>
+                    <label for='chkActiveNeoplasm'><input type='checkbox' class='chkNeoplasm_1' id='chkActiveNeoplasm' data-hasMarked='0' value='1000000100000000'>активное злокачественное новообразование</label><span> &hellip;</span><span class='comments' hidden>: имеются локальные или отдаленные метастазы и/или химиотерапия/радиотерапия &lt; 6 мес назад</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF clsOncoRF'>
+                    <label for='chkSomeTherapyOfNeoplasm' class='clsSurgRF clsOncoRF'><input type='checkbox' class='chkNeoplasm_1' id='chkSomeTherapyOfNeoplasm' value='1000000300000000'> гормонотерапия, химиотерапия, рентгенотерапия у онкологических пациентов<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>сахарный диабет <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsDiabetes' value='100001000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkTypeOneDiabetes'><input type='checkbox' class='chkDiabetes_1 chkObstComorbidities' id='chkTypeOneDiabetes' value='1000000000000000'><span hidden> сахарный диабет</span> I типа</label><span> &hellip;</span><span class='comments' hidden> с нефропатией</span><br>
+                    <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                        <label for='chkTypeTwoDiabetes'><input type='checkbox' class='chkDiabetes_1' id='chkTypeTwoDiabetes' value='100000000000000'><span hidden> сахарный диабет</span> II типа<br></label>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF'>
+            <div class='divTogglerRF'>
+                <label>острое воспалительное заболевание или инфекция <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsAcuteInflammatoryDiseaseOrInfection' value='1000000000001000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkAcuteInflammatoryDisease'><input type='checkbox' id='chkAcuteInflammatoryDisease' value='10000000000000000'> острое воспалительное заболевание<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkSepsis'><input type='checkbox' id='chkSepsis' value='1000000310000000'> сепсис (&lt; 1 мес.)<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF'>
+                    <label for='chkSepticEndocarditis'><input type='checkbox' id='chkSepticEndocarditis' value='100000000000000'> септический эндокардит<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkAcuteInfection'><input type='checkbox' class='chkSumTherRF_2' id='chkAcuteInfection' value='1000000000000000'> острая инфекция<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsNonsurgBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>ревматологическое заболевание <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='102.000000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsNonsurgBleedingRF'>
+                    <label for='chkRheumaticDiseases'><input type='checkbox' id='chkRheumaticDiseases' data-hasMarked='0' value='1000000000000000'> ревматологическое заболевание<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF'>
+                    <label for='chkAcuteRheumaticDiseases'><input type='checkbox' class='chkSumTherRF_2 chkObstComorbidities' id='chkAcuteRheumaticDiseases' value='1000000000000000'> острое ревматологическое заболевание</label><span> &hellip;</span><span class='comments' hidden>: активная системная красная волчанка, воспалительная полиартропатия</span><br>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF'>
+            <div class='divTogglerRF'>
+                <label>заболевания легких с дыхательной недостаточностью<button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsPulmonInsuff' value='1000000100000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <!--
+                <div class='divSingleLvlRF clsTherRF'>
+                    <label for='chkSomeLungDiseasesWithPulmInsuff'><input type='checkbox' id='chkSomeLungDiseasesWithPulmInsuff' value='1000000000000000'> любое<span hidden> заболевание легких с дыхательной недостаточностью</span></label><br>
+                </div>
+-->
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkSevereLungDiseases'><input type='checkbox' class='chkBedRestMore3Days_1 chkLungDiseases_1' id='chkSevereLungDiseases' value='1000000300000000'><span hidden> тяжелые заболевания легких</span> на ИВЛ</label><span> &hellip;</span><span hidden>, с выраженной дыхательной недостаточностью, требующие искусственной вентиляцией легких</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkModerateLungDiseases'><input type='checkbox' class='chkLungDiseases_1' id='chkModerateLungDiseases' value='1000000200000000'><span hidden> заболевания легких</span> без ИВЛ</label><span> &hellip;</span><span class='comments' hidden>, в том числе пневмония, с дыхательной недостаточностью, не требующие искусственной вентиляции</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkLungDiseasesIn30Days'><input type='checkbox' id='chkLungDiseasesIn30Days' value='1000000010000000'><span hidden>заболевания легких длительностью</span> &lt; 1 мес.<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkChronicObstructivePulmonaryDisease'><input type='checkbox' id='chkChronicObstructivePulmonaryDisease' value='1000000010000000'> ХОБЛ</label>
+                    <span> &hellip;</span><span class='comments' hidden> (хроническая обструктивная болезнь легких)</span><br>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsOncoRF clsObstRF'>
+            <div class='divTogglerRF'>
+                <label>анемия <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsOncoRF'>
+                    <label for='chkHbLess_100'><input type='checkbox' id='chkHbLess_100' value='1000000100000000'> Hb &lt; 100 г/л</label>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkSickleCellAnemia'><input type='checkbox' class='chkObstComorbidities' id='chkSickleCellAnemia' value='1000000000000000'> серповидноклеточная анемия<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsSurgRF'>
+            <div class='divTogglerRF'>
+                <label>тромбофилия <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkCoagulationFactor5Polymorphism'><input type='checkbox' class='chkHighRiskThrombophilia_1' id='chkCoagulationFactor5Polymorphism' value='1000000030000000'> полиморфизм фактора Лейдена</label><span> &hellip;</span><span class='comments' hidden> (V фактора свертывания крови)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkProthrombinPolymorphism'><input type='checkbox' class='chkHighRiskThrombophilia_1' id='chkProthrombinPolymorphism' value='1000000030000000'> полиморфизм протромбина G20210A<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkHyperhomocysteinemia'><input type='checkbox' class='chkHighRiskThrombophilia_1' id='chkHyperhomocysteinemia' value='1000000030000000'> гипергомоцистеинемия<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkCardiolipinAntibodiesIncreasedLevels'><input type='checkbox' class='chkHighRiskThrombophilia_1' id='chkCardiolipinAntibodiesIncreasedLevels' value='1000000030000000'> повышенный уровень антител к кардиолипину</label><span> &hellip;</span><span class='comments' hidden> (антифосфолипидный синдром)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkIsLupusAnticoagulant'><input type='checkbox' class='chkHighRiskThrombophilia_1' id='chkIsLupusAnticoagulant' value='1000000030000000'> наличие волчаночного антикоагулянта</label><span> &hellip;</span><span class='comments' hidden> (антифосфолипидный синдром)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkOtherCongenitalOrAcquiredThrombophilia'><input type='checkbox' class='chkHighRiskThrombophilia_1' id='chkOtherCongenitalOrAcquiredThrombophilia' value='1000000030000000'> другая врожденная или приобретенная тромбофилия</label><span> &hellip;</span><span class='comments' hidden> (дефекты антитромбина, протеина С или S и др.)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkThrombophiliaLowRisk'><input type='checkbox' id='chkThrombophiliaLowRisk' value='1000000000001000'> известная тромбофилия низкого риска (без ВТЭО)<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsOncoRF'>
+            <div class='divTogglerRF'>
+                <label>гиперкоагуляция <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <!--            <label for='chkIsHypercoagulation'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'> гиперкоагуляция (выбрать):<br></label>-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsOncoRF'>
+                    <label for='chkPlateletsMore_350'><input type='checkbox' id='chkPlateletsMore_350' value='1000000100000000'> тромбоциты &gt; 350 × 10 <sup><small>9</small></sup>/л<br></label>
+                </div>
+                <div class='divSingleLvlRF clsOncoRF'>
+                    <label for='chkFibrinogenMore_400'><input type='checkbox' id='chkFibrinogenMore_400' value='1000000100000000'> фибриноген &gt; 400 мг/мл<br></label>
+                </div>
+                <div class='divSingleLvlRF clsOncoRF'>
+                    <label for='chkDDimerMore_05'><input type='checkbox' id='chkDDimerMore_05' value='1000000100000000'> Д-димер &gt; 0,5 мкг/мл<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsNonsurgBleedingRF clsFibrBleedingRF clsSurgRF clsSurgBleedingRF clsTraumBleedingRF clsObstBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>геморрагические гемостазиопатии (геморрагический диатез, геморрагический синдром) <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsHemorragicSyndrome' value='1000000000000000' hidden><br>
+            </div>
+            <!--            <label for='chkIsHypocoagulation'><input type='checkbox' class='chk2_LvlRF' value='1000000000000100'> состояния гипокоагуляции (выбрать):<br></label>-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF  clsFibrBleedingRF  clsObstBleedingRF'>
+                    <label for='chkHemorrhagicGeneticCoagulopathies'><input type='checkbox' class='chkСoagulopathy_1' id='chkHemorrhagicGeneticCoagulopathies' value='1000000000000000' /> геморрагические генетические коагулопатии</label><span> &hellip;</span><span class='comments' hidden>. Наиболее часто встречаются гемофилия и болезнь Виллебранда. Более редкие генетические нарушения включают гемофилию С, гипопроконвертинемию и ряд других аномалий.</span><br>
+                </div>
+                <!--
+                <div class='divSingleLvlRF  clsFibrBleedingRF  clsObstBleedingRF'>
+                    <label for='chkHemophylia'><input type='checkbox' id='chkHemophylia' value='1000000000000000'/> гемофилия<br></label>
+                </div>
+                <div class='divSingleLvlRF clsFibrBleedingRF clsObstBleedingRF'><label for='chkVonWillebrandDisease'><input type='checkbox' id='chkVonWillebrandDisease' value='1000000000000000'/> болезнь Виллебранда<br></label>
+                </div>
+-->
+                <div class='divSingleLvlRF clsFibrBleedingRF   clsObstBleedingRF'>
+                    <label for='chkHemorrhagicAutoimmuneCoagulopathies'><input type='checkbox' class='chkСoagulopathy_1' id='chkHemorrhagicAutoimmuneCoagulopathies' value='1000000000000000' /> геморрагические аутоиммунные коагулопатии</label><span> &hellip;</span><span class='comments' hidden> обусловлены появлением антител (ингибиторов свертывания) к факторам свёртывания крови или фосфолипидам. Наиболее часто встречается коагулопатия иммунного генеза на фоне Антифосфолипидного синдрома. Дефицит факторов свертывания в результате аутоиммунных реакций иногда происходит у пациентов после частых переливаний крови.</span><br>
+                </div>
+                <div class='divSingleLvlRF clsFibrBleedingRF clsSurgBleedingRF clsTraumBleedingRF   clsObstBleedingRF'>
+                    <label for='chkHemorrhagicAcquiredCoagulopathies'><input type='checkbox' class='chkСoagulopathy_1' id='chkHemorrhagicAcquiredCoagulopathies' value='1000000000000000' /> геморрагические приобретенные коагулопатии</label><span> &hellip;</span><span class='comments' hidden>, могут быть обусловлены нарушением функции печени, применением разных антикоагулянтов, антиагрегантов или тромболитических препаратов, недостаточностью всасывания витамина «К» и повышенным потреблением компонентов системы свёртывания крови на фоне ДВС-синдрома. Поражение факторов свертываемости может быть в результате преждевременной отслойки плаценты, эмболии околоплодными водами и рака простаты. Коагулопатию вызывают некоторые виды гемотоксичных змеиных ядов, некоторые виды вирусных геморрагических лихорадок, иногда - лейкемия.</span><br>
+                </div>
+                <div class='divSingleLvlRF clsFibrBleedingRF   clsObstBleedingRF'>
+                    <label for='chkHemorrhagicVasopathies'><input type='checkbox' class='chkСoagulopathy_1' id='chkHemorrhagicVasopathies' value='1000000000000000' /> геморрагические вазопатии</label><span> &hellip;</span><span class='comments' hidden>- заболевания, обусловленные патологией сосудов. Типичные заболевания этой группы — болезнь Рандю–Ослера, пурпура Шёнляйна–Геноха, первичные геморрагические васкулиты.</span><br>
+                </div>
+                <!--
+                <div class='divSingleLvlRF clsFibrBleedingRF'>
+                    <label for='chkOtherStatesOfHypocoagulation'><input type='checkbox' id='chkOtherStatesOfHypocoagulation' value='1000000000000000'/> другие заболевания и состояния, приводящие кровотечениям</label><span> &hellip;</span><span class='comments' hidden>: дефицит факторов свертывания в результате аутоиммунных реакций (происходят у пациентов после частых переливаний крови. Кроме того, поражение факторов свертываемости может быть в результате тяжелой травмы, преждевременной отслойки плаценты, эмболии околоплодными водами и рака простаты). Тромбоцитопеническая пурпура. Болезнь Ослера (Рандю-Ослера). Болезнь Мошкович. Цинга. </span><br>
+                </div>
+-->
+
+                <div class='divSingleLvlRF clsFibrBleedingRF clsSurgBleedingRF'>
+                    <label for='chkPlateletsLess150'><input type='checkbox' class='chkThrombocytopenia_1' id='chkPlateletsLess150' data-hasMarked='0' value='1000000000000000' /> тромбоциты в крови &lt; 150 х 10<sup><small>9</small></sup>/л </label><span> &hellip;</span><span class='comments' hidden> (тромбоцитопения)</span><br>
+                </div>
+                <div class='divSingleLvlRFF clsSurgBleedingRF    clsObstBleedingRF'>
+                    <label for='chkPlateletsLess75'><input type='checkbox' class=' chkThrombocytopenia_1' id='chkPlateletsLess75' data-hasMarked='0' value='1000000000000100' /> тромбоциты в крови &lt; 75 х 10<sup><small>9</small></sup>/л<br></label>
+                </div>
+                <div class='divSingleLvlRF clsNonsurgBleedingRF clsSurgBleedingRF'>
+                    <label for='chkPlateletsLess50'><input type='checkbox' class='chkThrombocytopenia_1' id='chkPlateletsLess50' value='104.000000000000' /> тромбоциты в крови &lt; 50 х 10<sup><small>9</small></sup>/л<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkHeparinInducedThrombocytopenia'><input type='checkbox' class='chkThrombocytopenia_1' id='chkHeparinInducedThrombocytopenia' value='1000000030000000'> гепарин-индуцированная тромбоцитопения<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgBleedingRF'>
+                    <label for='chkKnownUntreatedBleedingDisorder'><input type='checkbox' id='chkKnownUntreatedBleedingDisorder' value='1000000001000000' /> нелеченная коагулопатия</label><span> &hellip;</span><span class='comments' hidden>. Любая из коагулопатий без эффективной медикаментозной коррекции.</span><br>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divSingleLvlRF clsFibrBleedingRF clsSurgBleedingRF clsTraumBleedingRF'>
+            <label for='chkConcomitantUseOfAnticoagulants'><input type='checkbox' id='chkConcomitantUseOfAnticoagulants' value='1000001001100000' />текущее применение антикоагулянтов, антиагрегантов или тромболитических препаратов<br></label>
+        </div>
+
+        <div class='divSingleLvlRF clsFibrBleedingRF'>
+            <label for='chkLabileINR'><input type='checkbox' id='chkLabileINR' value='1000001000000000' /> лабильное МНО</label><span> &hellip;</span><span class='comments' hidden> (&lt; 60% времени в терапевтическом диапазоне)</span><br>
+        </div>
+
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsObstRF'>
+            <div class='divTogglerRF'>
+                <label>ВТЭО в анамнезе <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <!--
+            <label for='chkWasVeinThromb'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'> ВТЭО в анамнезе (выбрать):<br></label>
+-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF'>
+                    <label for='chkWasPulmEmb'><input type='checkbox' class='chkSumAtrFibrRF_1 chkThromboemb_1' id='chkWasPulmEmb' value='1000000000000000'> эпизод ВТЭО в анамнезе</label><span> &hellip;</span><span class='comments' hidden> (за исключением тромбоза поверхностных вен)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkPreviousRecidivVTE'><input type='checkbox' class='chkThromboemb_1 chkThromboemb_2' id='chkPreviousRecidivVTE' value='1000000000004030'> предшествующие рецидивирующие ВТЭО<br></label>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkPreviousUnprovocedVTE'><input type='checkbox' class='chkThromboemb_1 chkThromboemb_2' id='chkPreviousUnprovocedVTE' value='1000000000000030'> предшествующие ВТЭО, ничем не спровоцированные или связанные с приемом эстрогенов<br></label>
+                </div>
+                <div class='divSingleLvlRF clsAtrFibrRF clsSurgRF clsObstRF'>
+                    <label for='chkPreviousProvokedVTO'><input type='checkbox' class='chkThromboemb_1 chkThromboemb_2 chkProvocedVTE_1' id='chkPreviousProvokedVTO' value='1000000000004000'> предшествующие спровоцированные ВТЭО, кроме единичного эпизода, связанного с большим хирургическим вмешательством<br></label>
+                </div>
+                <div class='divSingleLvlRF clsAtrFibrRF clsSurgRF clsObstRF'>
+                    <label for='chkPreviousProvokedVTO'><input type='checkbox' class='chkThromboemb_1 chkThromboemb_2 chkProvocedVTE_1' id='chkPreviousProvokedVTO' value='1000000000003000'> предшествующие ВТЭО спровоцированные большим хирургическим вмешательством<br></label>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkFamilyAnamnesisVTE'><input type='checkbox' class='chkThromboemb_3' id='chkFamilyAnamnesisVTE' value='1000000000001000'> семейный анамнез неспровоцированного или связанного с эстрогеном ВТЭО у родственника первой степени<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkWasFamilyPulmEmb'><input type='checkbox' class='chkThromboemb_3' id='chkWasFamilyPulmEmb' value='10000000000000003'> тромбоэмболия в семейном анамнезе<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsSurgRF clsObstRF'>
+            <div class='divTogglerRF'>
+                <label>ограниченная подвижность <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsRestrictedMobility' value='1000000000000010' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkBedRestNoSurgPatient'><input type='checkbox' id='chkBedRestNoSurgPatient' value='1000000010000000'> постельный режим<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF clsObstRF'>
+                    <label for='chkBedRestMore3Days'><input type='checkbox' id='chkBedRestMore3Days' data-hasMarked='0' value='1300000120000000'> строгий постельный режим</label><span> &hellip;</span><span class='comments' hidden> (без посещения туалетной комнаты) &gt; 72 часов</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkGypsumImmobOfLimbLess1Month'><input type='checkbox' id='chkGypsumImmobOfLimbLess1Month' value='1000000020000000'> гипсовая иммобилизация конечности</label><span> &hellip;</span><span class='comments' hidden> (давностью до 1 мес.)</span><br>
+                </div>
+                <!--
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkAcuteSpinalCordDamage'><input type='checkbox' id='chkAcuteSpinalCordDamage' value='10000000000000005'> острое повреждение спинного мозга</label><span> &hellip;</span><span class='comments' hidden> (паралич &lt; 1 мес.)</span><br>
+                </div>
+-->
+                <!--
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkBedRestMore3DaysAndOther'><input type='checkbox' id='chkBedRestMore3DaysAndOther' value='10000000000000003'> ограниченная подвижность</label><span> &hellip;</span><span class='comments' hidden> (постельный режим с выходом в туалет, инсульт с гемипарезом, нижняя параплегия), иммобилизация &gt; 3 сут</span><br>
+                </div>
+-->
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkPlegia'><input type='checkbox' id='chkPlegia' value='1000000100000000'> паралич или глубокий парез</label><span> &hellip;</span><span class='comments' hidden> (тетра- геми- или нижний грубый монопарез/плегия)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkLongSittingPosition'><input type='checkbox' id='chkLongSittingPosition' value='10000001000000000'> длительное положение сидя</label><span> &hellip;</span><span class='comments' hidden> (например длительный перелет в эконом-классе или поездка на транспорте сидя)</span><br>
+                </div>
+
+                <!--
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkLowParaplegia'><input type='checkbox' id='chkLowParaplegia' value='1000000100000000'> плегия или глубокий парез нижних конечностей<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkIshemicStrokeWithHemyplegia'><input type='checkbox' id='chkIshemicStrokeWithHemyplegia' value='1000000300000000'> ишемический инсульт с параличом или глубоким парезом<br></label>
+                </div>
+-->
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTraumRF clsNeurosurgRF'>
+            <div class='divTogglerRF'>
+                <label>есть травма &lt; 1 месяца назад <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsTraum' value='1000000000000000' hidden><br>
+            </div>
+            <!--
+            <label for='chkIsTrauma'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'> есть травма &lt; 1 месяца назад (выбрать):<br></label>
+-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkFracturePelvisLess1Month'><input type='checkbox' class='chkTraum_1' id='chkFracturePelvisLess1Month' value='1000000000030000'> перелом костей таза</label><span> &hellip;</span><span class='comments' hidden> (давностью до 1 мес.)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkFractureFemurLess1Month'><input type='checkbox' class='chkTraum_1' id='chkFractureFemurLess1Month' value='1000000000030000'> перелом бедра</label><span> &hellip;</span><span class='comments' hidden> (давностью до 1 мес.)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF clsTraumRF'>
+                    <label for='chkFractureTibiaLess1Month'><input type='checkbox' class='chkTraum_1' id='chkFractureTibiaLess1Month' value='1000000200000000'> изолированные переломы голени</label><span> &hellip;</span><span class='comments' hidden> (давностью до 1 мес.)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF clsTraumRF'>
+                    <label for='chkDamageLigamentsLowerLeg'><input type='checkbox' id='chkDamageLigamentsLowerLeg' value='10000002000000005'> повреждения связочного аппарата и сухожилий голени</label><span> &hellip;</span><span class='comments' hidden>, требующие иммобилизации голеностопного сустава</span><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF clsTraumRF clsNeurosurgRF'>
+                    <label for='chkAcuteSpinalCordDamage'><input type='checkbox' class='chkSpinalCordInjure_1' id='chkAcuteSpinalCordDamage' value='1000000000000000'> повреждение спинного мозга</label><br>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF clsTraumRF'>
+                    <label for='chkPolytrauma'><input type='checkbox' id='chkPolytrauma' value='1000000350000000'> множественная и сочетанная травма<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divSingleLvlRF clsTraumRF clsNeurosurgRF'>
+            <label for='chkSpinalCordDamage'><input type='checkbox' class='chkSpinalCordInjure_1' id='chkSpinalCordDamage' value='1000000000000000'> повреждение спинного мозга в анамнезе<br></label>
+        </div>
+        <div class='divGroupLvlRF clsLabourRF'>
+            <div class='divTogglerRF'>
+                <label>особенности данных родов <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <!--
+            <label for='chkIsThisLabour'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'/> особенности данных родов (выбрать):<br></label>
+-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkPretermBirth'><input type='checkbox' id='chkPretermBirth' value='1000000000001000' /> преждевременные роды<span> &hellip;</span><span class='comments' hidden> &lt; 37 недель при текущей беременности</span><br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkMultiplePregnancy'><input type='checkbox' id='chkMultiplePregnancy' value='1000000000001010'> многоплодная беременность<br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkPPH'><input type='checkbox' id='chkPPH' value='1000000000001010' /> послеродовое кровотечение<span> &hellip;</span><span class='comments' hidden> требующее &gt; 1 литра трансфузии</span><br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkProlongedLabour'><input type='checkbox' id='chkProlongedLabour' value='1000000000001010' /> затяжные роды<span> &hellip;</span><span class='comments' hidden> (>24 часов)</span><br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkMidCavityOrRotationalOperativeDelivery'><input type='checkbox' id='chkMidCavityOrRotationalOperativeDelivery' value='1000000000001010' /> полостные или ротационные щипцы<br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkARTIVF'> <input type='checkbox' id='chkARTIVF' value='1000000000001000' /> ART - вспомогательные репродуктивные технологии, IVF - экстракорпоральное оплодотворение<br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkPreeclampsia'><input type='checkbox' id='chkPreeclampsia' value='1000000000001010' /> преэклампсия<br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkSeverePreeclampsia'><input type='checkbox' class='chkLabourRuRF_1' id='chkSeverePreeclampsia' value='1000000000000000' /> тяжелая форма преэклампсии<br></label>
+                </div>
+                <div class='divSingleLvlRF clsLabourRF'>
+                    <label for='chkStillbirth'><input type='checkbox' class='chkLabourRuRF_1' id='chkStillbirth' value='1000000000001000' /> мертворождение при текущей беременности<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+            <label for='chkAcuteMiocardInfarction'><input type='checkbox' class='chkBedRestMore3Days_1 chkSumTherRF_1' id='chkAcuteMiocardInfarction' value='1000000010000000'>острый инфаркт миокарда</label><span> &hellip;</span><span class='comments' hidden> - 12-14 дней от начала, подострый - до 2 месяцев.</span><br>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>хроническая сердечная недостаточность <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF chkObstComorbidities' id='chkIsHeartInsuff' value='100001000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF'>
+                    <label for='chkSomeHeartInsuff' id='lblSomeHeartInsuff'><input type='checkbox' id='chkSomeHeartInsuff' value='1000000000000000'><span hidden> хроническая сердечная недостаточность</span> любой стадии<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkHeartInsuffLess1Month'><input type='checkbox' id='chkHeartInsuffLess1Month' value='1000000010000000'><span hidden> сердечная недостаточность любой стадии</span> &lt; 1 мес.<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkHeartInsuff3_4'><input type='checkbox' id='chkHeartInsuff3_4' value='10000002000000000'> хроническая сердечная недостаточность III—IV ФК по NYHA<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkCongestHeartFailOrSystLVDysfunctEFLess40Percent'><input type='checkbox' id='chkCongestHeartFailOrSystLVDysfunctEFLess40Percent' value='10000000000000001'> застойная сердечная недостаточность/дисфункция ЛЖ</label><span> &hellip;</span><span class='comments' hidden> (в частности, ФВ ≤ 40 %)</span><br>
+                 </div>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkArtificialHeartValve'><input type='checkbox' id='chkArtificialHeartValve' value='10000000000000000'> искусственный клапан сердца</label><br>
+                </div>
+
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsSurgRF'>
+            <div class='divTogglerRF'>
+                <label>применение гормональных препаратов <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000010000000' hidden><br>
+            </div>
+            <!--
+            <label for='chkIsHormoneTaking'><input type='checkbox' class='chk2_LvlRF' value='1000000010000000'> применение гормональных препаратов (выбрать):<br></label>
+-->
+            <div class='divMiddleLvlRF'>
+                <div class='divFemaleLvl' hidden>
+                    <div class='divSingleLvlRF clsSurgRF'>
+                        <label for='chkEstrogeneTaking'><input type='checkbox' id='chkEstrogeneTaking' value='1000000100000000'> применение эстроген-гестагенных препаратов</label><span> &hellip;</span><span class='comments' hidden> (контрацепция или гормональная заместительная терапия)</span><br>
+                    </div>
+                    <div class='divSingleLvlRF clsSurgRF'>
+                        <label for='chkSelectiveEstrogTaking'><input type='checkbox' id='chkSelectiveEstrogTaking' value='1000000100000000'> применение селективных модуляторов эстрогеновых рецепторов<br></label>
+                    </div>
+                </div>
+                <div class='divSingleLvlRF clsTherRF clsSurgRF'>
+                    <label for='chkHormTher'><input type='checkbox' id='chkHormTher' value='1100000000000000'> гормональная заместительная терапия <br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divFemaleLvl' hidden>
+            <div class='divSingleLvlRF clsSurgRF'>
+                <label for='chkHasBadObstAnamnesis'><input type='checkbox' id='chkHasBadObstAnamnesis' value='1000000010000000'> в анамнезе: необъяснимые мертворождения, выкидыши (3 и более), преждевременные роды с токсикозом или задержка внутриутробного развития<br></label>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsFibrBleedingRF clsSurgRF clsSurgBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>ОНМК <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <!--            <label for='chkIsStroke'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'> ОНМК (выбрать):<br></label>-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsTherRF clsFibrBleedingRF clsSurgRF clsSurgBleedingRF'>
+                    <label for='chkAcuteStroke'><input type='checkbox' class='chkSumTherRF_1 chkStroke_1' id='chkAcuteStroke' value='1000000151000100'> острый период инсульта</label><span> &hellip;</span><span class='comments' hidden> - учитывается 30 суток т. к. используемая шкала принимает как параметр этот срок острого периода (несмотря на то, что в России острым считается период 21 сутки)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsAtrFibrRF clsFibrBleedingRF'>
+                    <label for='chkStrokeHistory'><input type='checkbox' class='chkSumAtrFibrRF_1  chkStroke_1' id='chkStrokeHistory' value='1000000000000000' /> инсульт в анамнезе<br></label>
+                </div>
+                <div class='divSingleLvlRF clsAtrFibrRF'>
+                    <label for='chkWasTIA'><input type='checkbox' class='chkSumAtrFibrRF_1' id='chkWasTIA' value='1000000000000000'> ТИА в анамнезе<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsNonsurgBleedingRF clsFibrBleedingRF clsSurgBleedingRF clsTraumBleedingRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF'>
+            <div class='divTogglerRF'>
+                <label>почечная недостаточность <button class='btnTogglerRF' id='btnIsRenalInsuff'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden>
+            </div>
+            <!--
+            <label for='chkIsRenalInsuff' id='lblIsRenalInsuff'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'/> почечная недостаточность (выбрать):<br></label>
+-->
+
+            <div class='divMiddleLvlRF'>
+
+                <!--Скорость клубочковой фильтрации (клиренс креатинина): <input type='number' id='chkGFR'><br>               -->
+                <!--
+                <div class='divSingleLvlRF clsNonsurgBleedingRF'> Скорость клубочковой фильтрации (клиренс креатинина): <br>
+                    <label for='chkGlomerularFiltrationRateMore80' id='lblGlomerularFiltrationRateMore80'><input type='checkbox' class='chkGlomerularFiltrationRate_1' id='chkGlomerularFiltrationRateMore80' value='1000000000000000' /><span hidden> скорость клубочковой фильтрации</span> &gt; 80 мл/мин<br></label>
+                </div>
+-->
+                <!--
+                <div class='divSingleLvlRF clsNonsurgBleedingRF'>
+                    <label for='chkGlomerularFiltrationRate61_80' id='lblGlomerularFiltrationRate61_80'><input type='checkbox' class='chkGlomerularFiltrationRate_1' id='chkGlomerularFiltrationRate61_80' value='1000000000000000' /><span hidden> скорость клубочковой фильтрации</span> 61— 80 мл/мин<br></label>
+                </div>
+-->
+                <!--
+                <div class='divSingleLvlRF clsNonsurgBleedingRF'>
+                    <label for='chkGlomerularFiltrationRate51_60' id='lblGlomerularFiltrationRate51_60'><input type='checkbox' class='chkGlomerularFiltrationRate_1' id='chkGlomerularFiltrationRate51_60' value='1000000000000000' /><span hidden> скорость клубочковой фильтрации</span> 51— 60 мл/мин<br></label>
+                </div>
+                <div class='divSingleLvlRF clsNonsurgBleedingRF clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkGlomerularFiltrationRateLess15'><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkSevereRenalInsuff_1' id='chkGlomerularFiltrationRateLess15' value='1000000000000000' /><span hidden> скорость клубочковой фильтрации</span> &lt; 15 мл/мин<br>
+                    </label>
+                </div>
+-->
+                <!--
+                <div class='divSingleLvlRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkSevereRenalFailure'><input type='checkbox' class='chkSevereRenalInsuff_1' id='chkSevereRenalFailure' value='1000001000000000' /> нарушение функции почек</label><span> &hellip;</span><span class='comments' hidden>. Хронический диализ, либо трансплантация почки, либо креатинин сыворотки &gt; 200 мкмоль/л (&gt; 6 мг/дл)</span><br>
+                </div>
+-->
+
+                <!--
+                <div class='divSingleLvlRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkCreatinineMore_200'><input type='checkbox' class='chkSevereRenalInsuff_1 chkSevereRenalInsuff_2' id='chkCreatinineMore_200' value='1000000000000000' /> креатинин сыворотки &gt; 200 мкмоль/л (&gt; 6 мг/дл)</label><br>
+                </div>
+-->
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkChronicDialysis'><input type='checkbox' class='chkSevereRenalInsuff_1 chkSevereRenalInsuff_2' id='chkChronicDialysis' value='1000000000000000' /> хронический диализ</label><br>
+                </div>
+
+                <div class='divSingleLvlRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkKidneyTransplantation'><input type='checkbox' class='chkSevereRenalInsuff_1 chkSevereRenalInsuff_2' id='chkKidneyTransplantation' value='1000000000000000' /> трансплантация почки</label><br>
+                </div>
+
+                <div class='divSingleLvlRF clsSurgRF'>
+                    <label for='chkNephroticSyndrome'><input type='checkbox' class='chkObstComorbidities' id='chkNephroticSyndrome' value='1000000100000000'> нефротический синдром<br></label>
+                </div>
+            </div>
+            <form id='frmGFR_CC' hidden>
+                <input type='number' id='inpCreatinineVal' placeholder='Значение креатинина'>
+                <select class='chk2_LvlRF' id='slctCrUnitsGroup'>
+                    <option id='optCrUnits_mcmol' value='2' selected><label for='opnCrUnits_mcmol'>мкмоль/л</label></option>
+                    <option id='optCrUnits_mmol' value='1'><label for='opnCrUnits_mmol'>ммоль/л</label></option>
+                    <option id='optCrUnits_mg' value='3'><label for='opnCrUnits_mg'>мг/дл(мг/100 мл, мг/%)</label></option>
+                    <option id='optCrUnits_mgX10' value='4'><label for='opnCrUnits_mgX10'>мг/дл(мг/л, мкг/мл)</label></option>
+                </select>
+                <br>
+                <label for='chkRaceB'><input type='checkbox' class='chk2_LvlRF' id='chkRaceB' value='1000000000000000' /> негроидная раса</label>
+            </form>
+            <label for='chkGlomerularFiltrationRate30_59' id='lblGlomerularFiltrationRate30_59' hidden><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkRenalInsuff_1' id='chkGlomerularFiltrationRate30_59' value='101.000000000000' /> скорость клубочковой фильтрации 30—59 мл/мин</label>
+            <label for='chkGlomerularFiltrationRateLess30' hidden><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkSevereRenalInsuff_1 chkRenalInsuff_1' id='chkGlomerularFiltrationRateLess30' value='102.500000000000' /> скорость клубочковой фильтрации &lt; 30 мл/мин </label>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>печеночная недостаточность <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsLiverFailure' value='102.500000000100' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsNonsurgBleedingRF  clsSurgBleedingRF'>
+                    <label for='chkLiverFailure'><input type='checkbox' id='chkLiverFailure' value='1000000000000000' /> печеночная недостаточность (МНО &gt; 1,5)<br></label>
+                </div>
+                <div class='divSingleLvlRFclsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkSevereHepaticFailure'><input type='checkbox' id='chkSevereHepaticFailure' value='1000001000000000' /> нарушение функции печени</label><span> &hellip;</span><span class='comments' hidden>. Хронические болезни печени (цирроз), либо значительные сдвиги в печеночных пробах (повышение билирубина &gt; чем в 2 раза от верхней границы нормы + повышение АЛТ/АСТ/щелочной фосфатазы &gt; чем в 3 раза от верхней границы нормы)</span><br>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsFibrBleedingRF clsObstRF'>
+            <div class='divTogglerRF'>
+                <label>вредные привычки <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <!--
+            <label for='chkIsSmockingAlcoholOrDrugUse' id='lblIsSmockingAlcoholOrDrugUse'><input type='checkbox' class='chk2_LvlRF' value='1000000000000000'/> вредные привычки (выбрать):<br></label>
+-->
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF  clsFibrBleedingRF'>
+                    <label for='chkAlcoholUse'><input type='checkbox' id='chkAlcoholUse' value='1000001000000000' /> злоупотребление алкоголем</label><span> &hellip;</span><span class='comments' hidden> (&gt; 8 стаканов в неделю)</span><br>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkCurrentIntravenousDrugUse'><input type='checkbox' class='chkObstComorbidities' id='chkCurrentIntravenousDrugUse' value='1000000000000000'> текущее внутривенное употребление наркотиков<br></label>
+                </div>
+                <div class='divSingleLvlRF clsObstRF'>
+                    <label for='chkSmoking'><input type='checkbox' id='chkSmoking' value='1000000000001010'> курение<br></label>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class='divGroupLvlRF clsTherRF clsFibrBleedingRF clsSurgBleedingRF clsTraumBleedingRF clsObstBleedingRF'>
+            <div class='divTogglerRF'>
+                <label>кровотечение активное или в анамнезе <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000000000000' hidden><br>
+            </div>
+            <div class='divMiddleLvlRF'>
+                <div class='divSingleLvlRF clsNonsurgBleedingRF'>
+                    <label for='chkBbleeding3MonthsBefore'><input type='checkbox' id='chkBbleeding3MonthsBefore' value='104.000000000000' /><span hidden> кровотечения</span> &lt; чем за 3 мес до госпитализации<br></label>
+                </div>
+                <div class='divSingleLvlRF clsSurgBleedingRF clsObstBleedingRF'>
+                    <label for='chkActiveBleeding'><input type='checkbox' id='chkActiveBleeding' value='1000000001000100' /> продолжающееся активное кровотечение<br></label>
+                </div>
+                <div class='divSingleLvlRF clsTraumBleedingRF'>
+                    <label for='chkDifficultControlBleeding'><input type='checkbox' id='chkDifficultControlBleeding' value='1000000000100000' /> трудно контролируемое кровотечение во время текущего оперативного лечения /обширность хирургического вмешательства<br></label>
+                </div>
+                <div class='divSingleLvlRF clsFibrBleedingRF clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkPriorMajorBleeding'><input type='checkbox' id='chkPriorMajorBleeding' value='1000000001100000' /> предшествующее массивное кровотечение</label><span> &hellip;</span><span class='comments' hidden> (интракраниальное, либо требующее госпитализации, либо со снижением Hb &gt; 2 г/л, либо требующее гемотрансфузии)</span><br>
+                </div>
+                <!--
+                <div class='divSingleLvlRF clsFibrBleedingRF'>
+                    <label for='chkPpredispositionToBleedings'><input type='checkbox' id='chkPriorMajorBleedingOrPredisposingToBleeding' value='1000001000000000'/> предрасположенность к кровотечениям</label><span> &hellip;</span><span class='comments' hidden> (например, геморрагический диатез)</span><br>
+                </div>
+-->
+                <hr>
+            </div>
+        </div>
+        <div class='divSingleLvlRF clsObstBleedingRF'>
+            <label for='chkHighRiskBleeding'><input type='checkbox' id='chkHighRiskBleeding' value='1000000000000100' /> высокий риск кровотечения в родах</label><span> &hellip;</span><span class='comments' hidden> (например, предлежание плаценты)</span><br>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF'>
+            <label for='chkLargeOperIn30Days'><input type='checkbox' id='chkLargeOperIn30Days' value='1000000010000000'> большая операция &lt; 1 мес. назад<br></label>
+        </div>
+        <div class='divSingleLvlRF clsObstRF'>
+            <label for='chkHyperemesis'><input type='checkbox' id='chkHyperemesis' value='1000000000003000'> гиперемезис</label><span> &hellip;</span><span class='comments' hidden>: форма раннего токсикоза, основными симптомами которой являются сильная тошнота, регулярная рвота, ощущение слабости.</span><br>
+        </div>
+        <div class='divSingleLvlRF clsObstRF'>
+            <label for='chkOHSS'><input type='checkbox' id='chkOHSS' value='1000000000004000'> синдром гиперстимуляции яичников</label><span> &hellip;</span><span class='comments' hidden> (учитывается только в первом триместре)</span><br>
+        </div>
+        <div class='divFemaleLvl'>
+            <div class='divSingleLvlRF'>
+                <div class='clsSurgRF'>
+                    <label for='chkStillbirthsMiscarriagesPrematureBirth'><input type='checkbox' id='chkStillbirthsMiscarriagesPrematureBirth' value='1000000010000000'> необъяснимые мертворождения, выкидыши (&ge; 3), преждевременные роды с токсикозом или задержка внутриутробного развития<br></label>
+                </div>
+            </div>
+        </div>
+        <div class='divSingleLvlRF clsObstRF'>
+            <label for='chkMultipleParity'><input type='checkbox' id='chkMultipleParity' value='1000000000001010'> роды в анамнезе больше 3<br></label>
+        </div>
+        <div class='divSingleLvlRF clsObstRF'>
+            <label for='chkIsOperationInPregnancy'><input type='checkbox' id='chkIsOperationInPregnancy' value='1000000000003030'> хирургические вмешательства во время беременности или в раннем послеродовом периоде</label><span> &hellip;</span><span class='comments' hidden>, за исключением немедленного восстановления промежности, а также аппендэктомии, послеродовой стерилизации</span><br>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF'>
+            <label for='chkLowerlimbEdema'><input type='checkbox' id='chkLowerlimbEdema' value='1000000010000000'> отек нижних конечностей<br></label>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF clsObstRF'>
+            <label for='chkVaricoseVeins'><input type='checkbox' id='chkVaricoseVeins' value='1000000110001010'> варикозное расширение вен нижних конечностей<br></label>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF'>
+            <label for='chkVeinCompression'><input type='checkbox' id='chkVeinCompression' value='1000000100000000'> сдавление вен</label><span> &hellip;</span><span class='comments' hidden> опухолью, гематомой и пр.</span><br>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF clsTraumRF'>
+            <label for='chkInflammatoryColonDiseases'><input type='checkbox' class='chkObstComorbidities' id='chkInflammatoryColonDiseases' value='1000000110020000'> воспалительные заболевания толстого кишечника<br></label>
+        </div>
+        <div class='divSingleLvlRF clsSurgBleedingRF'>
+            <label for='chkLumbarPuncture'><input type='checkbox' id='chkLumbarPuncture' value='1000000001000000' /> люмбальная пункция, эпидуральная или спинномозговая анестезия</label><span> &hellip;</span><span class='comments' hidden> за 4 ч. до или в течение 12 ч после операции</span><br>
+        </div>
+        <div class='divSingleLvlRF clsTraumRF'>
+            <label for='chkGeneralAnesthesia'><input type='checkbox' id='chkGeneralAnesthesia' value='10000001000000000' /> общая анестезия<br></label>
+        </div>
+        <div class='divSingleLvlRF clsAtrFibrRF'>
+            <label for='chkWasMyocardInfarctionOrAtherosclOfLargeArteries'><input type='checkbox' id='chkWasMyocardInfarctionOrAtherosclOfLargeArteries' value='1000010000000000'> сосудистое заболевание</label><span> &hellip;</span><span class='comments' hidden> (инфаркт миокарда в анамнезе, периферический атеросклероз, атеросклеротические бляшки в аорте)</span><br>
+        </div>
+        <div class='divSingleLvlRF clsFibrBleedingRF'>
+            <label for='chkJointTakingOfAnticoagulantsAndNonsteroidalAntiinflammatoryDrugs'><input type='checkbox' id='chkJointTakingOfAnticoagulantsAndNonsteroidalAntiinflammatoryDrugs' value='1000001000000000'> совместный прием антикоагулянтов и НПВП</label><span> &hellip;</span><span class='comments' hidden> (нестероидных противовоспалительных препаратов)</span><br>
+        </div>
+        <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
+            <label for='chkActiveUlcerOfStomachOrDuodenum'><input type='checkbox' id='chkActiveUlcerOfStomachOrDuodenum' value='104.500000000000' /> активная язва желудка или двенадцатиперстной кишки<br></label>
+        </div>
+        <div class='divSingleLvlRF clsNonsurgBleedingRF'>
+            <label for='chkHospitalizationInIntensiveCareUnit'><input type='checkbox' id='chkHospitalizationInIntensiveCareUnit' value='102.500000000000'> пребывание в отделении интенсивной терапии</label><span> &hellip;</span><span class='comments' hidden> в период госпитализации</span><br>
+        </div>
+        <div class='divSingleLvlRF clsNonsurgBleedingRF clsSurgRF'>
+            <label for='chkCentralVeinCatheter'><input type='checkbox' id='chkCentralVeinCatheter' value='102.001220000000'> катетер в центральной вене<br></label>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF'>
+            <label for='chkParoxysmalNightHemoglobinuria'><input type='checkbox' id='chkParoxysmalNightHemoglobinuria' value='1000000100000000'> пароксизмальная ночная гемоглобинурия<br></label>
+        </div>
+        <div class='divSingleLvlRF clsTraumRF'>
+            <label for='chkRopeApplication'><input type='checkbox' id='chkRopeApplication' value='1000000100000000'> наложение жгута/турникета во время операции<br></label>
+        </div>
+        <div class='divSingleLvlRF clsTraumRF'>
+            <label for='chkGypsumImmob'><input type='checkbox' id='chkGypsumImmob' value='1000000020000000'> гипсовая иммобилизация конечности</label><span> &hellip;</span><span class='comments' hidden> &lt; 1 мес.</span><br>
+        </div>
+        <div class='divSingleLvlRF clsOncoRF'>
+            <label for='chkWBCMore_11'><input type='checkbox' id='chkWBCMore_11' value='1000000100000000'> лейкоциты крови &gt; 11 × 10<sup><small>9</small></sup>/л<br></label>
+        </div>
+        <div class='divSingleLvlRF clsTraumRF'>
+            <label for='chkArthritis'><input type='checkbox' id='chkArthritis' value='1000000100000000'> воспаление суставов нижних конечностей (артрит), остеомиелит<br></label>
+        </div>
+        <div class='divSingleLvlRF clsTraumRF clsObstRF'>
+            <label for='chkDehydration'><input type='checkbox' id='chkDehydration' value='1000000100000010'> дегидратация</label><span> &hellip;</span><span class='comments' hidden> - cостояние, связанное со значительными потерями воды (потоотделение, рвота, диурез, диарея), либо недостаточным поступлением воды в организм.</span><br>
+        </div>
+        <div class='divSingleLvlRF clsSurgRF'>
+            <label for='chkMyeloproliferativeDiseases'><input type='checkbox' id='chkMyeloproliferativeDiseases' value='1000000100000000'> миелопролиферативные заболевания</label><span> &hellip;</span><span class='comments' hidden>: эссенциальная тромбоцитемия (увеличение числа тромбоцитов), истинная полицитемия (увеличенное количество эритроцитов), хронический миелолейкоз (увеличенное количество лейкоцитов)
+            </span><br>
+        </div>
+
+        <div class='chk3_LvlRF' hidden>
+            <label for='chkMaleDouble'><input type='checkbox' id='chkMaleDouble' value='101.000000000000'> мужской пол</label>
+            <label for='chkFemale'><input type='checkbox' id='chkFemale' value='1000010000000000' checked> женский пол</label>
+            <label for='chkBMIMore25'><input type='checkbox' id='chkBMIMore25' value='1000000010000000'> ИМТ &gt; 25 кг/м2</label>
+            <label for='chkBMIMore30'><input type='checkbox' id='chkBMIMore30' value='1100000100000000'> ожирение (ИМТ &gt; 30 кг/м2)</label>
+            <label for='chkBMI_30_39'><input type='checkbox' id='chkBMI_30_39' value='1000000100001010'> ожирение (ИМТ 30 - 39 кг/м2)</label>
+            <label for='chkBMIMore35'><input type='checkbox' id='chkBMIMore35' value='1000000000000000'> ожирение (ИМТ &gt; 35 кг/м2)</label>
+            <label for='chkBMIMore40'><input type='checkbox' id='chkBMIMore40' value='1000000000002000'> ожирение (ИМТ &gt; 40 кг/м2)</label>
+            <label for='chkAgeMore35'><input type='checkbox' id='chkAgeMore35' value='1000000000001010'> возраст &gt; 35 лет</label>
+            <label for='chkAgeMore40'><input type='checkbox' id='chkAgeMore40' value='1000000000000000'> возраст &gt; 40 лет</label>
+            <label for='chkAge_41_60'><input type='checkbox' id='chkAge_41_60' value='1000000010000000'> возраст 41—60 лет</label>
+            <label for='chkAge_61_75'><input type='checkbox' id='chkAge_61_75' value='1000000020000000'> возраст 61—75 лет</label>
+            <label for='chkAge_40_84'><input type='checkbox' id='chkAge_40_84' value='101.500000000000'> возраст 40—84 года</label>
+            <label for='chkAgeMore65'><input type='checkbox' id='chkAgeMore65' value='1000001000000000'> возраст &gt; 65 лет</label>
+            <label for='chkAge_65_74'><input type='checkbox' id='chkAge_65_74' value='1000010000000000'> возраст 65—74 года</label>
+            <label for='chkAgeMore70'><input type='checkbox' id='chkAgeMore70' value='1100000000000000'> возраст &gt; 70 лет</label>
+            <label for='chkAgeMore75'><input type='checkbox' id='chkAgeMore75' value='1000020030000000'> возраст 75 лет и старше</label>
+            <label for='chkAgeMore85'><input type='checkbox' id='chkAgeMore85' value='103.500000000000'> возраст 85 лет и старше</label>
+
+            <!--
+            <label for='chkGlomerularFiltrationRate30_59' id='lblGlomerularFiltrationRate30_59'><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkRenalInsuff_1' id='chkGlomerularFiltrationRate30_59' value='101.000000000000' /> скорость клубочковой фильтрации 30—59 мл/мин</label>
+            <label for='chkGlomerularFiltrationRateLess30'><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkSevereRenalInsuff_1 chkRenalInsuff_1' id='chkGlomerularFiltrationRateLess30' value='102.500000000000' /> скорость клубочковой фильтрации &lt; 30 мл/мин </label>
+-->
+            <input type='checkbox' id='chkWasSomeVeinThromb' value='130000013000000'>
+            <input type='checkbox' id='chkSeverePreeclampsiaOrStillbirth' value='1000000000000020'>
+            <input type='checkbox' id='chkBurnsLess20Percent' value='1000000200000000'>
+            <input type='checkbox' id='chkBurnsMore20Percent' value='1000000300000000'>
+            <input type='checkbox' id='chkIsActiveNeoplasmOrTherapyOfNeoplasm' value='132.000100000000'>
+            <input type='checkbox' id='chkRheumaticDiseasesOrInfection' value='1100000000000000'>
+            <input type='checkbox' id='chkPostpartum' value='1000000110000000'>
+            <input type='checkbox' id='chklaparoscopicIntervention' value='1000000000000000'>
+            <input type='checkbox' id='chkArthroscopicSurgery' value='1000000000000000'>
+            <input type='checkbox' id='chkArtroplasty' value='1000000300000000'>
+            <input type='checkbox' id='chkHipFractureSurgery' value='1000000300000000'>
+            <input type='checkbox' id='chkShinFractureSurgery' value='1000000000000000'>
+            <input type='checkbox' id='chkPancreatoDuodResection' value='1000000001000000'>
+            <input type='checkbox' id='chkLiverResection' value='1000000001000000'>
+            <input type='checkbox' id='chkPulmonectomy' value='1000000001000000'>
+            <input type='checkbox' id='chkHeartSurgery' value='1000000001000000'>
+            <input type='checkbox' id='chkBrainOrSpinalCordSurg' value='1000000001000000'>
+            <input type='checkbox' id='chkIsKnownHighRiskThrombophilia' value='1300000300003030'>
+            <input type='checkbox' id='chkFracturePpelvisFemurTibiaLess1Month' value='1000000050000000'>
+            <input type='checkbox' id='chkIsObstComorbidityRF' value='1000000000003020'>
+            <input type='checkbox' id='chkPulmonOrHeartInsuff' value='1100000000000000'>
+            <input type='checkbox' id='chkAcuteIschemicStrokeOrMiocardInfarction' value='1100000000000000'>
+            <input type='checkbox' id='chkStroke' value='1000001000000000'>
+            <input type='checkbox' id='chkVascularAnamnesis' value='1000020000000000'>
+            <input type='checkbox' id='chkSevereRenalOrLiverFailure' value='1000000001000000'>
+            <input type='checkbox' id='chkLiverResection' value='10000000000000001'>
+            <input type='checkbox' id='chkPDR' value='10000000000000001'>
+            <input type='checkbox' id='chkPulmonectomy' value='10000000000000001'>
+            <input type='checkbox' id='chkNeurosurgOper' value='10000000000000001'>
+            <input type='checkbox' id='chkSmallSurgery' value='1000000000000000'>
+            <input type='checkbox' id='chkLargeSurgery' value='1000000000000000'>
+            <input type='checkbox' id='chkWasIshemicStrokeTIAOrArtThrombosis' value='1000000000000000'>
+            <input type='checkbox' id='chkThrombocytopenia' value='1000000001000000'>
+            <input type='checkbox' id='chkIsBedRestMore3Days' value='1000000000000000'>
+            <input type='checkbox' id='chkTraumOrOperIn30Days' value='1200000000000000'>
+            <input type='checkbox' id='chkBleedingOrHemorragicSyndrome' value='1000001000000000'>
+            <input type='checkbox' id='chkAcuteInflammatoryDiseaseOrInfectionWithBedRest' value='1000000200000000'>
+            <input type='checkbox' id='chkSpinalCordDamageWithPlegia' value='1000000350000000'>
+            <input type='checkbox' id='chkStrokeWithPlegia' value='1000000300030000'>
+            <input type='checkbox' id='chkArthritisWithRestrictedMobility' value='1000000000010000'>
+            <input type='checkbox' id='chkIsRestrictedMobilityOrDehydration' value='1000000000001000'>
+            <input type='checkbox' id='chkCSectionInLabour' value='1000000000002010'>
+            <input type='checkbox' id='chkElectiveCSection' value='1000000000001000'>
+            <input type='checkbox' id='chkСoagulopathyWithoutThrombocytopenia' value='1000000000000100'>
+            <input type='checkbox' id='chkSevereRenalInsuff' value='1000000000100100'>
+            <input type='checkbox' id='chkSevereRenalInsuff_3' value='1000001000000000'>
+            <input type='checkbox' id='chkFamilyVeinThromb' value='1300000130000010'>
+            <input type='checkbox' id='chkWasProvocedVTE' class='chk2_LvlRF' value='1000000000000020'>
+            <input type='checkbox' id='chkSeverePreeclampsiaOrStillbirth' value='1000000000000020'>
+        </div>
+    </div>
+    <hr>
+    <button id='btnOne' hidden>Перейти к оценке риск-факторов ВТЭО</button><br>
+
+    <p id='pTitleOfConclusion' hidden>Комплексная оценка риска ВТЭО:</p>
+    <p id='pTextCollector_1' hidden>Заболевания и риск-факторы:</p>
+    <p id='pTextCollector_2' hidden>Шкалы риска ВТЭО:</p>
+    <p id='pTextCollector_3' hidden>Шкалы риска кровотечения при профилактике ВТЭО:</p>
+
+    <p id='pBestConclusion' hidden>Риск ВТЭО низкий.</p>
+
+    <button id='btnTwo'>OK</button>
+    <button id='btnThree'>OK</button>
+
+            <br><br>
+    <footer>&copy;SmartMedInterface</footer>
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/js/wte_watch/wte_watch_1.js" defer></script>
+</body>
+<html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%=title %></title>
+</head>
+<body>
+    <!-- <a href="/">Главная страница</a><br> -->
+    <a href="/programs">Программы</a><br>
+    <a href="/logout">Logout</a><br>
+    <p><%=message %></p>
+
+    <div id='divProfileOfPatient'>
+        Виудите антропометрические данные пациента:<br><br>
+        <!--        Возраст <input type='number' id='age'><br>-->
+        Дата рождения <input type='date' id='dateOfBirth'><br>
+        Вес <input type='number' id='weight'><br>
+        Рост <input type='number' id='height'><br>
+        <label for='chkMale'><input type='checkbox' id='chkMale'> мужской пол </label>
+        <p>Медицинский профиль пациента:</p>
+        <select id='slctMedicalProfileOfPatient' multiple>
+            <option value='1'>Терапия</option>
+            <option value='2'>Фибрилляция предсердий</option>
+            <option value='3'>Общая хирургия</option>
+            <option value='4'>Травматология и ортопедия</option>
+            <option value='5'>Нейрохирургия</option>
+            <option value='6'>Сердечно-сосудистая хирургия</option>
+            <option value='7'>Урология</option>
+            <option value='8'>Комбустиология</option>
+            <option value='9'>Онкология</option>
+            <option value='10'>Акушерство и гинекология</option>
+            <option value='11' hidden>пусто</option>
+        </select>
+        <div id='divObstOrGynProfile' hidden>
+            <p>Профиль пациента в рамках специальности:</p>
+            <label for='rdoObstProfile' class='clsObstRFOrGynProfile'> <input type='radio' name='rdoObstOrGynProfile' id='rdoObstProfile' value='0'> Акушерский <br></label>
+            <label for='rdoGynProfile' class='clsObstRFOrGynProfile'> <input type='radio' name='rdoObstOrGynProfile' id='rdoGynProfile' value='1'> Гинекологический <br></label>
+        </div>
+        <div id='divPregnancyOrChildbirth' hidden>
+            <p>Период наблюдения женщины:</p>
+            <label for='rdoPregnancyPeriod' class='lblPregnancyOrChildbirth'> <input type='radio' name='rdoPregnancyOrChildbirth' id='rdoPregnancyPeriod' value='0'> беременность </label>
+            <input type='number' id='inpWeekOfPregnancy' placeholder='срок в неделях' hidden> <br>
+            <label for='rdoChildbirthPeriod' class='lblPregnancyOrChildbirth'>
+                <input type='radio' name='rdoPregnancyOrChildbirth' id='rdoChildbirthPeriod' value='1'> роды и ранний послеродовый период<br><br></label>
+            <div id='divDateOfChildbirth' hidden>
+                Дата родов:
+                <button id='btnChildbirthYesterday'>Вчера</button>
+                <button id='btnChildbirthToday'>Сегодня</button>
+                <button id='btnChildbirthSomeDate'>Другая дата:</button>
+                <input type='date' id='inpDateOfChildbirth' hidden>
+            </div>
+        </div><br>
+        <label for='chkIsOrNoSurg' class='lblIsOrNoSurg' hidden><input type='checkbox' id='chkIsOrNoSurg'> Оперативное лечение:<br></label>
+        <div id='divChooseKindOfOper' hidden>
+            <p>Выбрать операцию:</p>
+            <button class='btnAccordChooseOper btnGenSurgOper' hidden>Общая хирургия</button>
+            <div class='divGenSurgOper' hidden>
+                <select size='15' multiple>
+                    <option value='0'> плановая холецистэктомия</option>
+                    <option value='0'> неосложненная аппендэктомия</option>
+                    <option value='0'> грыжесечение</option>
+                    <option value='1'> гастрэктомия</option>
+                    <option value='1'> резекция печени</option>
+                    <option value='1'> панкреатодуоденальная резекция</option>
+                    <option value='1'></option>
+                    <option value='1'> колэктомия</option>
+                    <option value='1'> резекция желудка или кишечника</option>
+                    <option value='1'> осложненная аппендэктомия</option>
+                    <option value='1'> холецистэктомия по экстренным показаниям</option>
+                    <option value='1'> пульмонэктомия или расширенная резекция легкого</option>
+                    <option value='1'> ампутация бедра</option>
+                    <option value='1'> бариатрические операции</option>
+                    <option value='1'> лапароскопическое вмешательство (длительностью &gt; 45 мин.)</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnTraumOrthOper' hidden>Травматология и ортопедия</button>
+            <div class='divTraumOrthOper' hidden>
+                <select size='9' multiple>
+                    <option value='1'> ампутация бедра</option>
+                    <option value='0'> вмешательство по поводу деформации стопы</option>
+                    <option value='2'> эндоскопические операции на суставах нижней конечности</option>
+                    <option value='0'> операции на мягких тканях нижних конечностей с последующей иммобилизацией</option>
+                    <option value='1'> остеотомии и остеосинтез таза</option>
+                    <option value='1'> остеотомии и остеосинтез голени</option>
+                    <option value='3'> эндопротезирование тазобедренного, коленного суставов</option>
+                    <option value='3'> операции при переломах бедра</option>
+                    <option value='1'> операции на позвоночном столбе</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnNeurosurgOper' hidden>Нейрохирургия</button>
+            <div class='divNeurosurgOper' hidden>
+                <select size='2' multiple>
+                    <option value='1'> операции на головном и спинном мозге</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnCardiovascOper' hidden>Сердечно-сосудистая хирургия</button>
+            <div class='divCardiovascOper' hidden>
+                <select size='6' multiple>
+                    <option value='0'> флебэктомия</option>
+                    <option value='0'> стволовая лазерная или радиочастотная облитерация</option>
+                    <option value='0'> кроссэктомия при восходящем тромбофлебите поверхностных вен</option>
+                    <option value='1'> артериальная реконструкция</option>
+                    <option value='1'> аорто-коронарное шунтирование</option>
+                    <option value='1'> другая операция на сердце</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnUrolOper' hidden>Урология</button>
+            <div class='divUrolOper' hidden>
+                <select size='4' multiple>
+                    <option value='0'> трансуретральная аденомэктомия</option>
+                    <option value='1'> чреспузырная аденомэктомия</option>
+                    <option value='1'> экстирпация мочевого пузыря</option>
+                    <option value='1'> нефрэктомия с лимфоаденэктомией и/или удалением опухолевого тромба из нижней полой вены</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper btnCombustOper' hidden>Комбустиология</button>
+            <div class='divCombustOper' hidden>
+                <select size='4' multiple>
+                    <option value='0'> некрэктомия ожоговых ран на площади до 10% поверхности тела</option>
+                    <option value='0'> аутодермопластика до 15% поверхности тела</option>
+                    <option value='1'> некрэктомия ожоговых ран на площади свыше 10% поверхности тела</option>
+                    <option value='1'> аутодермопластика свыше 15% поверхности тела</option>
+                </select>
+            </div>
+            <button class='btnAccordChooseOper' hidden>Онкология</button>
+            <button class='btnAccordChooseOper btnObsGynOper' hidden>Акушерство и гинекология</button>
+            <div class='divObsGynOper' hidden>
+                <select size='4' multiple>
+                    <option value='0'> аборт</option>
+                    <option value='1'> кесарево сечение плановое </option>
+                    <option value='1'> кесарево сечение в родах</option>
+                    <option value='1'> ампутация матки</option>
+                    <option value='1'> экстирпация матки</option>
+                </select>
+            </div>
+        </div><br>
+        <div id='divCreateKindOfOper' hidden>
+            <label for='chkCreateKindOfOper' class='lblCreateKindOfOper'> <input type='checkbox' id='chkCreateKindOfOper'> Создать профиль операции самостоятельно:<br><br></label>
+        </div>
+        <div id='divSmallOrLargeOper' hidden>
+            <label for='rdoSmallOper' class='lblSmallOrLargeOper'>
+                <input type='radio' name='rdoSmallOrLargeOper' id='rdoSmallOper' value='0'>Малая <span>&hellip;</span><span class='comments' hidden> Может быть проведена без госпитализации больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной травмы.</span><br></label>
+            <label for='rdoLargeOper' class='lblSmallOrLargeOper'><input type='radio' name='rdoSmallOrLargeOper' id='rdoLargeOper' value='1'>Большая <span>&hellip;</span><span class='comments' hidden> Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут</span><br></label>
+        </div>
+        <label for='chkTimeOfSurg' class='lblTimeOfSurg' hidden><input type='checkbox' id='chkTimeOfSurg' value='1000000000000000'> длительность операции &gt; 60 минут<br></label>
+
+            <div id='divDateOfOper' hidden>
+                Дата операции:
+                <button id='btnOperYesterday'>Вчера</button>
+                <button id='btnOperToday'>Сегодня</button>
+                <button id='btnOperTomorrow'>Завтра</button>
+                <button id='btnOperSomeDate'>Другая дата:</button>
+                <input type='date' id='inpDateOfOper' hidden>
+            </div><br>
+
+
+        <label for='chkCalculateRiskOfBleeding'><input type='checkbox' id='chkCalculateRiskOfBleeding' checked /> Вычислять риск кровотечения при профилактике ВТЭО<br></label>
+    </div>
+    <hr>
+    <button id='btnOne' hidden>Перейти к оценке риск-факторов ВТЭО</button><br>
+
+            <br><br>
+    <footer>&copy;SmartMedInterface</footer>
+    <script src="/scripts/jquery.min.js"></script>
+    <script src="/js/wte_watch/wte_patient_profile.js" defer></script>
+</body>
+<html>

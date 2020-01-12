@@ -88,16 +88,16 @@ app.get('/programs', auth, (req, res) => {
     res.render('programs',{title: "Programs Page", message: "Programs Page"});
 });
 
-app.get('/wte_patient_profile', auth, (req, res) => {
-    res.render('wte_watch_ejs/wte_patient_profile',{title: "WTE Watcher Patient Profile Page", message: "WTE Watcher Patient Profile Page"});
+app.get('/vte_patient_profile', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_patient_profile',{title: "vte Watcher Patient Profile Page", message: "vte Watcher Patient Profile Page"});
 });
 
-app.get('/wte_1', auth, (req, res) => {
-    res.render('wte_watch_ejs/wte_watch_1.ejs',{title: "WTE Watcher Start Page", message: "WTE Watcher Start Page"});
+app.get('/vte_1', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_watch_1.ejs',{title: "vte Watcher Start Page", message: "vte Watcher Start Page"});
 });
 
-app.get('/wte_2', auth, (req, res) => {
-    res.render('wte_watch_ejs/wte_watch_2.ejs',{title: "WTE Watcher Second Page", message: "WTE Watcher Second Page"});
+app.get('/vte_2', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_watch_2.ejs',{title: "vte Watcher Second Page", message: "vte Watcher Second Page"});
 });
 
 

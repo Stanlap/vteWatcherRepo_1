@@ -1,39 +1,39 @@
 'use strict';
 
 let objPatient = {
-    pkGender: 0,
+    pkBirthDateOfPatient: '',
     pkAge: 0,
+    pkGender: 0,
     pkHeight: 0,
     pkWeight: 0,
-    pkMedProfile: 0,
-    pkRiskVTE: 0,
     pkWeekOfPregnancy: 0,
     pkDateOfChildbirth: '',
-    pkSevereHepaticFailure: false,
-    pkHeartInsuff3_4: false,
     pkIsOrNoSurg: false,
     pkDateOfOper: '',
-    pkDiabetes: false,
-    pkActiveUlcerOfStomachOrDuodenum: false,
-    pkChronicDialysis: false,
-    pkArtificialHeartValve: false,
-    pkUncontrolledSystemicHypertension: false,
-    pkArtroplasty: false,
-    pkPullOfSurg: false,
-    pkCC: 125,
-    pkBirthDateOfPatient: '',
+    pkValuesMedPfofile: []
+
+    
+    // pkPullOfSurg: false,
+    // pkRiskVTE: 0,
+    // pkMedProfile: 0,
+    // pkSevereHepaticFailure: false,
+    // pkHeartInsuff3_4: false,
+    // pkDiabetes: false,
+    // pkActiveUlcerOfStomachOrDuodenum: false,
+    // pkChronicDialysis: false,
+    // pkArtificialHeartValve: false,
+    // pkUncontrolledSystemicHypertension: false,
+    // pkArtroplasty: false,
+    // pkCC: 125,
     // pkGeneralListOfRF: '',
     // pkGeneralListOfOper: '',
-    pkAllSurgProfiles: [],
-pkValuesMedPfofile: [],
-pkSelectedRF: []
-
-
+    // pkAllSurgProfiles: [],
+    // pkSelectedRF: []
 
 };
 
 
-$('#dateOfBirth').on('input', function () {
+$('#dateOfBirth').on('change', function () {
     objPatient.pkBirthDateOfPatient = new Date($('#dateOfBirth').prop('value'));
 });
 
@@ -53,19 +53,30 @@ $.extend({
 });
 $('#slctMedicalProfileOfPatient').on('change', function () {
     $('#chkMale').prop('disabled', true);
-    objPatient.pkValuesMedPfofile = $('#slctMedicalProfileOfPatient option:selected');
-
     $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth').hide();
     $('#chkIsOrNoSurg, #chkCreateKindOfOper, #divPregnancyOrChildbirth input:checked, #divObstOrGynProfile input:checked, #divSmallOrLargeOper input:checked').prop('checked', false);
     $('.btnAccordChooseOper').prop('value', 1).next().hide();
     $('.btnAccordChooseOper').hide();
-    objPatient.pkAllSurgProfiles = (objPatient.pkValuesMedPfofile.is('[value = 3]') || objPatient.pkValuesMedPfofile.is('[value = 4]') || objPatient.pkValuesMedPfofile.is('[value = 5]') || objPatient.pkValuesMedPfofile.is('[value = 6]') || objPatient.pkValuesMedPfofile.is('[value = 7]') || objPatient.pkValuesMedPfofile.is('[value = 8]') || objPatient.pkValuesMedPfofile.is('[value = 9]'));
-    if (objPatient.pkAllSurgProfiles === true) {
-        $('.lblIsOrNoSurg').show();
+
+    $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
+        objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
+    });
+    console.log(objPatient.pkValuesMedPfofile);
+
+    function isSurgOrObstProfiles() {
+        $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+            (value > 2 && value < 10) ? $('.lblIsOrNoSurg').show():
+                (value === 10) ? $('#divObstOrGynProfile').show() : '';
+            return true;
+        });
     }
-    (objPatient.pkValuesMedPfofile.is('[value = 10]')) ?
-    $('#divObstOrGynProfile').show(): '';
+    isSurgOrObstProfiles();
 });
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 $('input[name=rdoObstOrGynProfile]:radio').on('click', function () {
 
     if ($(this).val() == 0) {
@@ -151,7 +162,7 @@ $('#btnOperYesterday').on('click', function () {
 $('#btnOperToday').on('click', function () {
     $('#inpDateOfOper').hide();
     objPatient.pkDateOfOper = formatDate();
-   console.log(objPatient.pkDateOfOper);
+    console.log(objPatient.pkDateOfOper);
     (objPatient.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
 });
 $('#btnOperTomorrow').on('click', function () {
@@ -171,23 +182,28 @@ $('#inpDateOfOper').on('change', function () {
     (objPatient.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
 });
 
-$('#weight').on('change', ()=>{
+
+
+
+$('#weight').on('change', () => {
     ($('#weight').prop('value') < 50 || $('#weight').prop('value') > 120) ? alert(`Вес пациента действительно ${$('#weight').prop('value')} кг?`): '';
-    (getCurrentAge(objPatient.pkBirthDateOfPatient) < 18 || getCurrentAge(objPatient.pkBirthDateOfPatient) > 100)
-    ? alert(`Возраст пациента действительно ${getCurrentAge(objPatient.pkBirthDateOfPatient)} лет?`): '';
+    (getCurrentAge(objPatient.pkBirthDateOfPatient) < 18 || getCurrentAge(objPatient.pkBirthDateOfPatient) > 100) ?
+    alert(`Возраст пациента действительно ${getCurrentAge(objPatient.pkBirthDateOfPatient)} лет?`): '';
 
 });
-$('#height').on('change', ()=>{
+$('#height').on('change', () => {
     ($('#height').prop('value') < 150 || $('#height').prop('value') > 190) ? alert(`Рост пациента действительно ${$('#height').prop('value')} см?`): '';
-    (getCurrentAge(objPatient.pkBirthDateOfPatient) < 18 || getCurrentAge(objPatient.pkBirthDateOfPatient) > 100)
-    ? alert(`Возраст пациента действительно ${getCurrentAge(objPatient.pkBirthDateOfPatient)} лет?`): '';
+    (getCurrentAge(objPatient.pkBirthDateOfPatient) < 18 || getCurrentAge(objPatient.pkBirthDateOfPatient) > 100) ?
+    alert(`Возраст пациента действительно ${getCurrentAge(objPatient.pkBirthDateOfPatient)} лет?`): '';
 
 });
 
 function showBtnGoToRF() {
-   
 
-    (getCurrentAge(objPatient.pkBirthDateOfPatient) !== 0 && ($('#weight').val().length > 0) && ($('#height').val().length > 0) && (objPatient.pkValuesMedPfofile.length > 0)) ?  $('#btnOne').show() : $('#btnOne').hide();
+    objPatient.pkAge = getCurrentAge(objPatient.pkBirthDateOfPatient);
+    (objPatient.pkAge !== 0 && ($('#weight').val().length > 0) && ($('#height').val().length > 0) && (objPatient.pkValuesMedPfofile.length > 0)) ? $('#btnOne').show(): $('#btnOne').hide();
+
+    // (objPatient.pkAge !== 0 && ($('#weight').val().length > 0) && ($('#height').val().length > 0) && (objPatient.pkValuesMedPfofile.length > 0)) ?  $('#btnOne').show() : $('#btnOne').hide();
 }
 $('#btnOne').bind('click', goToRF);
 
@@ -204,10 +220,10 @@ $('input[name=rdoObstOrGynProfile]').click(function () {
 
 $('input[name=rdoPregnancyOrChildbirth]').click(function () {
     ($(this).val() == 0) ? ($('#inpWeekOfPregnancy').show(), $('#diobjPatient.pkDateOfChildbirth').hide(), $('#inpDateOfChildbirth').val(''), objPatient.pkDateOfChildbirth = '') : ($('#inpWeekOfPregnancy').hide(), objPatient.pkWeekOfPregnancy = 0, $('#diobjPatient.pkDateOfChildbirth').show());
-//});
-//
-//$('input[name=rdoPregnancyOrChildbirth]').click(function () {
-//
+    //});
+    //
+    //$('input[name=rdoPregnancyOrChildbirth]').click(function () {
+    //
     ($(this).val() == 1) ? ($('#inpWeekOfPregnancy').val(''), objPatient.pkWeekOfPregnancy = 0, $('#inpWeekOfPregnancy').hide(), $('#btnOne').prop('disabled', false), $('#divDateOfChildbirth').show()) : (objPatient.pkDateOfChildbirth != '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
     ($(this).val() == 0) ? ($('#inpWeekOfPregnancy').show(), $('#divDateOfChildbirth').hide()) : (objPatient.pkWeekOfPregnancy !== 0) ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
 });
@@ -221,7 +237,7 @@ $('#inpWeekOfPregnancy').on('input', function () {
 
 
 $('#btnChildbirthYesterday').on('click', function () {
-//    console.log('OK');
+    //    console.log('OK');
     let vYesterday = addDays(new Date(), -1);
     $('#inpDateOfChildbirth').hide();
     objPatient.pkDateOfChildbirth = (`${vYesterday.getFullYear()}-${('0' + (vYesterday.getMonth() + 1)).slice(-2)}-${('0' + vYesterday.getDate()).slice(-2)}`);
@@ -240,7 +256,7 @@ $('#btnChildbirthSomeDate').on('click', function () {
 
 $('#inpDateOfChildbirth').on('change', function () {
     objPatient.pkDateOfChildbirth = $(this).val();
-   console.log(objPatient.pkDateOfChildbirth);
+    console.log(objPatient.pkDateOfChildbirth);
     (objPatient.pkDateOfChildbirth !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
 });
 

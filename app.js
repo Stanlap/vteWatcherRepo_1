@@ -92,6 +92,10 @@ app.get('/vte_patient_profile', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_patient_profile',{title: "vte Watcher Patient Profile Page", message: "vte Watcher Patient Profile Page"});
 });
 
+app.get('/vte_patient_list_rf', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_patient_list_rf',{title: "vte Watcher Patient Risk Factors", message: "vte Watcher Patient Risk Factors"});
+});
+
 app.get('/vte_1', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_watch_1.ejs',{title: "vte Watcher Start Page", message: "vte Watcher Start Page"});
 });

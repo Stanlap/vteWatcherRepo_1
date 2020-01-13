@@ -10,7 +10,8 @@ let objPatient = {
     pkDateOfChildbirth: '',
     pkIsOrNoSurg: false,
     pkDateOfOper: '',
-    pkValuesMedPfofile: []
+    pkValuesMedPfofile: [],
+    pkCalculateRiskOfBleeding: true
 };
 
 $('#dateOfBirth').on('change', function () {
@@ -19,16 +20,6 @@ $('#dateOfBirth').on('change', function () {
 
 $('#chkMale').on('click', function () {
     ($(this).is(':checked')) ? $('#slctMedicalProfileOfPatient [value="10"]').hide() : $('#slctMedicalProfileOfPatient [value="10"]').show();
-});
-
-$.extend({
-    distinct: function (anArray) {
-        let result = [];
-        $.each(anArray, function (i, v) {
-            if ($.inArray(v, result) === -1) result.push(v);
-        });
-        return result;
-    }
 });
 
 $('#slctMedicalProfileOfPatient').on('change', function () {
@@ -234,10 +225,13 @@ function goToRF() {
     ($('#chkMale').is(':checked')) ? objPatient.pkGender = 1 : '';
     objPatient.pkWeight = Number($('#weight').val());
     objPatient.pkHeight = Number($('#height').val());
+    ($('#chkCalculateRiskOfBleeding').is(':checked')) ? objPatient.pkCalculateRiskOfBleeding = true : '';
+
     $('#chkIsOrNoSurg').is(':checked') ? objPatient.pkIsOrNoSurg = true : '';
     console.log(objPatient);
     let serialObj = JSON.stringify(objPatient);
         localStorage.setItem('Patient', serialObj);
 let returnObj = JSON.parse(localStorage.getItem('Patient'))
 console.log(returnObj);
+$(location).attr('href','/vte_patient_list_rf');
 } 

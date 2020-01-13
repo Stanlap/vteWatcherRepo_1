@@ -524,6 +524,14 @@ $('#chkUncontrolledSystemicHypertension').on('click', function () {
 //        ($(this).is(':checked') && $('#lblRheumaticDiseases').prop('visible', true))? $('#chkRheumaticDiseases').prop('checked', true): ($('#chkRheumaticDiseases, #chkIsRheumaticDiseases').prop('checked', false), $('#lblIsRheumaticDiseases').show(), $('#divIsRheumaticDiseases').hide());
 //    })
 
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
 let vCounterPaduaScore = 0,
     vCounterCHA2DS2_VASс = 0,
     vCounterIMPROVE = 0,

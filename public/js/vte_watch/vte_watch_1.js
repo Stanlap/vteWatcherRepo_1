@@ -994,6 +994,7 @@ function bindBalls(counter) {
     }
     return counter + vBalls;
 }
+
 $('#btnTwo').on('click', function () {
     $('#pTitleOfConclusion').show();
 

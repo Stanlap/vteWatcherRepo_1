@@ -15,9 +15,8 @@ let objPatient = {
     pkPregnancyOrChildbirth: false,
     pkBMI: 0,
     pkAllChoosedOperations: [],
-    pkGradeOfOper: 0
-
-
+    pkGradeOfOper: 0,
+    pkOperTimeMore60: false
 };
 
 $('#dateOfBirth').on('change', function () {
@@ -236,20 +235,30 @@ function goToRF() {
     }
     objPatient.pkBMI = searchBMI($('#weight').val(), $('#height').val());
 
+    $('#chkIsOrNoSurg').is(':checked') ? objPatient.pkIsOrNoSurg = true : '';
+
     let pkOperDifficultyGrades = [0];
+
     $.each($('#divChooseKindOfOper option:selected'), function (el) {
         pkOperDifficultyGrades.push($('#divChooseKindOfOper option:selected')[el].value);
         objPatient.pkAllChoosedOperations.push($('#divChooseKindOfOper option:selected')[el].innerText);
-    })
+    });
     function getMaxOfArray(numArray) {
         return Math.max.apply(null, numArray);
     }
     ($('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined) ? objPatient.pkGradeOfOper = Number($('input[name=rdoSmallOrLargeOper]:checked').val()): objPatient.pkGradeOfOper = getMaxOfArray(pkOperDifficultyGrades.map(Number));
 
+    if(objPatient.pkIsOrNoSurg === true && objPatient.pkAllChoosedOperations.length === 0) {
+        objPatient.pkAllChoosedOperations.push('малая операция');
+        (objPatient.pkGradeOfOper === 1) ? objPatient.pkAllChoosedOperations.push('большая операция'):'';
+    }
+    
+
     ($('#chkCalculateRiskOfBleeding').is(':checked')) ? objPatient.pkCalculateRiskOfBleeding = true : '';
-    $('#chkIsOrNoSurg').is(':checked') ? objPatient.pkIsOrNoSurg = true : '';
     ($('input[name=rdoPregnancyOrChildbirth]:checked').val() != undefined) ? objPatient.pkPregnancyOrChildbirth = true : '';
     console.log(objPatient);
+    ($('#chkTimeOfSurg').is(':checked')) ? objPatient.pkOperTimeMore60 = true : '';
+
     let serialObj = JSON.stringify(objPatient);
         localStorage.setItem('Patient', serialObj);
 let returnObj = JSON.parse(localStorage.getItem('Patient'))

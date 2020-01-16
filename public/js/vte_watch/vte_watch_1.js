@@ -928,6 +928,8 @@ function countRF() {
     console.log(vCounterCapriniRF);
     console.log(vCounterRusTraumRF);
 
+    
+
     let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
     let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
     $('.chk2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);

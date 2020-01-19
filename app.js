@@ -3,6 +3,7 @@ const session = require('express-session');
 const fileStore = require('session-file-store')(session);
 const passport = require('passport');
 const userDB = require('./neDB');
+const countRF = require('./public/vte_brain');
 const app = express();
 const port = 8000;
 // const ejs = require('ejs');
@@ -66,6 +67,15 @@ app.post('/login', (req, res, next) => {
 app.post('/registration', function (req, res) {
     userDB.addUser(req.body.email, req.body.password, res);
 });
+app.post('/count', function (req, res) {
+    // let xAr_2 =[];
+    // let xAr = req.body.rfArr.split(',');
+    // xAr.forEach(function(el) {
+    //     xAr_2.push(el.split(''));
+    // });
+    let xAr_3 = countRF.countKindsRF(req.body.rfArr, req.body.objPatient);
+    res.send('xAr_3');
+});
 
 app.get('/logout', (req, res) => {
     req.logOut();
@@ -94,6 +104,10 @@ app.get('/vte_patient_profile', auth, (req, res) => {
 
 app.get('/vte_patient_list_rf', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_patient_list_rf',{title: "vte Watcher Patient Risk Factors", message: "vte Watcher Patient Risk Factors"});
+});
+
+app.get('/vte_results_rf', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_results_rf',{title: "vte Watcher Patient Has Risk Factors", message: "vte Watcher Patient Has Risk Factors"});
 });
 
 app.get('/vte_1', auth, (req, res) => {

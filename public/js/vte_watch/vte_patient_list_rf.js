@@ -508,19 +508,22 @@ let objPatientForBrain = {
 };
 
 
-fetch('/count', {  
-    method: 'post',  
-    body: {
-        rfArr : JSON.stringify(pkRfArr),
-        objPatient: JSON.stringify(objPatientForBrain)
-    }
-  })
-  .then(function (data) {  
-    console.log('Request succeeded with JSON response', data);  
-  })  
-  .catch(function (error) {  
-    console.log('Request failed', error);  
-  });  
+// fetch('/count', {  
+//     method: 'post', 
+//     headers: {
+//         'Content-Type': 'text/html; charset=utf-8'
+//       },
+//     body: {
+//         rfArr : JSON.stringify(pkRfArr.join()),
+//         objPatient: JSON.stringify(objPatientForBrain)
+//     }
+//   })
+//   .then(function (data) {  
+//     console.log('Request succeeded with JSON response', data);  
+//   })  
+//   .catch(function (error) {  
+//     console.log('Request failed', error);  
+//   });  
 
 }
 

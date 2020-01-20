@@ -68,13 +68,9 @@ app.post('/registration', function (req, res) {
     userDB.addUser(req.body.email, req.body.password, res);
 });
 app.post('/count', function (req, res) {
-    // let xAr_2 =[];
-    // let xAr = req.body.rfArr.split(',');
-    // xAr.forEach(function(el) {
-    //     xAr_2.push(el.split(''));
-    // });
     let xAr_3 = countRF.countKindsRF(req.body.rfArr, req.body.objPatient);
-    res.send('xAr_3');
+    let json = JSON.stringify(xAr_3);
+    return res.send(json);
 });
 
 app.get('/logout', (req, res) => {

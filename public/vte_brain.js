@@ -11,8 +11,7 @@ module.exports.countKindsRF = (tArr, objPatient) => {
         tArr_3.push(el);
     });
 
-    p_1 = new Promise((resolve, rejected) => {
-        resolve(objRF = {
+        objRF = {
             vCounterPaduaScore: 0,
             vCounterCHA2DS2_VASс: 0,
             vCounterIMPROVE: 0,
@@ -27,7 +26,7 @@ module.exports.countKindsRF = (tArr, objPatient) => {
             vCounterGreenTop37a: 0,
             vCounterObstRuRF: 0,
             vCounterObstBleedingRF: 0
-        });
+        };
         let i = [], m = 0;
         tArr_2.forEach(el => {
             i.push(el[2]);
@@ -37,8 +36,7 @@ module.exports.countKindsRF = (tArr, objPatient) => {
             i = [];
             objRF.vCounterIMPROVE += Number(m);               
         });
-    });
-    p_1.then((result) => {
+    
         tArr_3.forEach( el => {
 
             objRF.vCounterPaduaScore += el[1];
@@ -95,8 +93,6 @@ module.exports.countKindsRF = (tArr, objPatient) => {
 
         (objRF.vCounterMajorBleedingScoreRF > 0) ? objRF.vCounterMajorBleedingScoreRF = 1: '';
         (objRF.vCounterTraumBleedingRF > 0) ? objRF.vCounterTraumBleedingRF = 1: '';
-    }).then(() => {
-        console.log(objRF)
-    });
-    return objRF;
-}
+        console.log(objRF);
+        return objRF;
+    };

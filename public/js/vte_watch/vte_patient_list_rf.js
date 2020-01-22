@@ -476,8 +476,9 @@ function countRF() {
     ($('#divAllRF input:checkbox:checked')).each(function () {
         pkRfArr.push($(this).val());
     });
-console.log(pkRfArr);
+// console.log(pkRfArr);
 console.log( pkRfArr.join());
+// console.log(JSON.stringify($.extend({}, pkRfArr)));
     let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
     let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
     $('.chk2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
@@ -494,37 +495,25 @@ console.log( pkRfArr.join());
         });
         return b;
     }
+
     objPatient.pkGeneralListOfRF = getStringOfRF($('#divAllRF input:checked').parent());
     // console.log(objPatient);
 
     let serialObj = JSON.stringify(objPatient);
     localStorage.setItem('Patient', serialObj);
-let returnObj = JSON.parse(localStorage.getItem('Patient'))
-// console.log(returnObj);
 
-let objPatientForBrain = {
+let objPatientForCounter = {
     isOrNoSurg: objPatient.pkIsOrNoSurg,
     operTimeMore60: objPatient.operTimeMore60
 };
-
-
-// fetch('/count', {  
-//     method: 'post', 
-//     headers: {
-//         'Content-Type': 'text/html; charset=utf-8'
-//       },
-//     body: {
-//         rfArr : JSON.stringify(pkRfArr.join()),
-//         objPatient: JSON.stringify(objPatientForBrain)
-//     }
-//   })
-//   .then(function (data) {  
-//     console.log('Request succeeded with JSON response', data);  
-//   })  
-//   .catch(function (error) {  
-//     console.log('Request failed', error);  
-//   });  
-
+$.post('/count', {'rfArr' : pkRfArr.join(), 'objPatientForCounter': JSON.stringify(objPatientForCounter)},
+        function(data) {
+        localStorage.setItem('objScalesVTE', data);
+        // let fromRfArr = localStorage.getItem('objScalesVTE');
+        // let objBallsRiskVTE = JSON.parse(fromRfArr);
+        // console.log(objBallsRiskVTE.vCounterPaduaScore);
+        // console.log(JSON.parse(data));
+        });
 }
 
 $('#btnOne').bind('click', countRF);

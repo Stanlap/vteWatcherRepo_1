@@ -67,17 +67,27 @@ app.post('/login', (req, res, next) => {
 app.post('/registration', function (req, res) {
     userDB.addUser(req.body.email, req.body.password, res);
 });
+
 app.post('/count', function (req, res) {
-    let xAr_3 = countRF.countKindsRF(req.body.rfArr, req.body.objPatient);
-    let json = JSON.stringify(xAr_3);
-    return res.send(json);
+    console.log(req.body.rfArr);
+    let xAr = countRF.countKindsRF(req.body.rfArr, req.body.objPatientForCounter);
+    let jxAr = JSON.stringify(xAr);
+    return res.send(jxAr);
 });
+// app.post('/count', function (req, res) {
+//     let xAr_3 = countRF.countKindsRF(req.body.rfArr, req.body.objPatient);
+//     let json = JSON.stringify(xAr_3);
+//     return res.send(json);
+// });
 
 app.get('/logout', (req, res) => {
     req.logOut();
     res.redirect('/');
     foundedUser = {};
 });
+// app.get('/reqPost', (req, res) => {
+//     res.render('vte_watch_ejs/reqPost');
+// });
 
 const auth = (req, res, next) => {
     if (req.isAuthenticated()) {

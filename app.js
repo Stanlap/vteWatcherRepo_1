@@ -68,12 +68,6 @@ app.post('/registration', function (req, res) {
     userDB.addUser(req.body.email, req.body.password, res);
 });
 
-app.post('/count', function (req, res) {
-    console.log(req.body.rfArr);
-    let xAr = countRF.countKindsRF(req.body.rfArr, req.body.objPatientForCounter);
-    let jxAr = JSON.stringify(xAr);
-    return res.send(jxAr);
-});
 // app.post('/count', function (req, res) {
 //     let xAr_3 = countRF.countKindsRF(req.body.rfArr, req.body.objPatient);
 //     let json = JSON.stringify(xAr_3);
@@ -123,6 +117,17 @@ app.get('/vte_1', auth, (req, res) => {
 app.get('/vte_2', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_watch_2.ejs',{title: "vte Watcher Second Page", message: "vte Watcher Second Page"});
 });
+app.get('/vte_concl', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_concl.ejs',{title: "vte Conclusion about risk of VTE", message: "vte Conclusion about risk of VTE"});
+});
+
+app.post('/count', auth, (req, res) => {
+    console.log(req.body.rfArr);
+    let xAr = countRF.countKindsRF(req.body.rfArr, req.body.objPatientForCounter);
+    let jxAr = JSON.stringify(xAr);
+    return res.send(jxAr);
+});
+
 
 
 app.listen(port, () => console.log(`Server is listening on port ${port}!`));

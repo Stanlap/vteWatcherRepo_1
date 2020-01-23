@@ -1,4 +1,5 @@
-let objPatient = JSON.parse(localStorage.getItem('Patient'))
+let objPatient = JSON.parse(localStorage.getItem('Patient'));
+localStorage.removeItem('Patient')
 console.log(objPatient);
 
 $.extend({
@@ -395,7 +396,7 @@ function countRF() {
     ($('#chkIsTraum, #chkLargeOperIn30Days').is(':checked')) ? $('#chkTraumOrOperIn30Days').prop('checked', true): '';
     ($('#chkIsPulmonInsuff').is(':checked') || $('#chkIsHeartInsuff').is(':checked')) ? $('#chkPulmonOrHeartInsuff').prop('checked', true): '';
     ($('.chkSevereRenalInsuff_1').is(':checked')) ? $('#chkSevereRenalInsuff').prop('checked', true): '';
-       ($('.chkSevereRenalInsuff_2').is(':checked')|| vCreatinineValue > 200 ) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
+    ($('.chkSevereRenalInsuff_2').is(':checked') || vCreatinineValue > 200) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
     $('#chkIsLiverFailure').is(':checked') ? objPatient.pkSevereHepaticFailure = true : '';
     $('#chkHeartInsuff3_4').is(':checked') ? objPatient.pkHeartInsuff3_4 = true : '';
     $('#chkIsDiabetes').is(':checked') ? objPatient.pkDiabetes = true : '';
@@ -476,9 +477,9 @@ function countRF() {
     ($('#divAllRF input:checkbox:checked')).each(function () {
         pkRfArr.push($(this).val());
     });
-// console.log(pkRfArr);
-console.log( pkRfArr.join());
-// console.log(JSON.stringify($.extend({}, pkRfArr)));
+    // console.log(pkRfArr);
+    console.log(pkRfArr.join());
+    // console.log(JSON.stringify($.extend({}, pkRfArr)));
     let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
     let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
     $('.chk2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
@@ -501,19 +502,26 @@ console.log( pkRfArr.join());
 
     let serialObj = JSON.stringify(objPatient);
     localStorage.setItem('Patient', serialObj);
-
-let objPatientForCounter = {
-    isOrNoSurg: objPatient.pkIsOrNoSurg,
-    operTimeMore60: objPatient.operTimeMore60
-};
-$.post('/count', {'rfArr' : pkRfArr.join(), 'objPatientForCounter': JSON.stringify(objPatientForCounter)},
-        function(data) {
-        localStorage.setItem('objScalesVTE', data);
-        // let fromRfArr = localStorage.getItem('objScalesVTE');
-        // let objBallsRiskVTE = JSON.parse(fromRfArr);
-        // console.log(objBallsRiskVTE.vCounterPaduaScore);
-        // console.log(JSON.parse(data));
+    let objPatientForCounter = {
+        isOrNoSurg: objPatient.pkIsOrNoSurg,
+        operTimeMore60: objPatient.operTimeMore60
+    };
+    $.post('/count', {
+            'rfArr': pkRfArr.join(),
+            'objPatientForCounter': JSON.stringify(objPatientForCounter)
+        },
+        function (data) {
+            localStorage.setItem('objScalesVTE', data);
+            // let fromRfArr = localStorage.getItem('objScalesVTE');
+            // let objBallsRiskVTE = JSON.parse(fromRfArr);
+            // console.log(objBallsRiskVTE.vCounterPaduaScore);
+            // console.log(JSON.parse(data));
         });
+        serialObj = JSON.stringify(objPatient);
+        localStorage.setItem('Patient', serialObj);
+
+    $(location).attr('href', '/vte_concl');
+
 }
 
 $('#btnOne').bind('click', countRF);

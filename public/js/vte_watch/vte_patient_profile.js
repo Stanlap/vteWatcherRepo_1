@@ -16,7 +16,8 @@ let objPatient = {
     pkBMI: 0,
     pkAllChoosedOperations: [],
     pkGradeOfOper: 0,
-    pkOperTimeMore60: false
+    pkOperTimeMore60: false,
+    pkAllSurgProfiles: false
 };
 
 $('#dateOfBirth').on('change', function () {
@@ -38,9 +39,20 @@ $('#slctMedicalProfileOfPatient').on('change', function () {
         objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
     });
     console.log(objPatient.pkValuesMedPfofile);
+    
+    let bln = false;
+    function isSurgProfiles() {
+        $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+            (value > 2 && value < 10) ? bln = true:'';
+            return bln;
+        });
+    }
+    objPatient.pkAllSurgProfiles = isSurgProfiles();
+
 
     function isSurgOrObstProfiles() {
         $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+
             (value > 2 && value < 10) ? $('.lblIsOrNoSurg').show() :
                 (value === 10) ? $('#divObstOrGynProfile').show() : '';
             return true;

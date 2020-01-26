@@ -1,7 +1,8 @@
 let objPatient = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(objPatient);
-
+let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
+localStorage.removeItem('SelectedOper');
 $.extend({
     distinct: function (anArray) {
         let result = [];
@@ -379,9 +380,6 @@ function countRF() {
     (vGFR > 29 && vGFR < 60) ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true): '';
     (vGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true): '';
 
-    if (objPatient.pkIsOrNoSurg) {
-        ($('.divGenSurgOper select').prop('selectedIndex') == 4 || $('.divTraumOrthOper select').prop('selectedIndex') == 8 || $('.divNeurosurgOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 1) ? objPatient.pkPullOfSurg = true: '';
-    }
 
     ($('.chkSumTherRF_1').is(':checked')) ? $('#chkAcuteIschemicStrokeOrMiocardInfarction').prop('checked', true): '';
     ($('.chkSumTherRF_2').is(':checked')) ? $('#chkRheumaticDiseasesOrInfection').prop('checked', true): '';
@@ -427,25 +425,29 @@ function countRF() {
     ($('#chkIsRestrictedMobility, #chkDehydration').is(':checked')) ? $('#chkIsRestrictedMobilityOrDehydration').prop('checked', true): '';
     ($('.chkСoagulopathy_1').is(':checked')) ? $('#chkСoagulopathyWithoutThrombocytopenia').prop('checked', true): '';
 
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 2) ? $('#chkArthroscopicSurgery').prop('checked', true): '';
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 5) ? $('#chkShinFractureSurgery').prop('checked', true): '';
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 6) ? ($('#chkArtroplasty').prop('checked', true), objPatient.pkArtroplasty = true) : '';
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 7) ? $('#chkHipFractureSurgery').prop('checked', true): '';
 
-    ($('.divGenSurgOper select').prop('selectedIndex') == 4) ? $('#chkLiverResection').prop('checked', true): '';
-    ($('.divGenSurgOper select').prop('selectedIndex') == 5) ? $('#chkPancreatoDuodResection').prop('checked', true): '';
-    ($('.divGenSurgOper select').prop('selectedIndex') == 11) ? $('#chkPulmonectomy').prop('checked', true): '';
-    ($('.divGenSurgOper select').prop('selectedIndex') == 14) ? $('#chklaparoscopicIntervention').prop('checked', true): '';
 
-    ($('.divCardiovascOper select').prop('selectedIndex') == 4 || $('.divCardiovascOper select').prop('selectedIndex') == 5) ? $('#chkHeartSurgery').prop('checked', true): '';
 
-    ($('.divNeurosurgOper select').prop('selectedIndex') == 0) ?
-    $('#chkBrainOrSpinalCordSurg').prop('checked', true): '';
 
-    ($('.divObsGynOper select').prop('selectedIndex') == 1) ?
-    $('#chkElectiveCSection').prop('checked', true): '';
-    ($('.divObsGynOper select').prop('selectedIndex') == 2) ?
-    $('#chkCSectionInLabour').prop('checked', true): '';
+
+
+    (objPatient.pkArtroplasty) ? ($('#chkArtroplasty').prop('checked', true)) : '';
+
+    (objSelectedOper.pkArthroscopicSurgery) ? $('#chkArthroscopicSurgery').prop('checked', true): '';
+    (objSelectedOper.pkShinFractureSurgery) ? $('#chkShinFractureSurgery').prop('checked', true): '';
+    (objSelectedOper.pkHipFractureSurgery) ? $('#chkHipFractureSurgery').prop('checked', true): '';
+
+    (objSelectedOper.pkLiverResection) ? $('#chkLiverResection').prop('checked', true): '';
+    (objSelectedOper.pkPancreatoDuodResection) ? $('#chkPancreatoDuodResection').prop('checked', true): '';
+    (objSelectedOper.pkPulmonectomy) ? $('#chkPulmonectomy').prop('checked', true): '';
+    (objSelectedOper.pkLaparoscopicIntervention) ? $('#chklaparoscopicIntervention').prop('checked', true): '';
+
+    (objSelectedOper.pkHeartSurgery) ? $('#chkHeartSurgery').prop('checked', true): '';
+
+    (objSelectedOper.pkBrainOrSpinalCordSurg) ? $('#chkBrainOrSpinalCordSurg').prop('checked', true): '';
+
+    (objSelectedOper.pkElectiveCSection) ? $('#chkElectiveCSection').prop('checked', true): '';
+    (objSelectedOper.pkCSectionInLabour) ? $('#chkCSectionInLabour').prop('checked', true): '';
 
     (objPatient.pkAge > 35) ?
     $('#chkAgeMore35').prop('checked', true): '';

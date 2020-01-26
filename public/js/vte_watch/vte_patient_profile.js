@@ -17,7 +17,11 @@ let objPatient = {
     pkAllChoosedOperations: [],
     pkGradeOfOper: 0,
     pkOperTimeMore60: false,
-    pkAllSurgProfiles: false
+    pkAllSurgProfiles: false,
+    pkPullOfSurg: false,
+    pkArtroplastyHipJoint: false,
+    pkArtroplastyKneeJoint: false,
+    pkArtroplasty: false
 };
 
 $('#dateOfBirth').on('change', function () {
@@ -249,6 +253,54 @@ function goToRF() {
 
     $('#chkIsOrNoSurg').is(':checked') ? objPatient.pkIsOrNoSurg = true : '';
 
+    if (objPatient.pkIsOrNoSurg) {
+        ($('.divGenSurgOper select').prop('selectedIndex') == 4 || $('.divTraumOrthOper select').prop('selectedIndex') == 9 || $('.divNeurosurgOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 1) ? objPatient.pkPullOfSurg = true: '';
+    }
+
+    ($('.divTraumOrthOper select').prop('selectedIndex') == 6 || $('.divTraumOrthOper select').prop('selectedIndex') == 7) ? ($('#chkArtroplasty').prop('checked', true), objPatient.pkArtroplasty = true) : '';
+
+    ($('.divTraumOrthOper select').prop('selectedIndex') == 6) ? ($('#chkArtroplasty').prop('checked', true), objPatient.pkArtroplastyHipJoint = true) : '';
+    ($('.divTraumOrthOper select').prop('selectedIndex') == 7) ? ($('#chkArtroplasty').prop('checked', true), objPatient.pkArtroplastyKneeJoint = true) : '';
+
+
+
+    console.log($('.divTraumOrthOper select').prop('selectedIndex'));
+
+ let objSelectedOper ={
+     pkLiverResection : false,
+     pkPancreatoDuodResection : false,
+     pkPulmonectomy : false,
+     pkLaparoscopicIntervention : false,
+     pkHeartSurgery : false,
+     pkBrainOrSpinalCordSurg : false,
+     pkElectiveCSection : false,
+     pkSectionInLabour : false,
+     pkArthroscopicSurgery : false,
+     pkShinFractureSurgery : false,
+     pkHipFractureSurgery : false
+};
+
+($('.divTraumOrthOper select').prop('selectedIndex') == 2) ? objSelectedOper.pkArthroscopicSurgery = true: '';
+($('.divTraumOrthOper select').prop('selectedIndex') == 5) ? objSelectedOper.pkShinFractureSurgery = true: '';
+($('.divTraumOrthOper select').prop('selectedIndex') == 8) ? objSelectedOper.pkHipFractureSurgery = true: '';
+
+
+    ($('.divGenSurgOper select').prop('selectedIndex') == 4) ? objSelectedOper.pkLiverResection = true: '';
+    ($('.divGenSurgOper select').prop('selectedIndex') == 5) ? objSelectedOper.pkPancreatoDuodResection = true: '';
+    ($('.divGenSurgOper select').prop('selectedIndex') == 11) ? objSelectedOper.pkPulmonectomy = true: '';
+    ($('.divGenSurgOper select').prop('selectedIndex') == 14) ? objSelectedOper.pkLaparoscopicIntervention = true: '';
+
+    ($('.divCardiovascOper select').prop('selectedIndex') == 4 || $('.divCardiovascOper select').prop('selectedIndex') == 5) ? objSelectedOper.pkHeartSurgery = true: '';
+
+    ($('.divNeurosurgOper select').prop('selectedIndex') == 0) ?
+    objSelectedOper.pkBrainOrSpinalCordSurg = true: '';
+
+    ($('.divObsGynOper select').prop('selectedIndex') == 1) ?
+    objSelectedOper.pkElectiveCSection = true: '';
+    ($('.divObsGynOper select').prop('selectedIndex') == 2) ?
+    objSelectedOper.pkCSectionInLabour = true: '';
+
+
     let pkOperDifficultyGrades = [0];
 
     $.each($('#divChooseKindOfOper option:selected'), function (el) {
@@ -273,6 +325,8 @@ function goToRF() {
 
     let serialObj = JSON.stringify(objPatient);
         localStorage.setItem('Patient', serialObj);
+        serialObj = JSON.stringify(objSelectedOper);
+        localStorage.setItem('SelectedOper', serialObj);
 let returnObj = JSON.parse(localStorage.getItem('Patient'))
 console.log(returnObj);
 $(location).attr('href','/vte_patient_list_rf');

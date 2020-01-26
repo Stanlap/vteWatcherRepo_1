@@ -3,8 +3,6 @@
         console.log(objBallsRiskVTE);
         let objPatient = JSON.parse(localStorage.getItem('Patient'));
         console.log(objPatient);
-        console.log(objPatient.pkValuesMedPfofile);
-        console.log( typeof objPatient.pkValuesMedPfofile);
 
         function bindBalls(counter) {
             let vBalls;
@@ -145,15 +143,17 @@ $('#btnTwo').on('click', function () {
 
 $('#btnThree').on('click', function () {
 
-    console.log('Gender ' + objPatient.pkGender);
-    console.log('Age ' + objPatient.pkAge);
-    console.log('Height ' + objPatient.pkHeight);
-    console.log('Weight ' + objPatient.pkWeight);
-    console.log('Med Profile ' + objPatient.pkMedProfile);
-    console.log('RiskVTE ' + objPatient.pkRiskVTE);
-    console.log('CC ' + objPatient.pkCC);
+    // console.log('Gender ' + objPatient.pkGender);
+    // console.log('Age ' + objPatient.pkAge);
+    // console.log('Height ' + objPatient.pkHeight);
+    // console.log('Weight ' + objPatient.pkWeight);
+    // console.log('Med Profile ' + objPatient.pkMedProfile);
+    // console.log('RiskVTE ' + objPatient.pkRiskVTE);
+    // console.log('CC ' + objPatient.pkCC);
 
     let arrStratRF = [0, 0, 0, [0, 0], 0];
+
+    objPatient.pkMedProfile = 1;
 
     function getMainMedProfile() {
 
@@ -187,22 +187,23 @@ $('#btnThree').on('click', function () {
     }
 getMainMedProfile();
 
-    console.log(objPatient.pkMedProfile);
-    console.log(objPatient.pkRiskVTE);
-    console.log(objPatient.pkSevereHepaticFailure);
-    console.log(objPatient.pkHeartInsuff3_4);
-    console.log(objPatient.pkIsOrNoSurg);
-    console.log(objPatient.pkIsOrNoSurg);
-    console.log('Diabetes: ' + objPatient.pkDiabetes);
-    console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
-    console.log('Chronic Dialysis: ' + objPatient.pkChronicDialysis);
-    console.log('Artificial Heart Valve: ' + objPatient.pkArtificialHeartValve);
-    console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
-    console.log('Some Surg: ' + objPatient.pkPullOfSurg);
-    console.log('Artroplasty: ' + objPatient.pkArtroplasty);
+    // console.log(objPatient.pkMedProfile);
+    // console.log(objPatient.pkRiskVTE);
+    // console.log(objPatient.pkSevereHepaticFailure);
+    // console.log(objPatient.pkHeartInsuff3_4);
+    // console.log(objPatient.pkIsOrNoSurg);
+    // console.log(objPatient.pkIsOrNoSurg);
+    // console.log('Diabetes: ' + objPatient.pkDiabetes);
+    // console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
+    // console.log('Chronic Dialysis: ' + objPatient.pkChronicDialysis);
+    // console.log('Artificial Heart Valve: ' + objPatient.pkArtificialHeartValve);
+    // console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
+    // console.log('Some Surg: ' + objPatient.pkPullOfSurg);
+    // console.log('Artroplasty: ' + objPatient.pkArtroplasty);
 //    console.log('vProbe: ' + vProbe);
 
 delete objPatient.pkHeight;
+localStorage.removeItem("Patient");
 let serialObj = JSON.stringify(objPatient);
 localStorage.setItem("Patient", serialObj);
 

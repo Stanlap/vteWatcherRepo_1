@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let objPatient = JSON.parse(localStorage.getItem('Patient'));
     // localStorage.clear();
-    console.log(objPatient);
+    console.log(objPatient.pkMedProfile);
 
 
     $('<div/>').attr({
@@ -400,7 +400,6 @@ $(document).ready(function () {
                 vT_2.Mg = vOfficDose_Gen;
                 vT_1.singleProphDose = $('#inpText_2').val();
                 objChoosedDrug.tempCont = (`${(vT_1.singleProphDose/vOfficDose_Gen).toFixed(1)} ${vT_1.container},`);
-                $('#btnTry').trigger('click').remove();
                 objChoosedDrug.numberOfOfficDose = (vT_1.singleProphDose / vT_2.Mg).toFixed(1);
                 break;
 
@@ -457,12 +456,14 @@ $(document).ready(function () {
         $('#btnOne').unbind('click', makeNoteOfDrug);
 
         objPatient.pkChoosedDgurAndItsSignature = (`${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`);
-        $('#btnOne').unbind('click', makeNoteOfDrug);
+        objPatient.pkChoosedDrugGroupLat = objChoosedDrug.objChoosedDrugGroupLat;
+
+        localStorage.removeItem("Patient");
+        let serialObj = JSON.stringify(objPatient);
+        localStorage.setItem("Patient", serialObj);
+        
+        $(location).attr('href','/vte_assignment_sheet');    
     };
-    let serialObj = JSON.stringify(objPatient);
-    localStorage.setItem("Patient", serialObj);
-    
-    $(location).attr('href','/vte_assignment_sheet');
     
 
 });

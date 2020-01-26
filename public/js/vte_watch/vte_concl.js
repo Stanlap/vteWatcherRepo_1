@@ -204,6 +204,7 @@ getMainMedProfile();
 delete objPatient.pkHeight;
 let serialObj = JSON.stringify(objPatient);
 localStorage.setItem("Patient", serialObj);
+
 $(location).attr('href','/vte_drug');
-// 
+
 });

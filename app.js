@@ -120,6 +120,9 @@ app.get('/vte_2', auth, (req, res) => {
 app.get('/vte_concl', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_concl.ejs',{title: "vte Conclusion about risk of VTE", message: "vte Conclusion about risk of VTE"});
 });
+app.get('/vte_drug', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_drug.ejs',{title: "vte Define Drug", message: "vte Define Drug"});
+});
 
 app.post('/count', auth, (req, res) => {
     console.log(req.body.rfArr);

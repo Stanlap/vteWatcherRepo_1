@@ -204,6 +204,6 @@ getMainMedProfile();
 delete objPatient.pkHeight;
 let serialObj = JSON.stringify(objPatient);
 localStorage.setItem("Patient", serialObj);
-let returnObj = JSON.parse(localStorage.getItem("Patient"))
-alert(returnObj.pkMedProfile);//спарсим его обратно объект
+$(location).attr('href','/vte_drug');
+// 
 });

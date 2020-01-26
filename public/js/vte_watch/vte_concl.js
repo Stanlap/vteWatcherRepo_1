@@ -179,13 +179,14 @@ $('#btnThree').on('click', function () {
             arrStratRF[4] >= 1 ? (objPatient.pkMedProfile = 4, objPatient.pkRiskVTE = arrStratRF[4]) : '';
             //    arrStratRF[3] === 2 ? objPatient.pkMedProfile = 3 : '';       arrStratRF[4] === 2 ? objPatient.pkMedProfile = 4 : '';
         };
-        objPatient.pkDateOfChildbirth ?         (objPatient.pkMedProfile = 5, objPatient.pkRiskVTE =        arrStratRF[5]) :'';
+        objPatient.pkDateOfChildbirth ? (objPatient.pkMedProfile = 5, objPatient.pkRiskVTE = arrStratRF[5]) :'';
 
         objPatient.pkRiskVTE = arrStratRF[objPatient.pkMedProfile];
 //        return objPatient.pkMedProfile;
 //        return [objPatient.pkMedProfile, objPatient.pkRiskVTE];
     }
 getMainMedProfile();
+
     console.log(objPatient.pkMedProfile);
     console.log(objPatient.pkRiskVTE);
     console.log(objPatient.pkSevereHepaticFailure);

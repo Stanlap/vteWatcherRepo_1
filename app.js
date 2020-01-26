@@ -124,6 +124,10 @@ app.get('/vte_drug', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_drug.ejs',{title: "vte Define Drug", message: "vte Define Drug"});
 });
 
+app.get('/vte_assignment_sheet', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_assignment_sheet.ejs',{title: "vte Assignment sheet", message: "vte Assignment sheet"});
+});
+
 app.post('/count', auth, (req, res) => {
     console.log(req.body.rfArr);
     let xAr = countRF.countKindsRF(req.body.rfArr, req.body.objPatientForCounter);

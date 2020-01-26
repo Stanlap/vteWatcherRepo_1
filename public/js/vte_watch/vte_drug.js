@@ -452,7 +452,17 @@ $(document).ready(function () {
         let vText_1 = convertObjPairsToString(vT_2),
             vText_2 = (`${objChoosedDrug.tempCont} ${objChoosedDrug.singleProphDose}`);
         alert(`Выбран препарат: ${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`);
+
         console.log(`Выбран препарат: ${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`);
         $('#btnOne').unbind('click', makeNoteOfDrug);
+
+        objPatient.pkChoosedDgurAndItsSignature = (`${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`);
+        $('#btnOne').unbind('click', makeNoteOfDrug);
     };
+    let serialObj = JSON.stringify(objPatient);
+    localStorage.setItem("Patient", serialObj);
+    
+    $(location).attr('href','/vte_assignment_sheet');
+    
+
 });

@@ -13,7 +13,7 @@ $.extend({
     }
 });
 
-objPatient.pkValuesMedPfofile = $.distinct(objPatient.pkValuesMedPfofile);
+// objPatient.pkValuesMedPfofile = $.distinct(objPatient.pkValuesMedPfofile);
 
 
 $('#divAllRF div').hide();

@@ -2,7 +2,6 @@ $(document).ready(function () {
     let objPatient = JSON.parse(localStorage.getItem('Patient'));
     // localStorage.clear();
     console.log(objPatient);
-    console.log(objPatient.pkMedProfile);
     // switch (objPatient.pkChoosedDrugGroupLat) {
     function defineMinTreatmentPeriod(mP, chosDrug) {
         let mTP = 0;
@@ -46,7 +45,7 @@ $(document).ready(function () {
     }
 
     objPatient.pkMinTreatmentPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, objPatient.pkChoosedDrugGroupLat);
-
+    console.log(objPatient.pkMedProfile);
     console.log(objPatient.pkMinTreatmentPeriod);
 
 });

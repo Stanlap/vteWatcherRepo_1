@@ -161,7 +161,7 @@ $('#btnThree').on('click', function () {
         if (objPatient.pkValuesMedPfofile.includes(2)) {
             objBallsRiskVTE.vCounterCHA2DS2_VASс > 0 ? arrStratRF[2] = 2 : '';
         };
-        if ($('#chkIsOrNoSurg').is(':checked')) {
+        if (objPatient.pkIsOrNoSurg) {
             objBallsRiskVTE.vCounterRusSurgRF >= 1 && objBallsRiskVTE.vCounterRusSurgRF <= 2 ? arrStratRF[3][0] = 1 : objBallsRiskVTE.vCounterRusSurgRF >= 3 ? arrStratRF[3][0] = 2 : '';
             objBallsRiskVTE.vCounterCapriniRF >= 1 && objBallsRiskVTE.vCounterCapriniRF <= 2 ? arrStratRF[3][1] = 1 : objBallsRiskVTE.vCounterCapriniRF >= 3 ? arrStratRF[3][1] = 2 : '';
         };
@@ -187,11 +187,10 @@ $('#btnThree').on('click', function () {
     }
 getMainMedProfile();
 
-    // console.log(objPatient.pkMedProfile);
+    console.log(objPatient.pkMedProfile);
     // console.log(objPatient.pkRiskVTE);
     // console.log(objPatient.pkSevereHepaticFailure);
     // console.log(objPatient.pkHeartInsuff3_4);
-    // console.log(objPatient.pkIsOrNoSurg);
     // console.log(objPatient.pkIsOrNoSurg);
     // console.log('Diabetes: ' + objPatient.pkDiabetes);
     // console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
@@ -200,7 +199,6 @@ getMainMedProfile();
     // console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
     // console.log('Some Surg: ' + objPatient.pkPullOfSurg);
     // console.log('Artroplasty: ' + objPatient.pkArtroplasty);
-//    console.log('vProbe: ' + vProbe);
 
 delete objPatient.pkHeight;
 localStorage.removeItem("Patient");

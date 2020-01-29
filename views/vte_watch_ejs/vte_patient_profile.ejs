@@ -141,14 +141,17 @@
             <label for='chkCreateKindOfOper' class='lblCreateKindOfOper'> <input type='checkbox' id='chkCreateKindOfOper'> Создать профиль операции самостоятельно:<br><br></label>
         </div>
         <div id='divSmallOrLargeOper' hidden>
+            Укажите название операции: <br>
+            <textarea id='taNonTrivialOperTitle' cols= '30' rows='3'></textarea><br>
+    
             <label for='rdoSmallOper' class='lblSmallOrLargeOper'>
-                <input type='radio' name='rdoSmallOrLargeOper' id='rdoSmallOper' value='0'>Малая <span>&hellip;</span><span class='comments' hidden> Может быть проведена без госпитализации больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной травмы.</span><br></label>
-            <label for='rdoLargeOper' class='lblSmallOrLargeOper'><input type='radio' name='rdoSmallOrLargeOper' id='rdoLargeOper' value='1'>Большая <span>&hellip;</span><span class='comments' hidden> Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут</span><br></label>
+                <input type='radio' name='rdoSmallOrLargeOper' id='rdoSmallOper' value='0'>Малая </label><span class = 'preComment'>&hellip;</span class = 'preComment'><span class='comments' hidden> Может быть проведена без госпитализации больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной травмы.</span><br>
+                <label for='chkTimeOfSurg' class='lblTimeOfSurg' hidden><input type='checkbox' id='chkTimeOfSurg' value='1000000000000000'> длительность операции &gt; 60 минут<br></label>
+            <label for='rdoLargeOper' class='lblSmallOrLargeOper'><input type='radio' name='rdoSmallOrLargeOper' id='rdoLargeOper' value='1'>Большая </label><span class = 'preComment'>&hellip;</span><span class='comments' hidden> Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут</span><br><br>
         </div>
-        <label for='chkTimeOfSurg' class='lblTimeOfSurg' hidden><input type='checkbox' id='chkTimeOfSurg' value='1000000000000000'> длительность операции &gt; 60 минут<br></label>
 
             <div id='divDateOfOper' hidden>
-                Дата операции:
+                Дата основной операции: 
                 <button id='btnOperYesterday'>Вчера</button>
                 <button id='btnOperToday'>Сегодня</button>
                 <button id='btnOperTomorrow'>Завтра</button>

@@ -22,7 +22,17 @@ let objPatient = {
     pkArtroplastyHipJoint: false,
     pkArtroplastyKneeJoint: false,
     pkArtroplasty: false
+    // pkIsMedPfofile: false
 };
+$('span.preComment').on('click', function () {
+   $(this).next().show()
+   $(this).hide()
+})
+
+$('span.comments').on('click', function () {
+   $(this).prev().show()
+   $(this).hide()
+});
 
 $('#dateOfBirth').on('change', function () {
     objPatient.pkBirthDateOfPatient = new Date($('#dateOfBirth').prop('value'));
@@ -32,37 +42,19 @@ $('#chkMale').on('click', function () {
     ($(this).is(':checked')) ? $('#slctMedicalProfileOfPatient [value="10"]').hide() : $('#slctMedicalProfileOfPatient [value="10"]').show();
 });
 
+$('#slctMedicalProfileOfPatient').on('click', function () {
+    objPatient.pkValuesMedPfofile =[];
+    $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
+        objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
+        $(el).prop('value') < 3 ? $('.lblIsOrNoSurg').hide(): ($(el).prop('value') > 2 && $(el).prop('value')) < 10 ? $('.lblIsOrNoSurg').show() : $(el).prop('value') === 10 ? $('#divObstOrGynProfile').show() : $('#divObstOrGynProfile').show();
+    });
+});
 $('#slctMedicalProfileOfPatient').on('change', function () {
     $('#chkMale').prop('disabled', true);
-    $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth').hide();
+    $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth, #divDateOfOper').hide();
     $('#chkIsOrNoSurg, #chkCreateKindOfOper, #divPregnancyOrChildbirth input:checked, #divObstOrGynProfile input:checked, #divSmallOrLargeOper input:checked').prop('checked', false);
     $('.btnAccordChooseOper').prop('value', 1).next().hide();
     $('.btnAccordChooseOper').hide();
-
-    $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
-        objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
-    });
-    console.log(objPatient.pkValuesMedPfofile);
-    
-    let bln = false;
-    function isSurgProfiles() {
-        $.each(objPatient.pkValuesMedPfofile, function (index, value) {
-            (value > 2 && value < 10) ? bln = true:'';
-            return bln;
-        });
-    }
-    objPatient.pkAllSurgProfiles = isSurgProfiles();
-
-
-    function isSurgOrObstProfiles() {
-        $.each(objPatient.pkValuesMedPfofile, function (index, value) {
-
-            (value > 2 && value < 10) ? $('.lblIsOrNoSurg').show() :
-                (value === 10) ? $('#divObstOrGynProfile').show() : '';
-            return true;
-        });
-    }
-    isSurgOrObstProfiles();
 });
 
 $('input[name=rdoObstOrGynProfile]:radio').on('click', function () {
@@ -85,7 +77,7 @@ $('#chkIsOrNoSurg').on('click', function () {
         objPatient.pkValuesMedPfofile.includes(6) ? $('.btnCardiovascOper').show() : '';
         objPatient.pkValuesMedPfofile.includes(7) ? $('.btnUrolOper').show() : '';
         objPatient.pkValuesMedPfofile.includes(8) ? $('.btnCombustOper').show() : '';
-        objPatient.pkValuesMedPfofile.includes(9) ? $('#divChooseKindOfOper').hide() : '';
+        // objPatient.pkValuesMedPfofile.includes(9) ? $('#divChooseKindOfOper').hide() : '';
         objPatient.pkValuesMedPfofile.includes(10) ? $('.btnObsGynOper').show() : '';
     } else {
         $('#divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divDateOfOper').hide();
@@ -109,10 +101,10 @@ $('.btnAccordChooseOper').on('click', function (el) {
 });
 
 $('#chkCreateKindOfOper').on('click', function () {
-    ($(this).is(':checked')) ? ($('#divSmallOrLargeOper').show(), $('#divChooseKindOfOper').hide(), $('#divChooseKindOfOper option:selected').prop('selected', false),
+    ($(this).is(':checked')) ? ($('#divSmallOrLargeOper').show(), $('#divChooseKindOfOper').hide(),
         $('.btnObsGynOper').show()) : ($('#divSmallOrLargeOper, .lblTimeOfSurg').hide(),
-            $('.btnObsGynOper').show(),
-            $('#divSmallOrLargeOper input:checked').prop('checked', false), $('#divChooseKindOfOper').show());
+            $('.btnObsGynOper, #divChooseKindOfOper').show());
+            // $('#divSmallOrLargeOper input:checked').prop('checked', false), $('#divChooseKindOfOper').show());
 });
 
 $('input[name=rdoSmallOrLargeOper]:radio').on('click', function () {
@@ -187,16 +179,18 @@ $('#height').on('change', () => {
 });
 
 function showBtnGoToRF() {
-    objPatient.pkAge = getCurrentAge(objPatient.pkBirthDateOfPatient);
-    (objPatient.pkAge !== 0 && ($('#weight').val().length > 0) && ($('#height').val().length > 0) && (objPatient.pkValuesMedPfofile.length > 0)) ? $('#btnOne').show() : $('#btnOne').hide();
-}
+       // $('#slctMedicalProfileOfPatient option:selected').is(':checked') ? objPatient.pkIsMedPfofile = true:'';
 
-$('#btnOne').bind('click', goToRF);
+    objPatient.pkAge = getCurrentAge(objPatient.pkBirthDateOfPatient);
+    objPatient.pkAge !== 0 && $('#weight').val().length > 0 && $('#height').val().length > 0 && $('#slctMedicalProfileOfPatient option:selected').is(':checked') ? $('#btnOne').show() : $('#btnOne').hide();
+}
 
 $('#slctMedicalProfileOfPatient option').bind('click', showBtnGoToRF);
 $('#age, #weight, #height, #dateOfBirth').bind('input', showBtnGoToRF);
 
-$('#slctMedicalProfileOfPatient option').click(function () {
+$('#btnOne').bind('click', goToRF);
+
+$('#slctMedicalProfileOfPatient').click(function () {
     (objPatient.pkValuesMedPfofile.includes(10) && $('input[name=rdoObstOrGynProfile]:checked').val() === undefined) ? $('#btnOne').prop('disabled', true) : $('#btnOne').prop('disabled', false);
 });
 
@@ -250,6 +244,33 @@ function goToRF() {
         return (Math.ceil(w / (Math.pow((h / 100), 2))));
     }
     objPatient.pkBMI = searchBMI($('#weight').val(), $('#height').val());
+    objPatient.pkValuesMedPfofile = [];
+    $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
+        objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
+    });
+    console.log(objPatient.pkValuesMedPfofile);
+    
+    let bln = false;
+    function isSurgProfiles() {
+        $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+            (value > 2 && value < 10) ? bln = true:'';
+        });
+        return bln;
+    }
+    objPatient.pkAllSurgProfiles = isSurgProfiles();
+
+
+    // function isSurgOrObstProfiles() {
+    //     $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+
+    //         (value > 2 && value < 10) ? $('.lblIsOrNoSurg').show() :
+    //             (value === 10) ? $('#divObstOrGynProfile').show() : '';
+    //         return true;
+    //     });
+    // }
+    // isSurgOrObstProfiles();
+
+
 
     $('#chkIsOrNoSurg').is(':checked') ? objPatient.pkIsOrNoSurg = true : '';
 
@@ -307,20 +328,29 @@ function goToRF() {
         pkOperDifficultyGrades.push($('#divChooseKindOfOper option:selected')[el].value);
         objPatient.pkAllChoosedOperations.push($('#divChooseKindOfOper option:selected')[el].innerText);
     });
+
+    $('#taNonTrivialOperTitle').val() ? objPatient.pkAllChoosedOperations.push($('#taNonTrivialOperTitle').val()): '';
+
+
     function getMaxOfArray(numArray) {
         return Math.max.apply(null, numArray);
     }
-    ($('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined) ? objPatient.pkGradeOfOper = Number($('input[name=rdoSmallOrLargeOper]:checked').val()): objPatient.pkGradeOfOper = getMaxOfArray(pkOperDifficultyGrades.map(Number));
 
-    if(objPatient.pkIsOrNoSurg === true && objPatient.pkAllChoosedOperations.length === 0) {
-        objPatient.pkAllChoosedOperations.push('малая операция');
-        (objPatient.pkGradeOfOper === 1) ? objPatient.pkAllChoosedOperations.push('большая операция'):'';
-    }
+    ($('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined) ? pkOperDifficultyGrades.push(Number($('input[name=rdoSmallOrLargeOper]:checked').val())) : '';  
     
+    objPatient.pkGradeOfOper = getMaxOfArray(pkOperDifficultyGrades.map(Number));
+
+
+    // ($('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined) ? objPatient.pkGradeOfOper = Number($('input[name=rdoSmallOrLargeOper]:checked').val()): objPatient.pkGradeOfOper = getMaxOfArray(pkOperDifficultyGrades.map(Number));
+
+    // if(objPatient.pkIsOrNoSurg === true && objPatient.pkAllChoosedOperations.length === 0) {
+    //     objPatient.pkAllChoosedOperations.push('малая операция');
+    //     (objPatient.pkGradeOfOper === 1) ? objPatient.pkAllChoosedOperations.push('большая операция'):'';
+    // }
 
     ($('#chkCalculateRiskOfBleeding').is(':checked')) ? objPatient.pkCalculateRiskOfBleeding = true : '';
     ($('input[name=rdoPregnancyOrChildbirth]:checked').val() != undefined) ? objPatient.pkPregnancyOrChildbirth = true : '';
-    console.log(objPatient);
+
     ($('#chkTimeOfSurg').is(':checked')) ? objPatient.pkOperTimeMore60 = true : '';
 
     let serialObj = JSON.stringify(objPatient);
@@ -329,5 +359,5 @@ function goToRF() {
         localStorage.setItem('SelectedOper', serialObj);
 let returnObj = JSON.parse(localStorage.getItem('Patient'))
 console.log(returnObj);
-$(location).attr('href','/vte_patient_list_rf');
+// $(location).attr('href','/vte_patient_list_rf');
 } 

@@ -3,6 +3,7 @@ localStorage.removeItem('Patient')
 console.log(objPatient);
 let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
 localStorage.removeItem('SelectedOper');
+
 $.extend({
     distinct: function (anArray) {
         let result = [];
@@ -19,8 +20,6 @@ $.extend({
 $('#divAllRF div').hide();
 $('.divMiddleLvlRF').hide();
 $('.divFemaleLvl').show();
-
-(objPatient.pkPregnancyOrChildbirth) ? $('#chkPostpartum').prop('checked', true): '';
 
 $('.divSingleLvlRF').on('click', function (el) {
     el = $(this).closest('.divMiddleLvlRF').prev().find('input:checkbox');
@@ -131,6 +130,8 @@ if ($('#chkMale').is(':checked')) {
     $('#chkMaleDouble').prop('checked', false);
     $('.divFemaleLvl').show();
 }
+
+objPatient.pkPregnancyOrChildbirth ? $('#chkPostpartum').prop('checked', true): '';
 
 $('.chkGlomerularFiltrationRate_1').on('click', function () {
     $('.chkGlomerularFiltrationRate_1').not(this).prop('checked', false);

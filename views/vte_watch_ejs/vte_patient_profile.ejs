@@ -20,7 +20,7 @@
         Рост <input type='number' id='height'><br>
         <label for='chkMale'><input type='checkbox' id='chkMale'> мужской пол </label>
         <p>Медицинский профиль пациента:</p>
-        <select id='slctMedicalProfileOfPatient' multiple>
+        <select id='slctMedicalProfileOfPatient'size='5' multiple>
             <option value='1'>Терапия</option>
             <option value='2'>Фибрилляция предсердий</option>
             <option value='3'>Общая хирургия</option>
@@ -57,14 +57,13 @@
             <p>Выбрать операцию:</p>
             <button class='btnAccordChooseOper btnGenSurgOper' hidden>Общая хирургия</button>
             <div class='divGenSurgOper' hidden>
-                <select size='15' multiple>
+                <select size='14' multiple>
                     <option value='0'> плановая холецистэктомия</option>
                     <option value='0'> неосложненная аппендэктомия</option>
                     <option value='0'> грыжесечение</option>
                     <option value='1'> гастрэктомия</option>
                     <option value='1'> резекция печени</option>
                     <option value='1'> панкреатодуоденальная резекция</option>
-                    <option value='1'></option>
                     <option value='1'> колэктомия</option>
                     <option value='1'> резекция желудка или кишечника</option>
                     <option value='1'> осложненная аппендэктомия</option>
@@ -128,7 +127,7 @@
             <button class='btnAccordChooseOper' hidden>Онкология</button>
             <button class='btnAccordChooseOper btnObsGynOper' hidden>Акушерство и гинекология</button>
             <div class='divObsGynOper' hidden>
-                <select size='4' multiple>
+                <select size='5' multiple>
                     <option value='0'> аборт</option>
                     <option value='1'> кесарево сечение плановое </option>
                     <option value='1'> кесарево сечение в родах</option>

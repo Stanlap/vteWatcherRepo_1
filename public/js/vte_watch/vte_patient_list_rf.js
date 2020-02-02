@@ -506,6 +506,9 @@ function countRF() {
         });
         serialObj = JSON.stringify(objPatient);
         localStorage.setItem('Patient', serialObj);
+        // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+        // console.log(objBallsRiskVTE);
+        
 
     $(location).attr('href', '/vte_concl');
 

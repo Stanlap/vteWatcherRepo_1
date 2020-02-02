@@ -5,8 +5,8 @@ let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
 localStorage.removeItem('SelectedOper');
 console.log(objSelectedOper);
 
-$('#divAllRF div').hide();
-$('.divMiddleLvlRF').hide();
+// $('#divAllRF div').hide();
+// $('.divMiddleLvlRF').hide();
 $('.divFemaleLvl').show();
 
 $.extend({

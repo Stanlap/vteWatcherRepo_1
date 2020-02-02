@@ -1,59 +1,72 @@
+let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+console.log(objBallsRiskVTE);
+let objPatient = JSON.parse(localStorage.getItem('Patient'));
+console.log(objPatient);
 
-        let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-        console.log(objBallsRiskVTE);
-        let objPatient = JSON.parse(localStorage.getItem('Patient'));
-        console.log(objPatient);
+// function bindBalls(el) {
+//     let vBalls;
+//     if (el == 1) {
+//         vBalls = ' балл';
+//     }
+//     if (el > 1 && counter < 5) {
+//         vBalls = ' балла';
+//     }
+//     if (el > 4) {
+//         vBalls = ' баллов';
+//     }
+//     return el + vBalls;
+// }
+function bindBalls(el) {
+    switch (el) {
+    case (el > 1 && counter < 5):
+        end = 'а';
+        break;
+    case (el > 4):
+        end = 'ов'; // code block
+        break;
+    default:
+        end = ''; // code block
+}
+return `${el} балл${end}`;
+}
 
-        function bindBalls(counter) {
-            let vBalls;
-            if (counter == 1) {
-                vBalls = ' балл';
-            }
-            if (counter > 1 && counter < 5) {
-                vBalls = ' балла';
-            }
-            if (counter > 4) {
-                vBalls = ' баллов';
-            }
-            return counter + vBalls;
-        }
 
-        function countStratRF(vCounterRF, x) {
-            let vStratRF = '';
-            switch (x) {
-                case 'Padua':
-                    vCounterRF > 3 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-                    return vStratRF;
-                    break;
-                case 'IMPROVE':
-                    vCounterRF > 7 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-                    return vStratRF;
-                    break;
-                case 'HAS_BLED':
-                    vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-                    return vStratRF;
-                    break;
-                case 'CHA2DS2_VASсOrRusSurgOrTraumRF':
-                    vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : vStratRF = 'высокий';
-                    return vStratRF;
-                    break;
-        
-                case 'Caprini':
-                    vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : (vCounterRF >= 3 && vCounterRF <= 4) ? vStratRF = 'высокий' : vStratRF = 'очень высокий';
-                    return vStratRF;
-                    break;
-                case 'SurgOrTraumBleedingRF':
-                    vCounterRF >= 1 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-                    return vStratRF;
-                    break;
-                case 'GreenTop37aRus':
-                    (vCounterRF > 0 && vCounterRF <= 2) ? vStratRF = 'умеренный': (vCounterRF > 2 && vCounterRF != 0) ? vStratRF = 'высокий' : '';
-                    //
-                    //            vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'умеренный';
-                    return vStratRF;
-            }
-        }
-        
+function countStratRF(vCounterRF, x) {
+    let vStratRF = '';
+    switch (x) {
+        case 'Padua':
+            vCounterRF > 3 ? vStratRF = 'высокий' : vStratRF = 'низкий';
+            return vStratRF;
+            break;
+        case 'IMPROVE':
+            vCounterRF > 7 ? vStratRF = 'высокий' : vStratRF = 'низкий';
+            return vStratRF;
+            break;
+        case 'HAS_BLED':
+            vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'низкий';
+            return vStratRF;
+            break;
+        case 'CHA2DS2_VASсOrRusSurgOrTraumRF':
+            vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : vStratRF = 'высокий';
+            return vStratRF;
+            break;
+
+        case 'Caprini':
+            vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : (vCounterRF >= 3 && vCounterRF <= 4) ? vStratRF = 'высокий' : vStratRF = 'очень высокий';
+            return vStratRF;
+            break;
+        case 'SurgOrTraumBleedingRF':
+            vCounterRF >= 1 ? vStratRF = 'высокий' : vStratRF = 'низкий';
+            return vStratRF;
+            break;
+        case 'GreenTop37aRus':
+            (vCounterRF > 0 && vCounterRF <= 2) ? vStratRF = 'умеренный': (vCounterRF > 2 && vCounterRF != 0) ? vStratRF = 'высокий' : '';
+            //
+            //            vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'умеренный';
+            return vStratRF;
+    }
+}
+
 
 
 $('#btnTwo').on('click', function () {
@@ -179,32 +192,32 @@ $('#btnThree').on('click', function () {
             arrStratRF[4] >= 1 ? (objPatient.pkMedProfile = 4, objPatient.pkRiskVTE = arrStratRF[4]) : '';
             //    arrStratRF[3] === 2 ? objPatient.pkMedProfile = 3 : '';       arrStratRF[4] === 2 ? objPatient.pkMedProfile = 4 : '';
         };
-        objPatient.pkDateOfChildbirth ? (objPatient.pkMedProfile = 5, objPatient.pkRiskVTE = arrStratRF[5]) :'';
+        objPatient.pkDateOfChildbirth ? (objPatient.pkMedProfile = 5, objPatient.pkRiskVTE = arrStratRF[5]) : '';
 
         objPatient.pkRiskVTE = arrStratRF[objPatient.pkMedProfile];
-//        return objPatient.pkMedProfile;
-//        return [objPatient.pkMedProfile, objPatient.pkRiskVTE];
+        //        return objPatient.pkMedProfile;
+        //        return [objPatient.pkMedProfile, objPatient.pkRiskVTE];
     }
-getMainMedProfile();
+    getMainMedProfile();
 
     console.log(objPatient.pkMedProfile);
-    // console.log(objPatient.pkRiskVTE);
-    // console.log(objPatient.pkSevereHepaticFailure);
-    // console.log(objPatient.pkHeartInsuff3_4);
-    // console.log(objPatient.pkIsOrNoSurg);
-    // console.log('Diabetes: ' + objPatient.pkDiabetes);
-    // console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
-    // console.log('Chronic Dialysis: ' + objPatient.pkChronicDialysis);
-    // console.log('Artificial Heart Valve: ' + objPatient.pkArtificialHeartValve);
-    // console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
-    // console.log('Some Surg: ' + objPatient.pkPullOfSurg);
-    // console.log('Artroplasty: ' + objPatient.pkArtroplasty);
+    console.log(objPatient.pkRiskVTE);
+    console.log(objPatient.pkSevereHepaticFailure);
+    console.log(objPatient.pkHeartInsuff3_4);
+    console.log(objPatient.pkIsOrNoSurg);
+    console.log('Diabetes: ' + objPatient.pkDiabetes);
+    console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
+    console.log('Chronic Dialysis: ' + objPatient.pkChronicDialysis);
+    console.log('Artificial Heart Valve: ' + objPatient.pkArtificialHeartValve);
+    console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
+    console.log('Some Surg: ' + objPatient.pkPullOfSurg);
+    console.log('Artroplasty: ' + objPatient.pkArtroplasty);
 
-delete objPatient.pkHeight;
-localStorage.removeItem("Patient");
-let serialObj = JSON.stringify(objPatient);
-localStorage.setItem("Patient", serialObj);
+    delete objPatient.pkHeight;
+    localStorage.removeItem("Patient");
+    let serialObj = JSON.stringify(objPatient);
+    localStorage.setItem("Patient", serialObj);
 
-$(location).attr('href','/vte_drug');
+    // $(location).attr('href', '/vte_drug');
 
 });

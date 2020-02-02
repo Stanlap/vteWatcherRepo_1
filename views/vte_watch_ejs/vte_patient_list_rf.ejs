@@ -18,18 +18,18 @@
             </div>
             <div class='divMiddleLvlRF'>
                 <div class='divSingleLvlRF clsAtrFibrRF'>
-                    <label for='chkSystemicHypertension'><input type='checkbox' id='chkSystemicHypertension' data-hasMarked='0' value='1000000000000000' /><span hidden> артериальная гипертензия</span> 1 степени</label><span> &hellip;</span><span class='comments' hidden>, CАД 140-159 или ДАД 90-99 мм рт. ст.</span><br>
+                    <label for='chkSystemicHypertension'><input type='checkbox' class='chkSystemicHypertension_1' id='chkSystemicHypertension' value='1000000000000000' /><span hidden> артериальная гипертензия</span> 1 степени</label><span> &hellip;</span><span class='comments' hidden>, CАД 140-159 или ДАД 90-99 мм рт. ст.</span><br>
                 </div>
                 <div class='divSingleLvlRF clsFibrBleedingRF'>
-                    <label for='chkSystemicHypertension2Stage'><input type='checkbox' id='chkSystemicHypertension2Stage' data-hasMarked='0' value='1000001000000000' /><span hidden> артериальная гипертензия</span> 2 степени</label><span> &hellip;</span><span class='comments' hidden> САД 160-179 или
+                    <label for='chkSystemicHypertension2Stage'><input type='checkbox' class='chkSystemicHypertension_1 clsSystemicHypertension2thAndMoreStage' id='chkSystemicHypertension2Stage' value='1000000000000000' /><span hidden> артериальная гипертензия</span> 2 степени</label><span> &hellip;</span><span class='comments' hidden> САД 160-179 или
                         ДАД 100-109 мм рт. ст.</span><br>
                 </div>
                 <div class='divSingleLvlRF clsFibrBleedingRF'>
-                    <label for='chkSystemicHypertension3Stage'><input type='checkbox' id='chkSystemicHypertension3Stage' data-hasMarked='0' value='1000001000000000' /><span hidden> артериальная гипертензия</span> 3 степени</label><span> &hellip;</span><span class='comments' hidden> САД &ge; 180 или
+                    <label for='chkSystemicHypertension3Stage'><input type='checkbox' class='chkSystemicHypertension_1 clsSystemicHypertension2thAndMoreStage' id='chkSystemicHypertension3Stage' value='1000000000000000' /><span hidden> артериальная гипертензия</span> 3 степени</label><span> &hellip;</span><span class='comments' hidden> САД &ge; 180 или
                         ДАД &ge; 110 мм рт. ст.</span><br>
                 </div>
                 <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
-                    <label for='chkUncontrolledSystemicHypertension'><input type='checkbox' id='chkUncontrolledSystemicHypertension' data-hasMarked='0' value='1000000001000100' /> неконтролируемая артериальная гипертензия</label><span> &hellip;</span><span class='comments' hidden> (артериальное давление> 200 мм рт.ст. систолическое или > 120 мм рт.ст. диастолическое)</span><br>
+                    <label for='chkUncontrolledSystemicHypertension'><input type='checkbox' class='chkSystemicHypertension_1  clsSystemicHypertension2thAndMoreStage' id='chkUncontrolledSystemicHypertension' value='1000000001000100' /> неконтролируемая артериальная гипертензия</label><span> &hellip;</span><span class='comments' hidden> (артериальное давление> 200 мм рт.ст. систолическое или > 120 мм рт.ст. диастолическое)</span><br>
                 </div>
             </div>
         </div>
@@ -727,6 +727,7 @@
             <label for='chkGlomerularFiltrationRate30_59' id='lblGlomerularFiltrationRate30_59'><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkRenalInsuff_1' id='chkGlomerularFiltrationRate30_59' value='101.000000000000' /> скорость клубочковой фильтрации 30—59 мл/мин</label>
             <label for='chkGlomerularFiltrationRateLess30'><input type='checkbox' class='chkGlomerularFiltrationRate_1 chkSevereRenalInsuff_1 chkRenalInsuff_1' id='chkGlomerularFiltrationRateLess30' value='102.500000000000' /> скорость клубочковой фильтрации &lt; 30 мл/мин </label>
 -->
+            <input type='checkbox' id='chkSystemicHypertension2thAndMoreStage' value='1000001000000000'>
             <input type='checkbox' id='chkWasSomeVeinThromb' value='130000013000000'>
             <input type='checkbox' id='chkSeverePreeclampsiaOrStillbirth' value='1000000000000020'>
             <input type='checkbox' id='chkBurnsLess20Percent' value='1000000200000000'>

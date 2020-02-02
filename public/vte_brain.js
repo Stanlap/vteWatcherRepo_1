@@ -74,22 +74,22 @@ module.exports.countKindsRF = (tArr, objPatient) => {
         let vGradeOfOper = 0;
 
         if (objPatient.pkIsOrNoSurg) {
-            (vGradeOfOper == 3) ? objRF.vCounterRusSurgRF = 3: objRF.vCounterRusSurgRF = estimateSurgRiskGrade(objPatient.pkAge, objPatient.operTimeMore60, vGradeOfOper, objRF.vSetRusSurgRF.includes('1'));
+            (vGradeOfOper == 3) ? objRF.vCounterRusSurgRF = 3: objRF.vCounterRusSurgRF = estimateSurgRiskGrade(objPatient.pkAge, objPatient.operTimeMore60, vGradeOfOper, objRF.vSetRusSurgRF.includes(1));
         };
 
-        (objRF.vSetRusSurgRF.indexOf('2') != -1 && objRF.vCounterRusSurgRF < 3) ? objRF.vCounterRusSurgRF = 2: '';
-        (objRF.vSetRusSurgRF.indexOf('3') != -1) ? objRF.vCounterRusSurgRF = 3: '';
+        objRF.vSetRusSurgRF.includes(2) && objRF.vCounterRusSurgRF < 3 ? objRF.vCounterRusSurgRF = 2 : '';
+        objRF.vSetRusSurgRF.includes(3) ? objRF.vCounterRusSurgRF = 3 : '';
 
         if (objPatient.pkIsOrNoSurg) {
-            (vGradeOfOper == 3) ? objRF.vCounterCapriniRF += 5: (vGradeOfOper == 1 || vGradeOfOper == 2) ? objRF.vCounterCapriniRF += 2 : objRF.vCounterCapriniRF += 1;
+            vGradeOfOper === 3 ? objRF.vCounterCapriniRF += 5: (vGradeOfOper === 1 || vGradeOfOper === 2) ? objRF.vCounterCapriniRF += 2 : objRF.vCounterCapriniRF += 1;
         };
 
         if (objPatient.pkIsOrNoSurg) {
-            (vGradeOfOper == 3) ? objRF.vCounterRusTraumRF = 3: objRF.vCounterRusTraumRF = estimateSurgRiskGrade(objPatient.pkAge, objPatient.operTimeMore60, vGradeOfOper, objRF.vSetRusTraumRF.includes('1'));
+            vGradeOfOper === 3 ? objRF.vCounterRusTraumRF = 3: objRF.vCounterRusTraumRF = estimateSurgRiskGrade(objPatient.pkAge, objPatient.operTimeMore60, vGradeOfOper, objRF.vSetRusTraumRF.includes(1));
         };
 
-        (objRF.vSetRusTraumRF.indexOf('2') != -1 && objRF.vCounterRusTraumRF < 3) ? objRF.vCounterRusTraumRF = 2: '';
-        (objRF.vSetRusTraumRF.indexOf('3') != -1) ? objRF.vCounterRusTraumRF = 3: '';
+        (objRF.vSetRusTraumRF.indexOf(2) != -1 && objRF.vCounterRusTraumRF < 3) ? objRF.vCounterRusTraumRF = 2: '';
+        (objRF.vSetRusTraumRF.indexOf(3) != -1) ? objRF.vCounterRusTraumRF = 3: '';
 
         (objRF.vCounterMajorBleedingScoreRF > 0) ? objRF.vCounterMajorBleedingScoreRF = 1: '';
         (objRF.vCounterTraumBleedingRF > 0) ? objRF.vCounterTraumBleedingRF = 1: '';

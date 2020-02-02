@@ -3,6 +3,11 @@ localStorage.removeItem('Patient')
 console.log(objPatient);
 let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
 localStorage.removeItem('SelectedOper');
+console.log(objSelectedOper);
+
+$('#divAllRF div').hide();
+$('.divMiddleLvlRF').hide();
+$('.divFemaleLvl').show();
 
 $.extend({
     distinct: function (anArray) {
@@ -13,13 +18,6 @@ $.extend({
         return result;
     }
 });
-
-// objPatient.pkValuesMedPfofile = $.distinct(objPatient.pkValuesMedPfofile);
-
-
-$('#divAllRF div').hide();
-$('.divMiddleLvlRF').hide();
-$('.divFemaleLvl').show();
 
 $('.divSingleLvlRF').on('click', function (el) {
     el = $(this).closest('.divMiddleLvlRF').prev().find('input:checkbox');
@@ -46,6 +44,68 @@ $('.divSingleLvlRF label').next().next().on('click', function (ev) {
 $('.btnTogglerRF').on('click', function () {
     ($(this).html() === ('&gt;')) ? ($(this).closest('.divTogglerRF').next().show(), $(this).html('&lt;')) : ($(this).parents('.divTogglerRF').next().hide(), $(this).html('&gt;'));
 });
+
+let selectedRF = [];
+
+if (objPatient.pkValuesMedPfofile.includes(1)) {
+    selectedRF = $.merge($(selectedRF), $('.clsTherRF'));
+    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsNonsurgBleedingRF')) : '';
+};
+
+if (objPatient.pkValuesMedPfofile.includes(2)) {
+    selectedRF = $.merge($(selectedRF), $('.clsAtrFibrRF'));
+    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsFibrBleedingRF')) : '';
+};
+
+
+function isMedProfilesMoreTwo() {
+    $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+        if (value > 2) return true;
+    });
+};
+
+if (isMedProfilesMoreTwo()) {
+    selectedRF = $.merge($(selectedRF), $('.clsSurgRF'));
+    (objPatient.pkCalculateRiskOfBleeding && objPatient.pkValuesMedPfofile.includes(4) && objPatient.pkValuesMedPfofile.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+    (objPatient.pkCalculateRiskOfBleeding && $.inArray(4, objPatient.pkValuesMedPfofile) === -1 && $.inArray(10, objPatient.pkValuesMedPfofile) === -1) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+};
+
+if (objPatient.pkValuesMedPfofile.includes(4)) {
+    selectedRF = $.merge($(selectedRF), $('.clsTraumRF'));
+    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsTraumBleedingRF')) : '';
+};
+
+(objPatient.pkValuesMedPfofile.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
+(objPatient.pkValuesMedPfofile.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
+(objPatient.pkValuesMedPfofile.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
+
+if (objPatient.pkValuesMedPfofile.includes(10)) {
+    objPatient.pkObstOrGynProfile === 0 ? selectedRF = $.merge($(selectedRF), $('.clsObstRF')): '';
+    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsObstBleedingRF')) : '';
+    objPatient.pkPregnancyOrChildbirth === 1 ? selectedRF = $.merge($(selectedRF), $('.clsLabourRF')): '';
+};
+
+selectedRF = $.distinct(selectedRF);
+$(selectedRF).show();
+
+$('.divTogglerRF').show();
+
+$('#divProfileOfPatient').hide();
+if (objPatient.pkGender === 1) {
+    $('#chkFemale').prop('checked', false);
+    $('#chkMaleDouble').prop('checked', true);
+    $('.divFemaleLvl').hide();
+} else {
+    $('#chkFemale').prop('checked', true);
+    $('#chkMaleDouble').prop('checked', false);
+    $('.divFemaleLvl').show();
+}
+
+objPatient.pkPregnancyOrChildbirth < 2 ? $('#chkPostpartum').prop('checked', true): '';
+
+
+
+
 
 $('#btnIsRenalInsuff').on('click', function () {
     ($(this).html() === ('&gt;')) ? $('#frmGFR_CC').hide(): ($('#frmGFR_CC').show(), alert('Критически важно! Вводимые единицы измерения креатинина должны точно соответствовать его введенному значению. К сведению: если значение креатинина не введено, программа расценивает функцию почек как норму при назначении профилактики ВТЭО.'));
@@ -78,60 +138,7 @@ $('#chkBedRestMore3Days').on('click', function () {
     ($('#chkIsBedRestMore3Days').is(':checked')) ? (alert('Отмечены ранее патологические состояния и риск-факторы, которые требуют соблюдения больным строгого постального режима'), $(this).prop('checked', true)) : '';
     console.log($(this).attr('data-hasMarked'));
 });
-let selectedRF = [];
 
-if (objPatient.pkValuesMedPfofile.includes(1)) {
-    selectedRF = $.merge($(selectedRF), $('.clsTherRF'));
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsNonsurgBleedingRF')) : '';
-};
-
-if (objPatient.pkValuesMedPfofile.includes(2)) {
-    selectedRF = $.merge($(selectedRF), $('.clsAtrFibrRF'));
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsFibrBleedingRF')) : '';
-};
-
-function isMedProfilesMoreTwo() {
-    $.each(objPatient.pkValuesMedPfofile, function (index, value) {
-        if (value > 2) return true;
-    });
-};
-
-if (isMedProfilesMoreTwo()) {
-    selectedRF = $.merge($(selectedRF), $('.clsSurgRF'));
-    (objPatient.pkCalculateRiskOfBleeding && objPatient.pkValuesMedPfofile.includes(4) && objPatient.pkValuesMedPfofile.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
-};
-
-if (objPatient.pkValuesMedPfofile.includes(4)) {
-    selectedRF = $.merge($(selectedRF), $('.clsTraumRF'));
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsTraumBleedingRF')) : '';
-};
-
-(objPatient.pkValuesMedPfofile.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
-(objPatient.pkValuesMedPfofile.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
-(objPatient.pkValuesMedPfofile.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
-
-if (objPatient.pkValuesMedPfofile.includes(10)) {
-    ($('input[name=rdoObstOrGynProfile]:checked').val() == 0) ? selectedRF = $.merge($(selectedRF), $('.clsObstRF')): '';
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsObstBleedingRF')) : '';
-    ($('input[name=rdoPregnancyOrChildbirth]:checked').val() == 1) ? selectedRF = $.merge($(selectedRF), $('.clsLabourRF')): '';
-};
-
-selectedRF = $.distinct(selectedRF);
-$(selectedRF).show();
-$('.divTogglerRF').show();
-
-$('#divProfileOfPatient').hide();
-if ($('#chkMale').is(':checked')) {
-    $('#chkFemale').prop('checked', false);
-    $('#chkMaleDouble').prop('checked', true);
-    $('.divFemaleLvl').hide();
-} else {
-    $('#chkFemale').prop('checked', true);
-    $('#chkMaleDouble').prop('checked', false);
-    $('.divFemaleLvl').show();
-}
-
-objPatient.pkPregnancyOrChildbirth ? $('#chkPostpartum').prop('checked', true): '';
 
 $('.chkGlomerularFiltrationRate_1').on('click', function () {
     $('.chkGlomerularFiltrationRate_1').not(this).prop('checked', false);
@@ -139,6 +146,9 @@ $('.chkGlomerularFiltrationRate_1').on('click', function () {
 
 $('.chkDiabetes_1').on('click', function () {
     $('.chkDiabetes_1').not(this).prop('checked', false);
+});
+$('.chkSystemicHypertension_1').on('click', function () {
+    $('.chkSystemicHypertension_1').not(this).prop('checked', false);
 });
 
 $('.chkBurnsSuperficial_1').on('click', function () {
@@ -205,33 +215,6 @@ $('#chkPlateletsLess50').on('click', function () {
         $('#chkPlateletsLess75, #chkPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show() :
         ($('#chkPlateletsLess75, #chkPlateletsLess150').attr('data-hasMarked') == '0') ? $('#chkPlateletsLess75, #chkPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : '';
 });
-
-$('#chkSystemicHypertension').on('click', function () {
-    if ($(this).is(':checked')) {
-        $(this).attr('data-hasMarked', '1');
-    } else {
-        $(this).attr('data-hasMarked', '0');
-        $('#chkSystemicHypertension2Stage, #chkUncontrolledSystemicHypertension').prop('checked', false);
-    }
-});
-$('#chkSystemicHypertension2Stage').on('click', function () {
-    if ($(this).is(':checked')) {
-        $('#chkSystemicHypertension').prop('checked', true).closest('.divSingleLvlRF').hide();
-        $(this).attr('data-hasMarked', '1');
-
-    } else {
-        $('#chkUncontrolledSystemicHypertension').prop('checked', false).closest('.divSingleLvlRF').show();
-        $('#chkSystemicHypertension').attr('data-hasMarked') == '0' ? $('#chkSystemicHypertension').prop('checked', false).closest('.divSingleLvlRF').show() : $('#chkSystemicHypertension').closest('.divSingleLvlRF').show();
-        $(this).attr('data-hasMarked', '0');
-    }
-});
-$('#chkUncontrolledSystemicHypertension').on('click', function () {
-    ($(this).is(':checked')) ? $('#chkSystemicHypertension, #chkSystemicHypertension2Stage').prop('checked', true).closest('.divSingleLvlRF').hide():
-        ($('#chkSystemicHypertension').attr('data-hasMarked') == '1' && $('#chkSystemicHypertension2Stage').attr('data-hasMarked') == '0') ? ($('#chkSystemicHypertension').prop('checked', true).closest('.divSingleLvlRF').show(), $('#chkSystemicHypertension2Stage').prop('checked', false).closest('.divSingleLvlRF').show()) : ($('#chkSystemicHypertension2Stage').attr('data-hasMarked') == '1') ?
-        $('#chkSystemicHypertension2Stage, #chkSystemicHypertension').prop('checked', true).closest('.divSingleLvlRF').show() :
-        ($('#chkSystemicHypertension2Stage, #chkSystemicHypertension').attr('data-hasMarked') == '0') ? $('#chkSystemicHypertension2Stage, #chkSystemicHypertension').prop('checked', false).closest('.divSingleLvlRF').show() : '';
-});
-
 
 
 function countStratRF(vCounterRF, x) {
@@ -305,7 +288,7 @@ function calculateGFRAndСС() {
             break;
     }
     // взрослые
-    if (vCreatinineValue > 0 & objPatient.pkGender >= 0 & objPatient.pkAge > 0) {
+    if (vCreatinineValue > 0 && objPatient.pkGender >= 0 && objPatient.pkAge > 0) {
         // CKD-EPI
         if (objPatient.pkGender == 0) {
             if (vCreatinineValue <= 0.7) {
@@ -382,6 +365,7 @@ function countRF() {
     (vGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true): '';
 
 
+    ($('.clsSystemicHypertension2thAndMoreStage').is(':checked')) ? $('#chkSystemicHypertension2thAndMoreStage').prop('checked', true): '';
     ($('.chkSumTherRF_1').is(':checked')) ? $('#chkAcuteIschemicStrokeOrMiocardInfarction').prop('checked', true): '';
     ($('.chkSumTherRF_2').is(':checked')) ? $('#chkRheumaticDiseasesOrInfection').prop('checked', true): '';
     ($('.chkThromboemb_1').is(':checked')) ? $('#chkVascularAnamnesis, #chkWasSomeVeinThromb').prop('checked', true): '';

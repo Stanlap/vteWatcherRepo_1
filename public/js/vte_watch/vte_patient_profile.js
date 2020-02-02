@@ -12,7 +12,7 @@ let objPatient = {
     pkDateOfOper: '',
     pkValuesMedPfofile: [],
     pkCalculateRiskOfBleeding: true,
-    pkPregnancyOrChildbirth: false,
+    pkPregnancyOrChildbirth: 2,
     pkBMI: 0,
     pkAllChoosedOperations: [],
     pkGradeOfOper: 0,
@@ -21,7 +21,8 @@ let objPatient = {
     pkPullOfSurg: false,
     pkArtroplastyHipJoint: false,
     pkArtroplastyKneeJoint: false,
-    pkArtroplasty: false
+    pkArtroplasty: false,
+    pkObstOrGynProfile: 2
 };
 $('span.preComment').on('click', function () {
     $(this).next().show()
@@ -57,6 +58,7 @@ $('#slctMedicalProfileOfPatient').on('change', function () {
 });
 
 $('input[name=rdoObstOrGynProfile]:radio').on('click', function () {
+    objPatient.pkObstOrGynProfile = $(this).val();
     if ($(this).val() == 0) {
         $('#divPregnancyOrChildbirth').show();
     } else {
@@ -237,13 +239,10 @@ function goToRF() {
         objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
     });
 
-    let bln = false;
-
     function isSurgProfiles() {
         $.each(objPatient.pkValuesMedPfofile, function (index, value) {
-            (value > 2 && value < 10) ? bln = true: '';
+            if(value > 2 && value < 10) return true;
         });
-        return bln;
     }
     objPatient.pkAllSurgProfiles = isSurgProfiles();
 
@@ -305,12 +304,12 @@ function goToRF() {
         return Math.max.apply(null, numArray);
     }
 
-    ($('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined) ? pkOperDifficultyGrades.push(Number($('input[name=rdoSmallOrLargeOper]:checked').val())): '';
+    $('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined ? pkOperDifficultyGrades.push(Number($('input[name=rdoSmallOrLargeOper]:checked').val())): '';
 
     objPatient.pkGradeOfOper = getMaxOfArray(pkOperDifficultyGrades.map(Number));
 
-    ($('#chkCalculateRiskOfBleeding').is(':checked')) ? objPatient.pkCalculateRiskOfBleeding = true: '';
-    ($('input[name=rdoPregnancyOrChildbirth]:checked').val() != undefined) ? objPatient.pkPregnancyOrChildbirth = true: '';
+    $('#chkCalculateRiskOfBleeding').is(':checked') ? objPatient.pkCalculateRiskOfBleeding = true: '';
+    $('input[name=rdoPregnancyOrChildbirth]:checked').val() != undefined ? objPatient.pkPregnancyOrChildbirth = $('input[name=rdoPregnancyOrChildbirth]:checked').val(): '';
 
     ($('#chkTimeOfSurg').is(':checked')) ? objPatient.pkOperTimeMore60 = true: '';
 

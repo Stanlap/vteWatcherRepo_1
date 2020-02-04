@@ -238,11 +238,12 @@ function goToRF() {
     $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
         objPatient.pkValuesMedPfofile.push(+$(this).prop('value'));
     });
-
+let isElem = false;
     function isSurgProfiles() {
         $.each(objPatient.pkValuesMedPfofile, function (index, value) {
-            if(value > 2 && value < 10) return true;
+            if(value > 2 && value < 10) isElem = true;
         });
+        return isElem;
     }
     objPatient.pkAllSurgProfiles = isSurgProfiles();
 

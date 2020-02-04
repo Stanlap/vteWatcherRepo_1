@@ -5,6 +5,15 @@ let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
 localStorage.removeItem('SelectedOper');
 console.log(objSelectedOper);
 
+objPatient.pkSevereHepaticFailure = false;
+objPatient.pkHeartInsuff3_4 = false;
+objPatient.pkDiabetes = false;
+objPatient.pkActiveUlcerOfStomachOrDuodenum = false;
+objPatient.pkChronicDialysis = false;
+objPatient.pkArtificialHeartValve = false;
+objPatient.pkUncontrolledSystemicHypertension = false;
+
+
 // $('#divAllRF div').hide();
 // $('.divMiddleLvlRF').hide();
 $('.divFemaleLvl').show();

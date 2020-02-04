@@ -1,37 +1,21 @@
 let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-            // localStorage.removeItem('objScalesVTE');
-
 console.log(objBallsRiskVTE);
 let objPatient = JSON.parse(localStorage.getItem('Patient'));
 console.log(objPatient);
 
-// function bindBalls(el) {
-//     let vBalls;
-//     if (el == 1) {
-//         vBalls = ' балл';
-//     }
-//     if (el > 1 && counter < 5) {
-//         vBalls = ' балла';
-//     }
-//     if (el > 4) {
-//         vBalls = ' баллов';
-//     }
-//     return el + vBalls;
-// }
-function bindBalls(el) {
-    switch (el) {
-    case (el > 1 && counter < 5):
-        end = 'а';
-        break;
-    case (el > 4):
-        end = 'ов'; // code block
-        break;
-    default:
-        end = ''; // code block
+function bindBalls(counter) {
+    let vBalls;
+    if (counter == 1) {
+        vBalls = ' балл';
+    }
+    if (counter > 1 && counter < 5) {
+        vBalls = ' балла';
+    }
+    if (counter > 4) {
+        vBalls = ' баллов';
+    }
+    return counter + vBalls;
 }
-return `${el} балл${end}`;
-}
-
 
 function countStratRF(vCounterRF, x) {
     let vStratRF = '';
@@ -154,17 +138,6 @@ $('#btnTwo').on('click', function () {
     $('.pTextContainer:contains("умеренный")').css({
         'color': 'orange'
     });
-})
-
-$('#btnThree').on('click', function () {
-
-    // console.log('Gender ' + objPatient.pkGender);
-    // console.log('Age ' + objPatient.pkAge);
-    // console.log('Height ' + objPatient.pkHeight);
-    // console.log('Weight ' + objPatient.pkWeight);
-    // console.log('Med Profile ' + objPatient.pkMedProfile);
-    // console.log('RiskVTE ' + objPatient.pkRiskVTE);
-    // console.log('CC ' + objPatient.pkCC);
 
     let arrStratRF = [0, 0, 0, [0, 0], 0];
 
@@ -197,29 +170,28 @@ $('#btnThree').on('click', function () {
         objPatient.pkDateOfChildbirth ? (objPatient.pkMedProfile = 5, objPatient.pkRiskVTE = arrStratRF[5]) : '';
 
         objPatient.pkRiskVTE = arrStratRF[objPatient.pkMedProfile];
-        //        return objPatient.pkMedProfile;
-        //        return [objPatient.pkMedProfile, objPatient.pkRiskVTE];
     }
+
     getMainMedProfile();
 
-    console.log(objPatient.pkMedProfile);
-    console.log(objPatient.pkRiskVTE);
-    console.log(objPatient.pkSevereHepaticFailure);
-    console.log(objPatient.pkHeartInsuff3_4);
-    console.log(objPatient.pkIsOrNoSurg);
-    console.log('Diabetes: ' + objPatient.pkDiabetes);
-    console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
-    console.log('Chronic Dialysis: ' + objPatient.pkChronicDialysis);
-    console.log('Artificial Heart Valve: ' + objPatient.pkArtificialHeartValve);
-    console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
-    console.log('Some Surg: ' + objPatient.pkPullOfSurg);
-    console.log('Artroplasty: ' + objPatient.pkArtroplasty);
+    // console.log(objPatient.pkMedProfile);
+    // console.log(objPatient.pkRiskVTE);
+    // console.log(objPatient.pkSevereHepaticFailure);
+    // console.log(objPatient.pkHeartInsuff3_4);
+    // console.log(objPatient.pkIsOrNoSurg);
+    // console.log('Diabetes: ' + objPatient.pkDiabetes);
+    // console.log('vActiveUlcer: ' + objPatient.pkActiveUlcerOfStomachOrDuodenum);
+    // console.log('Chronic Dialysis: ' + objPatient.pkChronicDialysis);
+    // console.log('Artificial Heart Valve: ' + objPatient.pkArtificialHeartValve);
+    // console.log('Uncontrolled Systemic Hypertension: ' + objPatient.pkUncontrolledSystemicHypertension);
+    // console.log('Some Surg: ' + objPatient.pkPullOfSurg);
+    // console.log('Artroplasty: ' + objPatient.pkArtroplasty);
 
-    delete objPatient.pkHeight;
+    // delete objPatient.pkHeight;
     localStorage.removeItem("Patient");
     let serialObj = JSON.stringify(objPatient);
     localStorage.setItem("Patient", serialObj);
 
-    // $(location).attr('href', '/vte_drug');
+    $(location).attr('href', '/vte_drug');
 
 });

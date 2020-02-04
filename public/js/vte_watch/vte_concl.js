@@ -1,4 +1,6 @@
 let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+            // localStorage.removeItem('objScalesVTE');
+
 console.log(objBallsRiskVTE);
 let objPatient = JSON.parse(localStorage.getItem('Patient'));
 console.log(objPatient);

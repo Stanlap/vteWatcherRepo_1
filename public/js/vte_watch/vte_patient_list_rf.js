@@ -495,12 +495,15 @@ function countRF() {
     let serialObj = JSON.stringify(objPatient);
     localStorage.setItem('Patient', serialObj);
     let objPatientForCounter = {
+        age: objPatient.pkAge,
         isOrNoSurg: objPatient.pkIsOrNoSurg,
-        operTimeMore60: objPatient.operTimeMore60
+        operTimeMore60: objPatient.pkOperTimeMore60,
+        gradeOfOper: objPatient.pkGradeOfOper
+
     };
     $.post('/count', {
             'rfArr': pkRfArr.join(),
-            'objPatientForCounter': JSON.stringify(objPatientForCounter)
+            'objPatientForCounter': JSON.stringify(objPatientForCounter),
         },
         function (data) {
             localStorage.setItem('objScalesVTE', data);
@@ -509,8 +512,8 @@ function countRF() {
             // console.log(objBallsRiskVTE.vCounterPaduaScore);
             // console.log(JSON.parse(data));
 
-            let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-            localStorage.removeItem('objScalesVTE');
+            // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+            // localStorage.removeItem('objScalesVTE');
             console.log(objBallsRiskVTE);
     
         });
@@ -518,7 +521,7 @@ function countRF() {
         localStorage.setItem('Patient', serialObj);
         
 
-    // $(location).attr('href', '/vte_concl');
+    $(location).attr('href', '/vte_concl');
 
 }
 

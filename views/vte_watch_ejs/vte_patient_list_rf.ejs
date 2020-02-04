@@ -84,8 +84,12 @@
                     <label for='chkActiveNeoplasm'><input type='checkbox' class='chkNeoplasm_1' id='chkActiveNeoplasm' data-hasMarked='0' value='1000000100000000'>активное злокачественное новообразование</label><span> &hellip;</span><span class='comments' hidden>: имеются локальные или отдаленные метастазы и/или химиотерапия/радиотерапия &lt; 6 мес назад</span><br>
                 </div>
                 <div class='divSingleLvlRF clsSurgRF clsOncoRF'>
-                    <label for='chkSomeTherapyOfNeoplasm' class='clsSurgRF clsOncoRF'><input type='checkbox' class='chkNeoplasm_1' id='chkSomeTherapyOfNeoplasm' value='1000000300000000'> гормонотерапия, химиотерапия, рентгенотерапия у онкологических пациентов<br></label>
+                    <label for='chkHormoneTherapyOfNeoplasm' class='clsSurgRF clsOncoRF'><input type='checkbox' class='chkNeoplasm_1 chkNeoplasm_2' id='chkHormoneTherapyOfNeoplasm' value='1100000000000000'> гормонотерапия у онкологических пациентов<br></label>
                 </div>
+                <div class='divSingleLvlRF clsSurgRF clsOncoRF'>
+                    <label for='chkChemoOrXrayTherapyOfNeoplasm' class='clsSurgRF clsOncoRF'><input type='checkbox' class='chkNeoplasm_1 chkNeoplasm_2' id='chkChemoOrXrayTherapyOfNeoplasm' value='1000000000000000'> химиотерапия, рентгенотерапия у онкологических пациентов<br></label>
+                </div>
+
                 <hr>
             </div>
         </div>
@@ -454,7 +458,7 @@
         </div>
         <div class='divGroupLvlRF clsTherRF clsSurgRF'>
             <div class='divTogglerRF'>
-                <label>применение гормональных препаратов <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1000000010000000' hidden><br>
+                <label>применение гормональных препаратов <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' value='1100000010000000' hidden><br>
             </div>
             <!--
             <label for='chkIsHormoneTaking'><input type='checkbox' class='chk2_LvlRF' value='1000000010000000'> применение гормональных препаратов (выбрать):<br></label>
@@ -469,7 +473,7 @@
                     </div>
                 </div>
                 <div class='divSingleLvlRF clsTherRF clsSurgRF'>
-                    <label for='chkHormTher'><input type='checkbox' id='chkHormTher' value='1100000000000000'> гормональная заместительная терапия <br></label>
+                    <label for='chkHormTher'><input type='checkbox' id='chkHormTher' value='1000000000000000'> гормональная заместительная терапия <br></label>
                 </div>
                 <hr>
             </div>
@@ -566,14 +570,14 @@
         </div>
         <div class='divGroupLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
             <div class='divTogglerRF'>
-                <label>печеночная недостаточность <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsLiverFailure' value='102.500000000100' hidden><br>
+                <label>печеночная недостаточность <button class='btnTogglerRF'>&gt;</button></label><input type='checkbox' class='chk2_LvlRF' id='chkIsLiverFailure' value='102.501000000100' hidden><br>
             </div>
             <div class='divMiddleLvlRF'>
                 <div class='divSingleLvlRF clsNonsurgBleedingRF  clsSurgBleedingRF'>
                     <label for='chkLiverFailure'><input type='checkbox' id='chkLiverFailure' value='1000000000000000' /> печеночная недостаточность (МНО &gt; 1,5)<br></label>
                 </div>
-                <div class='divSingleLvlRFclsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF  clsSurgBleedingRF clsTraumBleedingRF'>
-                    <label for='chkSevereHepaticFailure'><input type='checkbox' id='chkSevereHepaticFailure' value='1000001000000000' /> нарушение функции печени</label><span> &hellip;</span><span class='comments' hidden>. Хронические болезни печени (цирроз), либо значительные сдвиги в печеночных пробах (повышение билирубина &gt; чем в 2 раза от верхней границы нормы + повышение АЛТ/АСТ/щелочной фосфатазы &gt; чем в 3 раза от верхней границы нормы)</span><br>
+                <div class='divSingleLvlRF clsTherRF clsAtrFibrRF clsSurgRF clsTraumRF clsNeurosurgRF clsCombustRF clsOncoRF clsObstRF clsFibrBleedingRF clsSurgBleedingRF clsTraumBleedingRF'>
+                    <label for='chkSevereHepaticFailure'><input type='checkbox' id='chkSevereHepaticFailure' value='1000000000000000'/>нарушение функции печени</label><span> &hellip;</span><span class='comments' hidden>. Хронические болезни печени (цирроз), либо значительные сдвиги в печеночных пробах (повышение билирубина &gt; чем в 2 раза от верхней границы нормы + повышение АЛТ/АСТ/щелочной фосфатазы &gt; чем в 3 раза от верхней границы нормы)</span><br>
                 </div>
                 <hr>
             </div>
@@ -777,6 +781,9 @@
             <input type='checkbox' id='chkFamilyVeinThromb' value='1300000130000010'>
             <input type='checkbox' id='chkWasProvocedVTE' class='chk2_LvlRF' value='1000000000000020'>
             <input type='checkbox' id='chkSeverePreeclampsiaOrStillbirth' value='1000000000000020'>
+            <input type='checkbox' id='chkSomeTherapyOfNeoplasm' value='1000000300000000'>
+            </div>
+
         </div>
     </div>
     <hr>

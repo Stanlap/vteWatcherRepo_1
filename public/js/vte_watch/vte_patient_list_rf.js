@@ -178,7 +178,7 @@ $('#chkHeartInsuffLess1Month').on('click', () => ($(this).is(':checked') && $('#
 $('#chkCongestHeartFailOrSystLVDysfunctEFLess40Percent').on('click', function () {
     ($(this).is(':checked') && $('#lblSomeHeartInsuff').is(':visible')) ? $('#chkSomeHeartInsuff').prop('checked', true): '';
 });
-$('#chkSomeTherapyOfNeoplasm').on('click', function () {
+$('.chkNeoplasm_2').on('click', function () {
     ($(this).is(':checked')) ? $('#chkActiveNeoplasm').prop('checked', true).closest('.divSingleLvlRF').hide():
         ($('#chkActiveNeoplasm').attr('data-hasMarked') == '0') ? $('#chkActiveNeoplasm').prop('checked', false).closest('.divSingleLvlRF').show() : '';
 });
@@ -253,6 +253,10 @@ function countStratRF(vCounterRF, x) {
     }
 }
 
+let vRace = 1,
+    vCreatinineValueEntered = '',
+    vCreatinineUnits = '';
+
 function calculateGFRAndСС() {
     // Код универсального калькулятора для расчета КК и СКФ взят из открытолго источника http://boris.bikbov.ru/ Программирование: Бикбов Б.Т. Выполняя условия автора, дословно приводим комментарий, на котором настаивает автор кода:
     // Данный код может свободно распространяться и модифицироваться при использовании в некоммерческих целях
@@ -268,7 +272,10 @@ function calculateGFRAndСС() {
         gfr_cg_bsa = '',
         vMDRD = '',
         vMDRD_Standartized = '',
+        vCreatinineValue = '';
         vSKD_EPI = '';
+
+        vCreatinineValue = vCreatinineValueEntered;
     vCreatinineUnits = Number(vCreatinineUnits);
     //    vCreatinineValue.replace(/[,]+/g, '.');
 
@@ -348,15 +355,12 @@ function calculateGFRAndСС() {
     console.log(vCreatinineValue, vCreatinineUnits, objPatient.pkGender, objPatient.pkAge, vRace, objPatient.pkWeight, objPatient.pkHeight);
 }
 
-let vRace = 1,
-    vCreatinineValue = '',
-    vCreatinineUnits = '';
 
 
 
 
 function countRF() {
-    ($('#inpCreatinineVal').val() == '') ? vCreatinineValue = 90: vCreatinineValue = $('#inpCreatinineVal').val();
+    ($('#inpCreatinineVal').val() == '') ? vCreatinineValueEntered = 90: vCreatinineValueEntered = $('#inpCreatinineVal').val();
     vCreatinineUnits = ($('#slctCrUnitsGroup').val()).replace(/[,]+/g, '.');
     ($('#chkRaceB').is(':checked')) ? vRace = 2: '';
     calculateGFRAndСС();
@@ -375,11 +379,12 @@ function countRF() {
     ($('.chkTraum_1').is(':checked')) ? $('#chkFracturePpelvisFemurTibiaLess1Month').prop('checked', true): '';
     ($('.chkHighRiskThrombophilia_1').is(':checked')) ? $('#chkIsKnownHighRiskThrombophilia').prop('checked', true): '';
     ($('.chkNeoplasm_1').is(':checked')) ? $('#chkIsActiveNeoplasmOrTherapyOfNeoplasm').prop('checked', true): '';
+    ($('.chkNeoplasm_2').is(':checked')) ? $('#chkSomeTherapyOfNeoplasm').prop('checked', true): '';
     ($('.chkStroke_1').is(':checked')) ? $('#chkStroke').prop('checked', true): '';
     ($('#chkIsTraum, #chkLargeOperIn30Days').is(':checked')) ? $('#chkTraumOrOperIn30Days').prop('checked', true): '';
     ($('#chkIsPulmonInsuff').is(':checked') || $('#chkIsHeartInsuff').is(':checked')) ? $('#chkPulmonOrHeartInsuff').prop('checked', true): '';
     ($('.chkSevereRenalInsuff_1').is(':checked')) ? $('#chkSevereRenalInsuff').prop('checked', true): '';
-    ($('.chkSevereRenalInsuff_2').is(':checked') || vCreatinineValue > 200) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
+    ($('.chkSevereRenalInsuff_2').is(':checked') || vCreatinineValueEntered > 200) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
     $('#chkIsLiverFailure').is(':checked') ? objPatient.pkSevereHepaticFailure = true : '';
     $('#chkHeartInsuff3_4').is(':checked') ? objPatient.pkHeartInsuff3_4 = true : '';
     $('#chkIsDiabetes').is(':checked') ? objPatient.pkDiabetes = true : '';
@@ -398,7 +403,7 @@ function countRF() {
     ($('.chkSumAtrFibrRF_1').is(':checked')) ? $('#chkVascularAnamnesis').prop('checked', true): '';
     ($('.chkThrombocytopenia_1').is(':checked')) ? $('#chkThrombocytopenia').prop('checked', true): '';
 
-    ($('#chkIsHemorragicSyndrome, #chkPriorMajorBleeding').is(':checked')) ? $('#chkBleedingOrHemorragicSyndrome').prop('checked', true): '';
+    ($('#chkIsHemorragicSyndrome, #chkPriorMajorBleeding, #chkHbLess_100').is(':checked')) ? $('#chkBleedingOrHemorragicSyndrome').prop('checked', true): '';
 
     ($('#chkIsAcuteInflammatoryDiseaseOrInfection').is(':checked') && $('#chkIsRestrictedMobility').is(':checked')) ? $('#chkAcuteInflammatoryDiseaseOrInfectionWithBedRest').prop('checked', true): '';
 
@@ -460,11 +465,11 @@ function countRF() {
     if (objPatient.pkIsOrNoSurg) {
         (objPatient.pkGradeOfOper > 0) ? ($('#chkLargeSurgery').prop('checked', true)) : $('#chkSmallSurgery').prop('checked', true);
     }
-    let pkRfArr = [];
+    let pkRfArr = [], pkRFText = [];
     ($('#divAllRF input:checkbox:checked')).each(function () {
         pkRfArr.push($(this).val());
     });
-    // console.log(pkRfArr);
+
     console.log(pkRfArr.join());
     // console.log(JSON.stringify($.extend({}, pkRfArr)));
     let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
@@ -503,14 +508,17 @@ function countRF() {
             // let objBallsRiskVTE = JSON.parse(fromRfArr);
             // console.log(objBallsRiskVTE.vCounterPaduaScore);
             // console.log(JSON.parse(data));
+
+            let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+            localStorage.removeItem('objScalesVTE');
+            console.log(objBallsRiskVTE);
+    
         });
         serialObj = JSON.stringify(objPatient);
         localStorage.setItem('Patient', serialObj);
-        // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-        // console.log(objBallsRiskVTE);
         
 
-    $(location).attr('href', '/vte_concl');
+    // $(location).attr('href', '/vte_concl');
 
 }
 

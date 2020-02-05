@@ -53,6 +53,7 @@ $('#slctMedicalProfileOfPatient').on('change', function () {
     $('#chkMale').prop('disabled', true);
     $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth, #divDateOfOper').hide();
     $('#chkIsOrNoSurg, #chkCreateKindOfOper, #divPregnancyOrChildbirth input:checked, #divObstOrGynProfile input:checked, #divSmallOrLargeOper input:checked').prop('checked', false);
+    $('#taNonTrivialOperTitle').val('');
     $('.btnAccordChooseOper').prop('value', 1).next().hide();
     $('.btnAccordChooseOper').hide();
 });
@@ -86,6 +87,7 @@ $('#chkIsOrNoSurg').on('click', function () {
         $('#divChooseKindOfOper option:selected').prop('selected', false);
         $('#chkCreateKindOfOper').prop('checked', false);
         $('#divSmallOrLargeOper input:checked').prop('checked', false);
+        $('#taNonTrivialOperTitle').val('');
     }
 });
 
@@ -101,11 +103,15 @@ $('.btnAccordChooseOper').on('click', function (el) {
 });
 
 $('#chkCreateKindOfOper').on('click', function () {
-    ($(this).is(':checked')) ? ($('#divSmallOrLargeOper').show(), $('#divChooseKindOfOper').hide(),
-        $('.btnObsGynOper').show()) : ($('#divSmallOrLargeOper, .lblTimeOfSurg').hide(),
-        $('.btnObsGynOper, #divChooseKindOfOper').show());
+    ($(this).is(':checked')) ? $('#divSmallOrLargeOper').show() : ($('#divSmallOrLargeOper, .lblTimeOfSurg').hide(), $('#taNonTrivialOperTitle').val(''), $('#divSmallOrLargeOper input:checked').prop('checked', false));
     // $('#divSmallOrLargeOper input:checked').prop('checked', false), $('#divChooseKindOfOper').show());
 });
+// $('#chkCreateKindOfOper').on('click', function () {
+//     ($(this).is(':checked')) ? ($('#divSmallOrLargeOper').show(), $('#divChooseKindOfOper').hide(),
+//         $('.btnObsGynOper').show()) : ($('#divSmallOrLargeOper, .lblTimeOfSurg').hide(),
+//         $('.btnObsGynOper, #divChooseKindOfOper').show(), $('#taNonTrivialOperTitle').val(''), $('#divSmallOrLargeOper input:checked').prop('checked', false));
+//     // $('#divSmallOrLargeOper input:checked').prop('checked', false), $('#divChooseKindOfOper').show());
+// });
 
 $('input[name=rdoSmallOrLargeOper]:radio').on('click', function () {
     ($(this).val() == 1) ? ($('.lblTimeOfSurg').hide(), $('#chkTimeOfSurg').prop('checked', false)) : $('.lblTimeOfSurg').show();
@@ -175,6 +181,7 @@ $('#height').on('change', () => {
 });
 
 function showBtnGoToRF() {
+     
     objPatient.pkAge = getCurrentAge(objPatient.pkBirthDateOfPatient);
     objPatient.pkAge !== 0 && $('#weight').val().length > 0 && $('#height').val().length > 0 && $('#slctMedicalProfileOfPatient option:selected').is(':checked') ? $('#btnOne').show() : $('#btnOne').hide();
 }

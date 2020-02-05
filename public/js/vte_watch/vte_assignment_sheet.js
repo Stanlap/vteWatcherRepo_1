@@ -3,8 +3,8 @@ $(document).ready(function () {
     // localStorage.clear();
     console.log(objPatient);
     // switch (objPatient.pkChoosedDrugGroupLat) {
-    function defineMinTreatmentPeriod(mP, chosDrug) {
         let mTP = 0;
+    function defineMinTreatmentPeriod(mP, chosDrug) {
         switch (chosDrug) {
 
             case 'Enoxaparin sodium':

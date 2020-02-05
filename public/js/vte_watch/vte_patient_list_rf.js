@@ -14,8 +14,8 @@ objPatient.pkArtificialHeartValve = false;
 objPatient.pkUncontrolledSystemicHypertension = false;
 
 
-// $('#divAllRF div').hide();
-// $('.divMiddleLvlRF').hide();
+$('#divAllRF div').hide();
+$('.divMiddleLvlRF').hide();
 $('.divFemaleLvl').show();
 
 $.extend({

@@ -108,7 +108,8 @@ function countStratRF(vCounterRF, vScaleTitle) {
     text: ('Российская риска ВТЭО в акушерстве-гинекологии: ' + bindBalls(objBallsRiskVTE.vCounterObstRuRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterObstRuRF, 'GreenTop37aRus') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
-($('#pTextCollector_2').children().length > 0) ? $('#pTextCollector_2').show(): '';
+$('#pTextCollector_2').children().length > 0 ? $('#pTextCollector_2').show() : $('#pBestConclusion').show();
+$('#pTextCollector_2').children().length === 0 && objPatient.pkRiskVTE === 0 ? $('#pBestConclusion').show() : '';
 
 
 
@@ -157,7 +158,9 @@ function getMainMedProfile() {
     };
     if (objPatient.pkIsOrNoSurg) {
         objBallsRiskVTE.vCounterRusSurgRF >= 1 && objBallsRiskVTE.vCounterRusSurgRF <= 2 ? arrStratRF[3][0] = 1 : objBallsRiskVTE.vCounterRusSurgRF >= 3 ? arrStratRF[3][0] = 2 : '';
-        objBallsRiskVTE.vCounterCapriniRF >= 1 && objBallsRiskVTE.vCounterCapriniRF <= 2 ? arrStratRF[3][1] = 1 : objBallsRiskVTE.vCounterCapriniRF >= 3 ? arrStratRF[3][1] = 2 : '';
+        objBallsRiskVTE.vCounterCapriniRF === 2 ? arrStratRF[3][1] = 1 : objBallsRiskVTE.vCounterCapriniRF >= 3 ? arrStratRF[3][1] = 2 : '';
+        // !!!!!! Код ниже для шкалы Caprini с умеренным риском профилактики ВТЭО с одного балла по шкале.
+        // objBallsRiskVTE.vCounterCapriniRF >= 1 && objBallsRiskVTE.vCounterCapriniRF <= 2 ? arrStratRF[3][1] = 1 : objBallsRiskVTE.vCounterCapriniRF >= 3 ? arrStratRF[3][1] = 2 : '';
     };
     if (objPatient.pkValuesMedPfofile.includes(4)) {
         objBallsRiskVTE.vCounterRusTraumRF >= 1 && objBallsRiskVTE.vCounterRusTraumRF <= 2 ? arrStratRF[4] = 1 : objBallsRiskVTE.vCounterRusTraumRF >= 2 ? arrStratRF[4] = 2 : '';
@@ -218,4 +221,5 @@ $('#btnTwo').bind('click', function(){
          let VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
         VTEProphylDecision === false && objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
     };
+    objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
 });

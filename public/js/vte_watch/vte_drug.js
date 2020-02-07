@@ -203,7 +203,7 @@ $(document).ready(function () {
     function passManagementToButtonOne() {
         $('#btnOne').show().bind('click', chooseDrugGroup);
     };
-
+    let choosedDrugGroupRu = '';
     function chooseDrugGroup() {
         $('#invitToAct_1').text('Выберите препарат по коммерческому названию:');
 
@@ -216,11 +216,13 @@ $(document).ready(function () {
         $('#inpText_2').val('');
 
         objChoosedDrug.objChoosedDrugGroup = $('#inpText_4').val();
+        choosedDrugGroupRu = objChoosedDrug.objChoosedDrugGroup
         console.log(objChoosedDrug.objChoosedDrugGroup);
 
         $.each(vObjDrugPairs, function (index, value) {
             value === objChoosedDrug.objChoosedDrugGroup ? objChoosedDrug.objChoosedDrugGroupLat = index : '';
         });
+        
         vArrPairs = Object.keys(objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs).map(function (name) {
             return [objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs[name].nameCyr, objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs[name].nameLat];
 
@@ -449,14 +451,20 @@ $(document).ready(function () {
             return vText;
         }
         (vT_1.timesADay === 1 || vT_1.timesADay > 4) ? vTimE_S = 'раз': '';
+
         let vText_1 = convertObjPairsToString(vT_2),
-            vText_2 = (`${objChoosedDrug.tempCont} ${objChoosedDrug.singleProphDose}`);
-        ChoosedMedicinesArr.push(`Выбран препарат: ${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`);
-        console.log(`Выбран препарат: ${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`);        $('#btnOne').unbind('click', makeNoteOfDrug);
+            vText_2 = (`${objChoosedDrug.tempCont} ${objChoosedDrug.singleProphDose}`),
+            objChoosedMedicine = {
+                signature: `${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`,
+                titleGroupRu: choosedDrugGroupRu
+                // treatPeriod: 10
+            };
+
+        ChoosedMedicinesArr.push(objChoosedMedicine);
 
         function goToAssignSheet() {
             let serialObj = JSON.stringify(ChoosedMedicinesArr);
-            localStorage.setItem("ChoosedMedicines", serialObj);
+            localStorage.setItem('ChoosedMedicines', serialObj);
             $(location).attr('href', '/vte_assignment_sheet');
         }
 

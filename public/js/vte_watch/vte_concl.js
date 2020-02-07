@@ -85,17 +85,17 @@ function countStratRF(vCounterRF, vScaleTitle) {
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-(objBallsRiskVTE.vCounterCapriniRF >= 2 && objPatient.pkAllSurgProfiles == true) ? $('<p>', {
+( objPatient.pkIsOrNoSurg && objBallsRiskVTE.vCounterCapriniRF >= 2 && objPatient.pkAllSurgProfiles == true) ? $('<p>', {
     text: ('Caprini: ' + bindBalls(objBallsRiskVTE.vCounterCapriniRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterCapriniRF, 'Caprini') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-(objBallsRiskVTE.vCounterRusSurgRF >= 1 && objPatient.pkAllSurgProfiles == true) ? $('<p>', {
+( objPatient.pkIsOrNoSurg && objBallsRiskVTE.vCounterRusSurgRF >= 1 && objPatient.pkAllSurgProfiles == true) ? $('<p>', {
     text: ('Российская риска ВТЭО в хирургии: ' + bindBalls(objBallsRiskVTE.vCounterRusSurgRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterRusSurgRF, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-(objBallsRiskVTE.vCounterRusTraumRF > 2 && objPatient.pkValuesMedPfofile.includes(4)) ? $('<p>', {
+( objPatient.pkIsOrNoSurg && objBallsRiskVTE.vCounterRusTraumRF > 2 && objPatient.pkValuesMedPfofile.includes(4)) ? $('<p>', {
     text: ('Российская риска ВТЭО в травматологии: ' + bindBalls(objBallsRiskVTE.vCounterRusTraumRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterRusTraumRF, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
@@ -201,25 +201,22 @@ localStorage.removeItem("Patient");
 let serialObj = JSON.stringify(objPatient);
 localStorage.setItem("Patient", serialObj);
 
-// $('#btnTwo').bind('click', function () {
-//     let VTEProphylDecision = '';
-//     if (objPatient.pkRiskVTE > 0) {
-//         if (objPatient.pkHighRiskOfBleeding) {
-//             VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
-//             VTEProphylDecision ? alert('Переходим к листу профилактики ВТЭО.') : $(location).attr('href', '/vte_drug');
-//         };
-//     } else{
-//         if (objPatient.pkHighRiskOfBleeding) {
-//             VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
-//             VTEProphylDecision ? alert('Переходим к листу профилактики ВТЭО.') : alert('Переходим к листу профилактики ВТЭО.');
-//         };
-//     };
-// });
 
 $('#btnTwo').bind('click', function(){
+    let VTEProphylDecision = false;
     if(objPatient.pkHighRiskOfBleeding){
-         let VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
-        VTEProphylDecision === false && objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+        VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
     };
-    objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+    if(objPatient.pkRiskVTE > 0){
+            VTEProphylDecision === false ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+    }else{
+        alert('Переходим к листу профилактики ВТЭО.');        
+    };
+// $('#btnTwo').bind('click', function(){
+//     if(objPatient.pkHighRiskOfBleeding){
+//          let VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
+//         VTEProphylDecision === false && objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+//     }else{
+//         objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+//     };
 });

@@ -456,7 +456,9 @@ $(document).ready(function () {
             vText_2 = (`${objChoosedDrug.tempCont} ${objChoosedDrug.singleProphDose}`),
             objChoosedMedicine = {
                 signature: `${objChoosedDrug.titleCyr} (${objChoosedDrug.titleLat}${vText_1}, ${vT_1.container} 1) ${vT_1.delivery}, ${vText_2}${vT_1.timesADay} ${vTimE_S}/${objChoosedDrug.frequencyOfDrugTaking}`,
-                titleGroupRu: choosedDrugGroupRu
+                titleGroupRu: choosedDrugGroupRu,
+                startDateOfVTEProphyl: new Date()
+
                 // treatPeriod: 10
             };
 

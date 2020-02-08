@@ -208,9 +208,9 @@ $('#btnTwo').bind('click', function(){
         VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
     };
     if(objPatient.pkRiskVTE > 0){
-            VTEProphylDecision === false ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+            VTEProphylDecision === false ? $(location).attr('href', '/vte_drug') : $(location).attr('href', '/vte_assignment_sheet');
     }else{
-        alert('Переходим к листу профилактики ВТЭО.');        
+        $(location).attr('href', '/vte_assignment_sheet');
     };
 // $('#btnTwo').bind('click', function(){
 //     if(objPatient.pkHighRiskOfBleeding){

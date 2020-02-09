@@ -28,6 +28,37 @@ $(document).ready(function () {
         })
         .appendTo('p');
 
+    function definePlateletsResearchTime(chosDrug, pRT = []) {
+        // pRT[0]- исследование до начала профилактики ВТЭО, pRT[1] - первое исследование после начала профилактики ВТЭО, pRT[2] - интервал между исследованиями (сутки).
+        switch (chosDrug) {
+
+            case 'Эноксапарин натрия' || 'Надропарин кальция':
+                pRT = [-1, 0, 7];
+                break;
+
+            case 'Гепарин натрия':
+                pRT = [-1, 1, 3];
+                break;
+        };
+        return pRT;
+    }
+
+
+    function defineSpinalCatheterVTEProphylTactics(chosDrug, bASC = [10, 2]) {
+// bASC[0] - число часов перед установкой/удалением катетера,
+//  bASC[1] - число часов после установки/удаления катетера.
+
+        switch (chosDrug) {
+            case 'Апиксабан':
+                bASC[1] = 5;
+                break;
+            default:
+                bASC = [10, 2];
+        };
+        return bASC;
+    }
+
+
     function defineMinTreatmentPeriod(mP, chosDrug, mTP) {
         switch (chosDrug) {
 

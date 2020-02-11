@@ -4,6 +4,9 @@ let objPatient = JSON.parse(localStorage.getItem('Patient'));
 console.log(objPatient);
 objPatient.pkHighRiskOfBleeding = false;
 
+
+objBallsRiskVTE.vCounterIMPROVE > 7 || bjBallsRiskVTE.vCounterHAS_BLED > 2 || objBallsRiskVTE.vCounterMajorBleedingScoreRF > 0 || objBallsRiskVTE.vCounterTraumBleedingRF > 0 || objBallsRiskVTE.vCounterObstBleedingRF > 2 ? objPatient.pkRiskBleed = 1 : objPatient.pkRiskBleed = 0;
+
 function bindBalls(counter) {
     let vBalls;
     if (counter == 1) {
@@ -217,6 +220,6 @@ $('#btnTwo').bind('click', function(){
 //          let VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
 //         VTEProphylDecision === false && objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
 //     }else{
-//         objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+        objPatient.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
 //     };
 });

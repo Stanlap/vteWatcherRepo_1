@@ -12,7 +12,7 @@ objPatient.pkActiveUlcerOfStomachOrDuodenum = false;
 objPatient.pkChronicDialysis = false;
 objPatient.pkArtificialHeartValve = false;
 objPatient.pkUncontrolledSystemicHypertension = false;
-
+objPatient.pkRace = 0;
 
 $('#divAllRF div').hide();
 $('.divMiddleLvlRF').hide();
@@ -261,122 +261,130 @@ function countStratRF(vCounterRF, x) {
             return vStratRF;
     }
 }
+$.each(objCreatinineUnits, function(key, value) {
+    $('#slctCrUnitsGroup')
+    .append($('<option>', { value : key })
+    .text(key));
+    });
 
-let vRace = 1,
-    vCreatinineValueEntered = '',
-    vCreatinineUnits = '';
+// console.log(`CC and GFR: ${calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)}`);
 
-function calculateGFRAndСС() {
-    // Код универсального калькулятора для расчета КК и СКФ взят из открытолго источника http://boris.bikbov.ru/ Программирование: Бикбов Б.Т. Выполняя условия автора, дословно приводим комментарий, на котором настаивает автор кода:
-    // Данный код может свободно распространяться и модифицироваться при использовании в некоммерческих целях
-    // Обязательным условием использования и распространения данного кода являются:
-    // 1. Сохранение комментариев с указанием авторства Бикбова Б.Т. в программном коде JavaScript
-    // 2. Указание авторства Бикбова Б.Т. на странице с использованием данного програмного кода
-    // 3. Указание активной ссылки на сайт http://boris.bikbov.ru/ на странице с использованием данного програмного кода
-    //Комментарий автора кода.
+// let vRace = 1,
+//     vCreatinineValueEntered = '',
+//     vCreatinineUnits = '';
+//     function calculateGFRAndСС() {
+//     // Код универсального калькулятора для расчета КК и СКФ взят из открытолго источника http://boris.bikbov.ru/ Программирование: Бикбов Б.Т. Выполняя условия автора, дословно приводим комментарий, на котором настаивает автор кода:
+//     // Данный код может свободно распространяться и модифицироваться при использовании в некоммерческих целях
+//     // Обязательным условием использования и распространения данного кода являются:
+//     // 1. Сохранение комментариев с указанием авторства Бикбова Б.Т. в программном коде JavaScript
+//     // 2. Указание авторства Бикбова Б.Т. на странице с использованием данного програмного кода
+//     // 3. Указание активной ссылки на сайт http://boris.bikbov.ru/ на странице с использованием данного програмного кода
+//     //Комментарий автора кода.
 
 
-    let gfr_cg = '',
-        bsa = '',
-        gfr_cg_bsa = '',
-        vMDRD = '',
-        vMDRD_Standartized = '',
-        vCreatinineValue = '';
-        vSKD_EPI = '';
+//     let gfr_cg = '',
+//         bsa = '',
+//         gfr_cg_bsa = '',
+//         vMDRD = '',
+//         vMDRD_Standartized = '',
+//         vCreatinineValue = '';
+//         vSKD_EPI = '';
 
-        vCreatinineValue = vCreatinineValueEntered;
-    vCreatinineUnits = Number(vCreatinineUnits);
-    //    vCreatinineValue.replace(/[,]+/g, '.');
+//         vCreatinineValue = vCreatinineValueEntered;
+//     vCreatinineUnits = Number(vCreatinineUnits);
+//     //    vCreatinineValue.replace(/[,]+/g, '.');
 
-    if ((vCreatinineValue <= 0.00003) || (vCreatinineValue >= 6500)) {
-        vCreatinineValue = 0;
-    }
-    // конвертирую креатинин
-    switch (parseInt(vCreatinineUnits)) {
-        case 1: // ммоль/л
-            vCreatinineValue = 1000 * vCreatinineValue / 88.4;
-            break;
-        case 2: // мкмоль/л
-            vCreatinineValue /= 88.4;
-            break;
-        case 4: // мкмоль/л
-            vCreatinineValue /= 10;
-            break;
-    }
-    // взрослые
-    if (vCreatinineValue > 0 && objPatient.pkGender >= 0 && objPatient.pkAge > 0) {
-        // CKD-EPI
-        if (objPatient.pkGender == 0) {
-            if (vCreatinineValue <= 0.7) {
-                vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -0.329) * Math.pow(0.993, objPatient.pkAge);
-            } else {
-                vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -1.209) * Math.pow(0.993, objPatient.pkAge);
-            }
-        } else {
-            if (vCreatinineValue <= 0.9) {
-                vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -0.411) * Math.pow(0.993, objPatient.pkAge);
-            } else {
-                vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -1.209) * Math.pow(0.993, objPatient.pkAge);
-            }
-        }
-        // коэффициент для расы
-        if (vRace == 1) { // белые
-            if (objPatient.pkGender == 0) {
-                vSKD_EPI = vSKD_EPI * 144;
-            } else {
-                vSKD_EPI = vSKD_EPI * 141;
-            }
-        } else { // негроидная
-            if (objPatient.pkGender == 0) {
-                vSKD_EPI = vSKD_EPI * 166;
-            } else {
-                vSKD_EPI = vSKD_EPI * 163;
-            }
-        }
-        vSKD_EPI = Math.round(vSKD_EPI);
-        if (vRace == 2) { // негродидная
-            vRace = 1.212;
-        }
-        // 186 - для нестандартизованных наборов креатинина, 175 - для стандартизованных
-        if (objPatient.pkGender == 0) {
-            vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * 0.742));
-            vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * 0.742));
-        } else {
-            vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * objPatient.pkGender));
-            vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * objPatient.pkGender));
-        }
-        //         кокрофт
-        if (objPatient.pkWeight > 0) {
-            gfr_cg = ((140 - objPatient.pkAge) * objPatient.pkWeight / 72) / vCreatinineValue;
-            if (objPatient.pkGender == 0) {
-                gfr_cg = gfr_cg * 0.85;
-            }
-            if (objPatient.pkHeight > 0) {
-                bsa = (objPatient.pkHeight * objPatient.pkWeight / 3600);
-                bsa = Math.sqrt(bsa);
-                gfr_cg_bsa = gfr_cg * 1.73 / bsa;
-            }
-        }
-    }
-    vGFR = Math.min(vSKD_EPI, vMDRD, vMDRD_Standartized);
-    objPatient.pkCC = Math.round(gfr_cg_bsa);
-    console.log(vGFR, objPatient.pkCC);
-    console.log(vCreatinineValue, vCreatinineUnits, objPatient.pkGender, objPatient.pkAge, vRace, objPatient.pkWeight, objPatient.pkHeight);
-}
+//     if ((vCreatinineValue <= 0.00003) || (vCreatinineValue >= 6500)) {
+//         vCreatinineValue = 0;
+//     }
+//     // конвертирую креатинин
+//     switch (parseInt(vCreatinineUnits)) {
+//         case 1: // ммоль/л
+//             vCreatinineValue = 1000 * vCreatinineValue / 88.4;
+//             break;
+//         case 2: // мкмоль/л
+//             vCreatinineValue /= 88.4;
+//             break;
+//         case 4: // мкмоль/л
+//             vCreatinineValue /= 10;
+//             break;
+//     }
+//     // взрослые
+//     if (vCreatinineValue > 0 && objPatient.pkGender >= 0 && objPatient.pkAge > 0) {
+//         // CKD-EPI
+//         if (objPatient.pkGender == 0) {
+//             if (vCreatinineValue <= 0.7) {
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -0.329) * Math.pow(0.993, objPatient.pkAge);
+//             } else {
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -1.209) * Math.pow(0.993, objPatient.pkAge);
+//             }
+//         } else {
+//             if (vCreatinineValue <= 0.9) {
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -0.411) * Math.pow(0.993, objPatient.pkAge);
+//             } else {
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -1.209) * Math.pow(0.993, objPatient.pkAge);
+//             }
+//         }
+//         // коэффициент для расы
+//         if (vRace == 1) { // белые
+//             if (objPatient.pkGender == 0) {
+//                 vSKD_EPI = vSKD_EPI * 144;
+//             } else {
+//                 vSKD_EPI = vSKD_EPI * 141;
+//             }
+//         } else { // негроидная
+//             if (objPatient.pkGender == 0) {
+//                 vSKD_EPI = vSKD_EPI * 166;
+//             } else {
+//                 vSKD_EPI = vSKD_EPI * 163;
+//             }
+//         }
+//         vSKD_EPI = Math.round(vSKD_EPI);
+//         if (vRace == 2) { // негродидная
+//             vRace = 1.212;
+//         }
+//         // 186 - для нестандартизованных наборов креатинина, 175 - для стандартизованных
+//         if (objPatient.pkGender == 0) {
+//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * 0.742));
+//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * 0.742));
+//         } else {
+//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * objPatient.pkGender));
+//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * objPatient.pkGender));
+//         }
+//         //         кокрофт
+//         if (objPatient.pkWeight > 0) {
+//             gfr_cg = ((140 - objPatient.pkAge) * objPatient.pkWeight / 72) / vCreatinineValue;
+//             if (objPatient.pkGender == 0) {
+//                 gfr_cg = gfr_cg * 0.85;
+//             }
+//             if (objPatient.pkHeight > 0) {
+//                 bsa = (objPatient.pkHeight * objPatient.pkWeight / 3600);
+//                 bsa = Math.sqrt(bsa);
+//                 gfr_cg_bsa = gfr_cg * 1.73 / bsa;
+//             }
+//         }
+//     }
+//     objPatient.pkGFR = Math.min(vSKD_EPI, vMDRD, vMDRD_Standartized);
+//     objPatient.pkCC = Math.round(gfr_cg_bsa);
+//     console.log(objPatient.pkGFR, objPatient.pkCC);
+//     console.log(vCreatinineValue, vCreatinineUnits, objPatient.pkGender, objPatient.pkAge, vRace, objPatient.pkWeight, objPatient.pkHeight);
+// }
 
 
 
 
 
 function countRF() {
-    ($('#inpCreatinineVal').val() == '') ? vCreatinineValueEntered = 90: vCreatinineValueEntered = $('#inpCreatinineVal').val();
-    vCreatinineUnits = ($('#slctCrUnitsGroup').val()).replace(/[,]+/g, '.');
-    ($('#chkRaceB').is(':checked')) ? vRace = 2: '';
-    calculateGFRAndСС();
+    ($('#inpCreatinineVal').val() == '') ? creatinVal = 90 : creatinVal = $('#inpCreatinineVal').val();
+    creatinUnits = $('#slctCrUnitsGroup').val();
+    ($('#chkRaceB').is(':checked')) ? objPatient.pkRace = 1 : '';
 
-    (vGFR > 29 && vGFR < 60) ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true): '';
-    (vGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true): '';
+console.log(`GFR: ${calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)}`);
 
+objPatient.pkCC = calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)[0];
+objPatient.pkGFR = calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)[1];
+
+objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (objPatient.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
 
     ($('.clsSystemicHypertension2thAndMoreStage').is(':checked')) ? $('#chkSystemicHypertension2thAndMoreStage').prop('checked', true): '';
     ($('.chkSumTherRF_1').is(':checked')) ? $('#chkAcuteIschemicStrokeOrMiocardInfarction').prop('checked', true): '';
@@ -393,7 +401,7 @@ function countRF() {
     ($('#chkIsTraum, #chkLargeOperIn30Days').is(':checked')) ? $('#chkTraumOrOperIn30Days').prop('checked', true): '';
     ($('#chkIsPulmonInsuff').is(':checked') || $('#chkIsHeartInsuff').is(':checked')) ? $('#chkPulmonOrHeartInsuff').prop('checked', true): '';
     ($('.chkSevereRenalInsuff_1').is(':checked')) ? $('#chkSevereRenalInsuff').prop('checked', true): '';
-    ($('.chkSevereRenalInsuff_2').is(':checked') || vCreatinineValueEntered > 200) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
+    ($('.chkSevereRenalInsuff_2').is(':checked') || objPatient.pkGFR < 30) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
     $('#chkIsLiverFailure').is(':checked') ? objPatient.pkSevereHepaticFailure = true : '';
     $('#chkHeartInsuff3_4').is(':checked') ? objPatient.pkHeartInsuff3_4 = true : '';
     $('#chkIsDiabetes').is(':checked') ? objPatient.pkDiabetes = true : '';
@@ -523,7 +531,7 @@ function countRF() {
 
             // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
             // localStorage.removeItem('objScalesVTE');
-            console.log(objBallsRiskVTE);
+            // console.log(objBallsRiskVTE);
     
         });
         serialObj = JSON.stringify(objPatient);

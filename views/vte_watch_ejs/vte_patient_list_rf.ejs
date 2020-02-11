@@ -556,11 +556,14 @@
             </div>
             <form id='frmGFR_CC' hidden>
                 <input type='number' id='inpCreatinineVal' placeholder='Значение креатинина'>
-                <select class='chk2_LvlRF' id='slctCrUnitsGroup'>
+                <!-- <select class='chk2_LvlRF' id='slctCrUnitsGroup'>
                     <option id='optCrUnits_mcmol' value='2' selected><label for='opnCrUnits_mcmol'>мкмоль/л</label></option>
                     <option id='optCrUnits_mmol' value='1'><label for='opnCrUnits_mmol'>ммоль/л</label></option>
                     <option id='optCrUnits_mg' value='3'><label for='opnCrUnits_mg'>мг/дл(мг/100 мл, мг/%)</label></option>
                     <option id='optCrUnits_mgX10' value='4'><label for='opnCrUnits_mgX10'>мг/дл(мг/л, мкг/мл)</label></option>
+                </select>
+                <br> -->
+                <select class='chk2_LvlRF' id='slctCrUnitsGroup'>
                 </select>
                 <br>
                 <label for='chkRaceB'><input type='checkbox' class='chk2_LvlRF' id='chkRaceB' value='1000000000000000' /> негроидная раса</label>
@@ -792,6 +795,7 @@
     <br><br>
     <footer>&copy;SmartMedInterface</footer>
     <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/gfr.js"></script>
     <script src="/js/vte_watch/vte_patient_list_rf.js" defer></script>
 </body>
 <html>

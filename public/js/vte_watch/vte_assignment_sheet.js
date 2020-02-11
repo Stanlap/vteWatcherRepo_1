@@ -6,7 +6,7 @@ $(document).ready(function () {
     localStorage.removeItem('ChoosedMedicines');
 
     console.log(objPatient, objChoosedMedicines);
-    console.log(objChoosedMedicines[1].startDateOfVTEProphyl);
+    // console.log(objChoosedMedicines[1].startDateOfVTEProphyl);
 
     $('<br><br>').appendTo('p');
     $('<div/>').attr({

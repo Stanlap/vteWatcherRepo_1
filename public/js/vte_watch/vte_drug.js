@@ -51,6 +51,8 @@ $(document).ready(function () {
 
     let ChoosedMedicinesArr = [];
 
+    objPatient.pkRiskVTE === 1 ? delete objDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : objPatient.pkRiskVTE === 2 ? delete objDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
+
     function getArrPairs(vArr, ) {
         return Object.keys(vArr).map(function (index) {
             return vArr[index].pair;
@@ -69,7 +71,7 @@ $(document).ready(function () {
 
     let vObjDrugPairs = getObjFromArrPairs(vArrPairs);
     console.log(vObjDrugPairs);
-
+    vObjDrugPairs = checkConditions();
     addOptionsToDatalist(vObjDrugPairs, $('#dlstList_1'));
     let vPrevUsedDrugGroup = '';
 
@@ -85,10 +87,10 @@ $(document).ready(function () {
     }
 
     function doFirstChoice() {
-        console.log('func_0');
+        console.log('func_0');        
+        // vObjDrugPairs = checkConditions();
         vPrevUsedDrugGroup = getKeyByValue(vObjDrugPairs, $('#inpText_4').val());
         $('#btnOne').show();
-        checkConditions();
         tryChooseDrugGroup();
         $('#inpText_4').val('');
         $('#inpText_4').unbind('input', doFirstChoice);
@@ -116,6 +118,7 @@ $(document).ready(function () {
             }
             delete vObjDrugPairs['Enoxaparin sodium'];
             delete vObjDrugPairs['Nadroparin calcium'];
+            delete vObjDrugPairs['Bemiparinum natrium'];
             delete vObjDrugPairs['Dabigatran etexilate'];
             delete vObjDrugPairs['Acetylsalicylic acid'];
         };
@@ -133,9 +136,9 @@ $(document).ready(function () {
         (objPatient.pkHeartInsuff3_4 || objPatient.pkActiveUlcerOfStomachOrDuodenum) ? delete vObjDrugPairs['Acetylsalicylic acid']: '';
         objPatient.pkUncontrolledSystemicHypertension ? delete vObjDrugPairs['Heparin sodium'] : '';
         (objPatient.pkIsOrNoSurg && objPatient.pkPullOfSurg) ? delete vObjDrugPairs['Heparin sodium']: '';
-
-        (objPatient.vCC < 15 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Apixaban) : '';
-        objPatient.vCC < 30 ? (delete vObjDrugPairs['Acetylsalicylic acid'], delete vObjDrugPairs['Dabigatran etexilate'], delete vObjDrugPairs['Fondaparinux sodium'], delete vObjDrugPairs.Warfarin) : '';
+        objPatient.pkSevereHepaticFailure ? delete vObjDrugPairs['Bemiparinum natrium']: '';
+        (objPatient.pkCC < 15 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Apixaban) : '';
+        objPatient.pkCC < 30 ? (delete vObjDrugPairs['Acetylsalicylic acid'], delete vObjDrugPairs['Dabigatran etexilate'], delete vObjDrugPairs['Fondaparinux sodium'], delete vObjDrugPairs.Warfarin) : '';
 
         objPatient.pkWeekOfPregnancy > 0 ? (delete vObjDrugPairs['Heparin sodium'], delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Apixaban) : '';
         (objPatient.pkWeekOfPregnancy > 0 && objPatient.pkArtificialHeartValve) ? delete vObjDrugPairs['Enoxaparin sodium']: '';
@@ -156,6 +159,7 @@ $(document).ready(function () {
                 delete vObjDrugPairs['Heparin sodium'];
             }
         };
+        return vObjDrugPairs;
     };
 
     function addOptionsToDatalist(vDrug, vDL) {
@@ -228,11 +232,15 @@ $(document).ready(function () {
 
         });
         vObjDrugPairs = {};
-        vArrPairs.forEach(entry => {
-            let key = entry[0];
-            let value = entry[1];
-            vObjDrugPairs[entry[1]] = entry[0];
-        });
+                vArrPairs.forEach(item => vObjDrugPairs[item[1]] = item[0]);
+
+        // vObjDrugPairs = {};
+        // vArrPairs.forEach(entry => {
+        //     let key = entry[0];
+        //     let value = entry[1];
+        //     vObjDrugPairs[entry[1]] = entry[0];
+        // });
+
         console.log(vObjDrugPairs);
         addOptionsToDatalist(vObjDrugPairs, $('#dlstList_1'));
         $('#inpText_4').val('');
@@ -375,6 +383,12 @@ $(document).ready(function () {
                 vT_1.singleProphDose *= 100;
                 break;
 
+            case 'Bemiparinum natrium':
+                console.log('Bemiparinum natrium');
+                vT_1.singleProphDose = vOfficDose_Gen;
+                // objPatient.pkRiskVTE === 1 ? vT_1.singleProphDose = 2500 : '';
+                vT_4 = ' ME, ';
+                break;
 
             case 'Heparin sodium':
                 console.log('Heparin sodium');
@@ -461,7 +475,7 @@ $(document).ready(function () {
 
                 // treatPeriod: 10
             };
-
+console.log(objChoosedMedicine.signature);
         ChoosedMedicinesArr.push(objChoosedMedicine);
 
         function goToAssignSheet() {
@@ -477,6 +491,7 @@ $(document).ready(function () {
                 $('#btnOne').unbind('click', makeNoteOfDrug).hide();
                 vArrPairs = getArrPairs(objDrugsList);
                 vObjDrugPairs = getObjFromArrPairs(vArrPairs);
+                vObjDrugPairs = checkConditions();                
                 addOptionsToDatalist(vObjDrugPairs, $('#dlstList_1'));
                 $('#invitToAct_1').html('Выберите лек. группу препарата:');
                 $('#inpText_4').bind('input', doFirstChoice);

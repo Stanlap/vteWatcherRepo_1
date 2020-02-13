@@ -5,7 +5,7 @@ console.log(objPatient);
 objPatient.pkHighRiskOfBleeding = false;
 
 
-objBallsRiskVTE.vCounterIMPROVE > 7 || bjBallsRiskVTE.vCounterHAS_BLED > 2 || objBallsRiskVTE.vCounterMajorBleedingScoreRF > 0 || objBallsRiskVTE.vCounterTraumBleedingRF > 0 || objBallsRiskVTE.vCounterObstBleedingRF > 2 ? objPatient.pkRiskBleed = 1 : objPatient.pkRiskBleed = 0;
+objBallsRiskVTE.vCounterIMPROVE > 7 || objBallsRiskVTE.vCounterHAS_BLED > 2 || objBallsRiskVTE.vCounterMajorBleedingScoreRF > 0 || objBallsRiskVTE.vCounterTraumBleedingRF > 0 || objBallsRiskVTE.vCounterObstBleedingRF > 2 ? objPatient.pkRiskBleed = 1 : objPatient.pkRiskBleed = 0;
 
 function bindBalls(counter) {
     let vBalls;

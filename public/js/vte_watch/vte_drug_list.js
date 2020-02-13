@@ -67,6 +67,27 @@ $(document).ready(function () {
                 }
             }
         },
+        'Bemiparinum natrium': {
+            pair: {
+                'Bemiparinum natrium': 'Бемипарин натрия'
+            },
+            'singleProphDose': 3500,
+            delivery: 'п/к',
+            container: 'шприц',
+            timesADay: 1,
+            drugs: {
+                'Zibor 2500': {
+                    nameCyr: 'Цибор 2500',
+                    nameLat: 'Zibor 2500',
+                    officDose: [2500],
+                },
+                'Zibor 3500': {
+                    nameCyr: 'Цибор 3500',
+                    nameLat: 'Zibor 3500',
+                    officDose: [3500],
+                }
+            }
+        },
         'Heparin sodium': {
             pair: {
                 'Heparin sodium': 'Гепарин натрия'

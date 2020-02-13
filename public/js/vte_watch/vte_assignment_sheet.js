@@ -62,7 +62,8 @@ $(document).ready(function () {
         // labSL[1] - день первого исследования с начала профилактики ВТЭО;
         // labSL[2] - кратность исследований (сут);
 
-        let doIt = '', labSL = ['', 0, 0];
+        let doIt = '',
+            labSL = ['', 0, 0];
         switch (chosDrug) {
             case 'Надропарин кальция':
                 doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатиниа в крови, ОАМ, электролиты крови. Назначить анализы повторно?');
@@ -84,10 +85,10 @@ $(document).ready(function () {
 
             case 'Варфарин':
                 labSL[2] = 5;
-                        doIt = confirm('При назначении Варфарина до начала профилактики ВТЭО пациенту должны быть выполнены: исследование МНО. Назначить анализы повторно?');
-                        doIt ? (labSL[0] = 'МНО', labSL[1] = 1) : '';
-                        allSamples.push(labSL);
-                        break;
+                doIt = confirm('При назначении Варфарина до начала профилактики ВТЭО пациенту должны быть выполнены: исследование МНО. Назначить анализы повторно?');
+                doIt ? (labSL[0] = 'МНО', labSL[1] = 1) : '';
+                allSamples.push(labSL);
+                break;
         };
         return allSamples;
     }
@@ -178,4 +179,82 @@ $(document).ready(function () {
             el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
         });
     };
+
+    function defineFactorXaInhibitorsPerioperativeTactics(chosDrug, operBleedingRisk, CC, surgDifficulty, startDrugTakingAfterOper = 24) {
+        let stopDrugTakingBeforeOper = 0;
+
+        if (operBleedingRisk === 1 || surgDifficulty === 1) {
+
+            chosDrug === 'Апиксабан' || chosDrug === 'Ривароксабан' ? stopDrugTakingBeforeOper = 48 : '';
+            if (chosDrug === 'Дабигатрана этексилат') {
+                CC >= 80 ? stopDrugTakingBeforeOper = 48 : CC >= 50 && CC < 80 ? stopDrugTakingBeforeOper = 72 : CC >= 15 && CC < 50 ? stopDrugTakingBeforeOper = 96 : '';
+            };
+        } else {
+            switch (chosDrug) {
+                case 'Апиксабан':
+                    CC >= 30 ? stopDrugTakingBeforeOper = 24 : CC < 30 ? stopDrugTakingBeforeOper = 36 : '';
+                    break;
+                case 'Ривароксабан':
+                    CC >= 30 ? stopDrugTakingBeforeOper = 24 : CC < 30 ? stopDrugTakingBeforeOper = 36 : '';
+                    break;
+
+                case 'Дабигатрана этексилат':
+                    CC >= 80 ? stopDrugTakingBeforeOper = 24 : CC >= 50 && CC < 80 ? stopDrugTakingBeforeOper = 36 : CC >= 15 && CC < 50 ? stopDrugTakingBeforeOper = 48 : '';
+                    break;
+            };
+        }
+        return [stopDrugTakingBeforeOper, startDrugTakingAfterOper];
+    }
+
+
+    function changeFactorXaInhibitorsToVitaminKAntagonists(chosDrug_1, chosDrug_2, timeAlg = []) {
+        if ((chosDrug_1 === 'Апиксабан' || chosDrug_1 === 'Ривароксабан' || chosDrug_1 === 'Дабигатрана этексилат') && chosDrug_2 === 'Варфарин') {
+            // время начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+            timeAlg[0] = 1;
+            // алгоритм приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+            timeAlg[1] = 'НОАК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.';
+            // дата первого исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+            timeAlg[2] = -1;
+            // кратность исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+            timeAlg[3] = 1;
+            // продолжительность исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+            timeAlg[4] = 3;
+        };
+        if (chosDrug_1 === 'Варфарин' && (chosDrug_1 === 'Апиксабан' || chosDrug_1 === 'Ривароксабан' || chosDrug_1 === 'Дабигатрана этексилат')) {
+            // Значения timeAlg при приеме антагонистов витамина К  в качестве второго лекарственного средства после ингибиторов фактора Ха:
+            timeAlg[0] = 0;
+            timeAlg[1] = 'При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.';
+            timeAlg[2] = -1;
+            timeAlg[3] = 1;
+            timeAlg[4] = 3;
+        };
+        return timeAlg;
+    }
+
+    function appointBridgeTherapy(chosDrug_1, chosDrug_2, bTHer,){
+        //  алгоритм вписать в справку позднее;
+        let med_1 = [], med_2 = [], vINR = [];
+        if(objPatient.pkIsOrNoOper, chosDrug_1 === 'Варфарин' && bTher){
+            med_1[0] = -5;
+            med_1[1] = 1;  
+            vINR[0] = -1;        
+            vINR[1] = 0;        
+            vINR[2] = 1;        
+
+            if(chosDrug_2 === 'Гепарин натрия') {
+                med_2[0] = -2;
+                med_2[1] = -6;
+                med_2[3] = 3;
+objPatient.IsSmallOper ? med_2[2] = 12 : med_2[2] = 48;  
+                };
+            if(chosDrug_2 === 'Эноксапарин натрия' || chosDrug_2 === 'Надропарин кальция') {
+                med_2[0] = -2;
+                med_2[1] = -24;
+                med_2[3] = 3;
+objPatient.IsSmallOper ? med_2[2] = 24 : med_2[2] = 48;  
+            };
+
+        } 
+    }
+
 });

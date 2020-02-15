@@ -111,7 +111,7 @@ $(document).ready(function () {
 
     function checkConditions() {
         objPatient.pkDateOfChildbirth === formatDate() ? delete vObjDrugPairs['Heparin sodium'] : '';
-        if (objPatient.vAge < 18) {
+        if (objPatient.pkAge < 18) {
             with(vObjDrugPairs) {
                 delete Apixaban;
                 delete Rivaroxaban;
@@ -122,7 +122,7 @@ $(document).ready(function () {
             delete vObjDrugPairs['Dabigatran etexilate'];
             delete vObjDrugPairs['Acetylsalicylic acid'];
         };
-        (objPatient.vAge > 60) ? delete vObjDrugPairs.Warfarin: '';
+        (objPatient.pkAge > 60) ? delete vObjDrugPairs.Warfarin: '';
         if (objPatient.pkSevereHepaticFailure) {
             with(vObjDrugPairs) {
                 delete Rivaroxaban;
@@ -137,8 +137,8 @@ $(document).ready(function () {
         objPatient.pkUncontrolledSystemicHypertension ? delete vObjDrugPairs['Heparin sodium'] : '';
         (objPatient.pkIsOrNoSurg && objPatient.pkPullOfSurg) ? delete vObjDrugPairs['Heparin sodium']: '';
         objPatient.pkSevereHepaticFailure ? delete vObjDrugPairs['Bemiparinum natrium']: '';
-        (objPatient.pkCC < 15 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Apixaban) : '';
-        objPatient.pkCC < 30 ? (delete vObjDrugPairs['Acetylsalicylic acid'], delete vObjDrugPairs['Dabigatran etexilate'], delete vObjDrugPairs['Fondaparinux sodium'], delete vObjDrugPairs.Warfarin) : '';
+        (objPatient.pkCC < 15 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Edoxaban) : '';
+        (objPatient.pkCC < 30 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs['Acetylsalicylic acid'], delete vObjDrugPairs['Dabigatran etexilate'], delete vObjDrugPairs['Fondaparinux sodium'], delete vObjDrugPairs.Warfarin) : '';
 
         objPatient.pkWeekOfPregnancy > 0 ? (delete vObjDrugPairs['Heparin sodium'], delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Apixaban) : '';
         (objPatient.pkWeekOfPregnancy > 0 && objPatient.pkArtificialHeartValve) ? delete vObjDrugPairs['Enoxaparin sodium']: '';
@@ -146,7 +146,7 @@ $(document).ready(function () {
         (objPatient.pkWeekOfPregnancy < 13 || objPatient.pkWeekOfPregnancy > 28) && objPatient.pkWeekOfPregnancy !== 0 ? delete vObjDrugPairs['Acetylsalicylic acid'] : '';
         objPatient.pkWeekOfPregnancy > 36 ? delete vObjDrugPairs.Warfarin : '';
 
-        if (objPatient.vGender == 0 && objPatient.vAge < 45 && objPatient.pkWeekOfPregnancy == 0) {
+        if (objPatient.vGender == 0 && objPatient.pkAge < 45 && objPatient.pkWeekOfPregnancy == 0) {
             let vAns = confirm('Если пациентка кормит грудью, следует отменить грудное вскармливание. Ваше решение?');
             if (vAns == false) {
                 with(vObjDrugPairs) {
@@ -284,10 +284,10 @@ $(document).ready(function () {
             addOptionsToDatalist(vSingleDosesList, $('#dlstList_2'));
         };
         let vTPath_1 = objDrugsList['Dabigatran etexilate'];
-        (objPatient.vMedProfile === 2 && (objPatient.vAge > 75 || objPatient.vCC < 51)) ? (vTPath_1.singleProphDose = 110, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
+        (objPatient.vMedProfile === 2 && (objPatient.pkAge > 75 || objPatient.pkCC < 51)) ? (vTPath_1.singleProphDose = 110, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
         if (objPatient.vMedProfile === 4) {
             vTPath_1.timesADay = 1;
-            objPatient.vAge < 76 ? (vTPath_1.singleProphDose = 220, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
+            objPatient.pkAge < 76 ? (vTPath_1.singleProphDose = 220, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
         };
 
         let vTPath_2 = objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs;
@@ -353,7 +353,7 @@ $(document).ready(function () {
                     vT_1.timesADay = 2;
                     vT_1.singleProphDose = 30;
                 }
-                (objPatient.vRiscVTE === 1 || objPatient.vCC < 30) ? (vT_1.singleProphDose = 20, objChoosedDrug.numberOfOfficDose = 1) : '';
+                (objPatient.vRiscVTE === 1 || objPatient.pkCC < 30) ? (vT_1.singleProphDose = 20, objChoosedDrug.numberOfOfficDose = 1) : '';
                 vT_3 = vT_2.Mg;
                 while (vT_3 < vT_1.singleProphDose) {
                     vT_3 += vT_3;
@@ -372,7 +372,7 @@ $(document).ready(function () {
                 if (objPatient.vMedProfile === 4) {
                     objPatient.vWeight < 50 ? vT_1.singleProphDose = 0.2 : objPatient.vWeight > 70 ? vT_1.singleProphDose = 0.4 : vT_1.singleProphDose = 0.3;
                 };
-                objPatient.vCC < 30 ? vT_1.singleProphDose = +(vT_1.singleProphDose *= 0.75).toFixed(2) : '';
+                objPatient.pkCC < 30 ? vT_1.singleProphDose = +(vT_1.singleProphDose *= 0.75).toFixed(2) : '';
 
                 vI = vT_2.Ml;
                 while (vI < vT_1.singleProphDose) {
@@ -402,7 +402,7 @@ $(document).ready(function () {
 
             case 'Fondaparinux sodium':
                 console.log('Fondaparinux sodium');
-                objPatient.vCC < 50 ? vT_1.singleProphDose *= 0.6 : '';
+                objPatient.pkCC < 50 ? vT_1.singleProphDose *= 0.6 : '';
                 vT_2.Ml = vOfficDose_Gen;
                 vT_2.Mg = vT_2.Ml * 5;
                 vT_5 = (vT_1.singleProphDose) + ' ml, ';
@@ -433,13 +433,20 @@ $(document).ready(function () {
 
             case 'Rivaroxaban':
                 console.log('Rivaroxaban');
-                (objPatient.vCC > 30 || objPatient.vCC < 51) ? vT_1.singleProphDose = 15: '';
+                (objPatient.pkCC > 30 || objPatient.pkCC < 51) ? vT_1.singleProphDose = 15: '';
                 vT_2.Mg = vOfficDose_Gen;
                 objChoosedDrug.numberOfOfficDose = (vT_1.singleProphDose / vOfficDose_Gen).toFixed(1);
                 break;
 
             case 'Apixaban':
                 console.log('Apixaban');
+                vT_2.Mg = vOfficDose_Gen;
+                objChoosedDrug.numberOfOfficDose = (vT_1.singleProphDose / vOfficDose_Gen).toFixed(1);
+                break;
+
+            case 'Edoxaban':
+                console.log('Edoxaban');
+                (objPatient.pkCC > 15 || objPatient.pkCC < 51) ? vT_1.singleProphDose = 30: '';
                 vT_2.Mg = vOfficDose_Gen;
                 objChoosedDrug.numberOfOfficDose = (vT_1.singleProphDose / vOfficDose_Gen).toFixed(1);
                 break;

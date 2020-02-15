@@ -243,6 +243,22 @@ $(document).ready(function () {
                 }
             }
         },
+        'Edoxaban': {
+            pair: {
+                'Edoxaban': 'Эдоксабан'
+            },
+            'singleProphDose': 60,
+            delivery: 'внутрь',
+            container: 'таб.',
+            timesADay: 1,
+            drugs: {
+                Lixiana: {
+                    nameCyr: 'Ликсиана',
+                    nameLat: 'Lixiana',
+                    officDose: [15, 30, 60],
+                }
+            }
+        },
         'Warfarin': {
             pair: {
                 'Warfarin': 'Варфарин'

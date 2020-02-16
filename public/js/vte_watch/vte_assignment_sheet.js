@@ -11,7 +11,7 @@ $(document).ready(function () {
     $('<div/>').attr({
             id: 'inviteToAct',
         })
-        .html('Укажите дату начала профилактики ВТЭО:')
+        .html('')
         .appendTo('#dialogMain');
     $('<br>').appendTo('#dialogMain');
     $('<input/>').attr({
@@ -51,21 +51,27 @@ $(document).ready(function () {
         })
         .appendTo('#dialogMain');
 
-    $('#dialogMain').hide();
 
-    let lineOfFuncs = [];
+    let lineOfFuncs = [askOfStartDateVTEProphyl];
+    if ($(objChoosedMedicines).length > 1) {
+        lineOfFuncs.push(askOfStartDateTakingOfSecMedicine);
+        const bridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
+        bridgeTher(objChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
+    };
+    objPatient.pkIsOrNoSurg && $(objChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
+    
+    clearValues();
+    executeParamsOfVTEProphyl();
 
-    if($(objChoosedMedicines).length > 1){
-        lineOfFuncs.push(defineStartDateTakingOfSecMedicine);
-        const askOfBridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
-        askOfBridgeTher(objChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(defineBridgeTherUsage) : '';    
-    }; 
+    
     function clearValues() {
-        $('#dialogMain').hide();
         $('#inviteToAct').html('')
         $('#inpDate').val('');
         $('input[name = chkRadio_1]:checked').prop('checked', false);
+        $('#dialogMain:visible').hide();
+        $('input[name = chkRadio_1], #btnOne').off('click');
     }
+
     function defineMinTreatmentPeriod(mP, chosDrug, mTP) {
         switch (chosDrug) {
             case 'Эноксапарин натрия':
@@ -98,111 +104,72 @@ $(document).ready(function () {
         console.log(el.treatPeriod);
     });
 
-    function initDialog() {
-        clearValues();
+    function askOfStartDateVTEProphyl() {    
         $('#dialogMain').show();
         $('#dialog_2').hide();
         $('#inviteToAct').html('Укажите дату начала профилактики ВТЭО:');
         objPatient.pkIsOrNoSurg ? $('#inpDate').val(objPatient.pkDateOfOper) : $('#inpDate').val(formatDate());
-        $('#btnOne').bind('click', defineStartDateOfVTEProphyl);
+        $('#btnOne').on('click', defineStartDateVTEProphyl);
     }
 
-    function defineStartDateOfVTEProphyl() {
-        console.log(lineOfFuncs);
-        objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val();
+    function defineStartDateVTEProphyl() {
+        objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val();``
         clearValues();
-        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift())  : $('#btnOne').unbind('click', defineStartDateOfVTEProphyl);
-        console.log(lineOfFuncs.length)
+        executeParamsOfVTEProphyl();
     }
 
-    function defineStartDateTakingOfSecMedicine() {
+    function executeParamsOfVTEProphyl() {
+        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'));
+    }
+
+    function askOfStartDateTakingOfSecMedicine() {
         $('#dialogMain').show();
         $('#dialog_2').hide();
-        $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:')
+        $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:');
         $('#inpDate').val(correctDate(addDays(new Date(), objChoosedMedicines[0].treatPeriod)));
-        $('#btnOne').bind('click', addStartDateOfSecondMedicine);
+        $('#btnOne').on('click', defineStartDateOfSecondMedicine);
     }
 
-    function addStartDateOfSecondMedicine() {
+    function defineStartDateOfSecondMedicine() {
         objChoosedMedicines[1].startDateOfVTEProphyl = $('#inpDate').val();
         clearValues();
-        $('#btnOne').unbind('click', addStartDateOfSecondMedicine);
+        executeParamsOfVTEProphyl();
     }
 
-
-    initDialog();
-
-
-    // $('#btnOne').on('click', function () {
-    //     objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val();
-    //     $(objChoosedMedicines).length === 0 ? ($('#inviteToAct').html('Данные сохранены.'), $('#inpDate').val('').hide()) : '';
-    //     if ($(objChoosedMedicines).length === 1) {
-    //         objChoosedMedicines[0].startDateOfVTEProphyl = $('#inpDate').val();
-    //         $('#inviteToAct').html('Данные сохранены.');
-    //         $('#inpDate').val('').hide();
-    //     };
-    //     if ($(objChoosedMedicines).length > 1) {
-    //         $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:')
-    //         let nextDateAfterTomorrow = addDays(new Date(), objChoosedMedicines[0].treatPeriod);
-    //         // console.log(nextDateAfterTomorrow);
-    //         $('#inpDate').val(`${nextDateAfterTomorrow.getFullYear()}-${('0' + (nextDateAfterTomorrow.getMonth() + 1)).slice(-2)}-${('0' + nextDateAfterTomorrow.getDate()).slice(-2)}`);
-    //         $('#btnOne').off();
-    //         $('#btnOne').bind('click', addStartDateOfSecondMedicine);
-    //     }
-    //     // $('#inpDate').val('').hide();         
-    // });
-
-
-
-
+    function askOfBridgeTherUsage() { 
+        $('#dialogMain').show();
+        $('#inpDate, #btnOne, #br_1').hide(); 
+        $('#inviteToAct').html('Планируется периоперационная мост-терапия НМГ или НФГ?');
+        $('#inpDate, #btnOne, #br_1').hide();
+        $('#dialog_2').show();
+        $('input[name = chkRadio_1]').on('click', defineBridgeTherUsage);
+    }
 
     function defineBridgeTherUsage() {
-        $('#btnOne, #br_1').hide();
-        $('#inviteToAct').html('Планируется периоперационная мост-терапия НМГ или НФГ?');
-        $('<label/>').attr({
-            for: 'chkR_1'
-        }).html('Да').appendTo('p');
-        $('<input/>').attr({
-            type: 'radio',
-            id: 'chkR_1',
-            name: 'chkRadio_1',
-            value: 0
-        }).appendTo('p');
-        $('<label/>').attr({
-            for: 'chkR_2'
-        }).html('Нет').appendTo('p');
-        $('<input/>').attr({
-            type: 'radio',
-            id: 'chkR_2',
-            name: 'chkRadio_1',
-            value: 1
-        }).appendTo('p');
-        $('#btnOne').unbind('click', addStartDateOfSecondMedicine);
-        objPatient.pkIsOrNoSurg ? $('input[name = chkRadio_1]').bind('click', defineSpinalAnestUsage) : '';;
+        $('input[name = chkRadio_1]:checked').val() === 0 ? objPatient.pkBridgeTher = true : objPatient.pkBridgeTher = false;
+        clearValues();
+        executeParamsOfVTEProphyl();
     }
-
-    function defineSpinalAnestUsage() {
-        console.log($('input[name = chkRadio_1]:checked').val());
-        $('input[name = chkRadio_1]:checked').val() === '0' ? objPatient.pkBridgeTher = true : objPatient.pkBridgeTher = false;
-        console.log(objPatient.pkBridgeTher);
-        $('input[name = chkRadio_1]:checked').prop('checked', false);
+    function askOfSpinalAnestUsage() { 
+        $('#dialogMain').show();
+        $('#inpDate, #btnOne, #br_1').hide();
         $('#inviteToAct').html('Операция выполняется под спинномозговой анестезией?');
-        $('input[name = chkRadio_1]').unbind('click', defineSpinalAnestUsage)
-        // $('<label/>').attr({ for: 'chkR_1'}).html('Да').appendTo('p');    
-        // $('<input/>').attr({ type: 'radio', id: 'chkR_1', name: 'chkRadio_1', value: 0}).appendTo('p');
-        // $('<label/>').attr({ for: 'chkR_2'}).html('Нет').appendTo('p');
-        // $('<input/>').attr({ type: 'radio', id: 'chkR_2', name: 'chkRadio_1', value: 1}).appendTo('p');
-        // $('#btnOne').unbind('click', addStartDateOfSecondMedicine);
+        $('#inpDate, #btnOne, #br_1').hide();
+        $('#dialog_2').show();
+        $('input[name = chkRadio_1]').on('click', defineSpinalAnestUsage);
+    };
 
-        // $('#btnOne, #br_1').show();
-    }
-    // objPatient.pkIsOrNoSurg ? defineSpinalAnestUsage() : '';
+function defineSpinalAnestUsage() {
+    $('input[name = chkRadio_1]:checked').val() === 0 ? objPatient.pkSpinalAnest = true: objPatient.pkSpinalAnest = false;
+    clearValues();
+    executeParamsOfVTEProphyl();
+}
 
-    // $('input[name = chkRadio_1]').bind('click', function(){
-    //     $(this).val() === 0 ? objPatient.pkSpinalAnest = true: objPatient.pkSpinalAnest = false;
-    //     console.log($(this).val());
-    //     console.log(objPatient.pkSpinalAnest);
-    // });
+
+
+
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function definePlateletsResearchTime(chosDrug, pRT = []) {
         // pRT[0]- исследование до начала профилактики ВТЭО, pRT[1] - первое исследование после начала профилактики ВТЭО, pRT[2] - интервал между исследованиями (сутки).

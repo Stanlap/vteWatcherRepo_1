@@ -41,6 +41,9 @@ $(document).ready(function () {
         name: 'chkRadio_1',
         value: 1
     }).appendTo('#dialog_2');
+    $('<div>').attr({
+        id: 'list_1'
+    }).appendTo('#dialogMain');
     $('<br><br>').attr({
         id: 'br_1'
     }).appendTo('#dialogMain');
@@ -52,11 +55,34 @@ $(document).ready(function () {
         .appendTo('#dialogMain');
 
 
-    let lineOfFuncs = [askOfStartDateVTEProphyl];
+        let testLine = [
+            ['исследование тромбоцитов в крови', [],
+                []
+            ],
+            ['исследование уровня мочевины и креатинина в крови', [],
+                []
+            ],
+            ['электролиты крови', [],
+                []
+            ],
+            ['коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТ)', [],
+                []
+            ],
+            ['коагулограмма (МНО)', [],
+                []
+            ],
+            ['ОАМ', [],
+                []
+            ]
+        ],
+        testBP = [],
+        lineOfFuncs = [askOfStartDateVTEProphyl];
+
     if ($(objChoosedMedicines).length > 1) {
         lineOfFuncs.push(askOfStartDateTakingOfSecMedicine);
         const bridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
         bridgeTher(objChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
+        testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
     };
     objPatient.pkIsOrNoSurg && $(objChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
 
@@ -169,17 +195,14 @@ $(document).ready(function () {
         executeParamsOfVTEProphyl();
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     $(objChoosedMedicines).each(function (ind, el) {
 
         el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
         el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
-        el.titleGroupRu === 'Гепарин натрия' ? el.checkingBP = ['контроль АД', 0, 1, 1] : '';
-        console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter);
+        el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
+        console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter, testBP);
     });
-
-
 
     let objAllLabTests = {
         pltTest: {
@@ -187,7 +210,7 @@ $(document).ready(function () {
             plan: []
         },
         creatinUreaTest: {
-            titleCyr: 'исследование уровня мочевины и креатиниа в крови',
+            titleCyr: 'исследование уровня мочевины и креатинина в крови',
             plan: []
         },
         genBloodTest: {
@@ -212,14 +235,6 @@ $(document).ready(function () {
         }
     };
 
-    function makeRowOfDates(item, rowArr = []) {
-        item[1][0] === 1 ?
-            $(rowArr).push(item[1][0]) : '';
-        // $('#inpDate').val(correctDate(vAddDays(new Date(), objChoosedMedicines[0].treatPeriod)));
-
-    }
-
-
     function buildLine(vP_2, tP) {
         let vLine = [],
             vV = vP_2[0] + 1;
@@ -231,19 +246,6 @@ $(document).ready(function () {
         console.log(vLine);
         return vLine;
     }
-    // function buildLine(vPlan_2, vAddDays, vDrugNum) {
-    //     vDrugNum < 2 ? vAddDays = 0 : '';
-    //     let vLine = [],
-    //         vV = vPlan_2[1] + 1 + vAddDays;
-    //     vPlan_2[0] === 1 ? vLine.push(vPlan_2[0] + vAddDays) : '';
-    //     vLine.push(vV);
-    //     while (vV + vPlan_2[2] <= vPlan_2[2] + vAddDays) {
-    //         vV = vV + vPlan_2[2];
-    //         vLine.push(vV);
-    //     }
-    //     console.log(vLine);
-    //     return vLine;
-    // }
 
     function definePltTestPlan(el) {
         // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
@@ -258,7 +260,7 @@ $(document).ready(function () {
         // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
         let tL_1 = [],
             vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('исследование уровня мочевины и креатиниа в крови', vP_1);
+        tL_1.push('исследование уровня мочевины и креатинина в крови', vP_1);
         el.titleGroupRu === 'Надропарин кальция' ? tL_1.push(buildLine([1, 10], el.treatPeriod)) : el.titleGroupRu === 'Дабигатрана этексилат' ? tL_1.push(buildLine([1, 5], el.treatPeriod)) : '';
         return tL_1;
     }
@@ -271,45 +273,84 @@ $(document).ready(function () {
         el.titleGroupRu === 'Надропарин кальция' ? tL_1.push(buildLine([1, 10], el.treatPeriod)) : el.titleGroupRu === 'Дабигатрана этексилат' ? tL_1.push(buildLine([1, 5], el.treatPeriod)) : '';
         return tL_1;
     }
+    // Коагулограмма № 3 (ПТИ, МНО, фибриноген, АТ3, АЧТВ)
+    function defineINRPlan(el) {
+        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
+        let tL_1 = [],
+            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
+        tL_1.push('коагулограмма (МНО)', vP_1, buildLine([3, 5], el.treatPeriod));
+        return tL_1;
+    };
 
+    function defineCoagulogramPlan(el) {
+        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
+        let tL_1 = [],
+            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
+        tL_1.push('коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТВ)', vP_1, buildLine([1, 10], el.treatPeriod));
+        return tL_1;
+    };
 
-    let testLine = [];
+    function defineElectrolytesTestPlan(el) {
+        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
+        let tL_1 = [],
+            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
+        tL_1.push('электролиты крови', vP_1, buildLine([1, 10], el.treatPeriod));
+        return tL_1;
+    }
+
     function defineAllTestsPlan(choosDrug) {
 
         $(choosDrug).each(function (ind, el) {
-            el.titleGroupRu === 'Эноксапарин натрия' || el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Гепарин натрия' ? testLine.push(definePltTestPlan(el)) : '';
-            el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? testLine.push(defineRenalTestPlan(el)) : '';
-            el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? testLine.push(defineGenUrineTest(el)) : '';
+            el.titleGroupRu === 'Эноксапарин натрия' || el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Гепарин натрия' ? testLine[0][2].push(definePltTestPlan(el)) : '';
+            el.titleGroupRu === 'Надропарин кальция' ? testLine[2][2].push(defineElectrolytesTestPlan(el)) : '';
+            el.titleGroupRu === 'Гепарин натрия' ? testLine[3][2].push(defineCoagulogramPlan(el)) : '';
+            el.titleGroupRu === 'Варфарин' ? testLine[4][2].push(defineINRPlan(el)) : '';
+            el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? (testLine[5][2].push(defineGenUrineTest(el)), testLine[1][2].push(defineRenalTestPlan(el))) : '';
+        });
+        testLine = testLine.filter(el => el[2].length != 0);
+        // console.log(vTL_Fine);
+        $(testLine).each(function (ind, el) {
+            // console.log(el[2].length);
+            // el[2].length === 0 ? testLine.splice(ind, 1) : '';
+            el[2].length === 1 ? el[1] = el[2][0][2].slice() : '';
+            if (el[2].length === 2) {
+                $.merge(el[1], el[2][0][2]);
+                $(el[2][1][2]).each(function (ind, item) {
+                    el[1].push(item + el[2][0][1][2]);
+                });
+            }
         });
         console.log(testLine);
+        // askOfPrevLabExams();
     }
 
     defineAllTestsPlan(objChoosedMedicines);
 
 
-
-
-    function defineElectrolytesTests(choosDrug) {
-        // labSL[0] - наименование назначенных исследований, labSL[1]- исследование до начала профилактики ВТЭО, labSL[2] - первое исследование, после начала профилактики ВТЭО, labSL[3] - интервал между исследованиями (сутки);
-        let labSL = ['', 0, 0, 0];
-        if (choosDrug === 'Надропарин кальция') {
-            let doIt = confirm('Пациенту должны быть выполнены: исследование электролитов крови. Назначить анализы повторно?');
-            doIt ? (labSL[0] = 'электролиты крови', labSL[1] = 1, labSL[2] = 1) : '';
-        };
-        return labSL;
+    function askOfPrevLabExams() {
+        $('#dialogMain, #btnOne, #br_1').show();
+        $('#dialog_2, #inpDate').hide();
+        $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить:');
+        $('<br>').appendTo('#dialogMain');
+        $(testLine).each(function (ind, el) {
+            $('<label/>').attr({
+                for: `chkTest_${ind}`
+            }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${formatDate()}'></input> ${el[0]}`).appendTo('#list_1');
+            $('<br>').appendTo('#list_1');
+        });
+        $('#btnOne').on('click', definePrevLabExams);
     }
-    // Коагулограмма № 3 (ПТИ, МНО, фибриноген, АТ3, АЧТВ)
-    function defineCoagulTests(choosDrug) {
-        // labSL[0] - наименование назначенных исследований, labSL[1]- исследование до начала профилактики ВТЭО, labSL[2] - первое исследование, после начала профилактики ВТЭО, labSL[3] - интервал между исследованиями (сутки);
-        let vCG = '';
-        choosDrug === 'Гепарин натрия' ? vCG = 'ПТИ, МНО, фибриноген, АТ3, АЧТВ ' : choosDrug === 'Варфарин' ? vCG = 'МНО' : '';
-        let doIt = confirm(`Пациенту должны быть выполнены: коагулограмма (${vCG}). Назначить анализы повторно?`),
-            labSL = [`коагулограмма (${vCG})`, 1, 1, 0];
-        if (doIt) {
-            choosDrug === 'Варфарин' ? labSL[3] = 5 : '';
-            return labSL;
-        };
-    };
+
+    function definePrevLabExams() {
+        let listTests = $('#list_1 input:checked').html;
+        $('#list_1').hide();
+
+        objChoosedMedicines[1].startDateOfVTEProphyl = $('#inpDate').val();
+        console.log(listTests);
+        clearValues();
+        executeParamsOfVTEProphyl();
+    }
+
 
 
 
@@ -324,8 +365,8 @@ $(document).ready(function () {
     //         labSL = ['', 0, 0, 0];
     //     switch (choosDrug) {
     //         case 'Надропарин кальция':
-    //             doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатиниа в крови, ОАМ, электролиты крови. Назначить анализы повторно?');
-    //             doIt ? (labSL[0] = 'исследование уровня мочевины и креатиниа в крови, ОАМ, электролиты крови', labSL[1] = 1, labSL[2] = 1,  doIt = false) : '';
+    //             doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатинина в крови, ОАМ, электролиты крови. Назначить анализы повторно?');
+    //             doIt ? (labSL[0] = 'исследование уровня мочевины и креатинина в крови, ОАМ, электролиты крови', labSL[1] = 1, labSL[2] = 1,  doIt = false) : '';
     //             break;
 
     //         case 'Гепарин натрия':
@@ -334,8 +375,8 @@ $(document).ready(function () {
     //             break;
 
     //         case 'Дабигатрана этексилат':
-    //             doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатиниа в крови, ОАМ. Назначить анализы повторно?');
-    //             doIt ? (labSL[0] = 'исследование уровня мочевины и креатиниа в крови, ОАМ', labSL[2] = 1) : '';
+    //             doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатинина в крови, ОАМ. Назначить анализы повторно?');
+    //             doIt ? (labSL[0] = 'исследование уровня мочевины и креатинина в крови, ОАМ', labSL[2] = 1) : '';
     //             objPatient.pkIsRenalInsuff ? labSL[3] = 5 : '';
     //             allSamples.push(labSL);
     //             break;

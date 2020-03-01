@@ -29,9 +29,9 @@ function correctDate(vD){
 // let day_1 = new Date(2019, 08, 20),
 //     day_2 = new Date(2019, 10, 07);
 
-// function diffDates(day_one, day_two) {
-//     return (day_one - day_two) / (60 * 60 * 24 * 1000);
-// };
+function diffDates(dateOne, dateTwo) {
+    return (dateOne - dateTwo) / (60 * 60 * 24 * 1000);
+};
 // diffDates(day_2, day_1);
 
 // let nextday = plusOrMinusDays(new Date("2020-02-19"), 7);
@@ -48,5 +48,10 @@ function correctDate(vD){
 // date1 <= date2; //true
 // console.log(date1 <= date2);
 
+
+        // привести к формату даты браузера;
+        // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$3-$2-$1') 
+        // привести к фоормату даты 'en-us';
+        // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$2/$3/$1');
 
 

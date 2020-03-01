@@ -55,7 +55,7 @@ $(document).ready(function () {
         .appendTo('#dialogMain');
 
 
-        let testLine = [
+    let testLine = [
             ['исследование тромбоцитов в крови', [],
                 []
             ],
@@ -77,6 +77,7 @@ $(document).ready(function () {
         ],
         testBP = [],
         lineOfFuncs = [askOfStartDateVTEProphyl];
+
 
     if ($(objChoosedMedicines).length > 1) {
         lineOfFuncs.push(askOfStartDateTakingOfSecMedicine);
@@ -135,20 +136,18 @@ $(document).ready(function () {
 
     function defineStartDateVTEProphyl() {
         objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val();
-
-        // привести к формату даты браузера;
-        // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$3-$2-$1') 
-        // привести к фоормату даты 'en-us';
-        // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$2/$3/$1');
         console.log(objPatient.pkstartDateOfVTEProphyl);
-        $(objChoosedMedicines).length > 0 ? (objChoosedMedicines[0].startDateOfVTEProphyl = $('#inpDate').val(), console.log(objChoosedMedicines[0].startDateOfVTEProphyl)) : '';
+        $(objChoosedMedicines).length > 0 ? (objChoosedMedicines[0].startDateOfVTEProphyl = $('#inpDate').val(), objPatient.pkDaysToStartVTEProph = Math.round(diffDates(new Date(correctDate(new Date(objChoosedMedicines[0].startDateOfVTEProphyl))), new Date(correctDate(new Date()))))) : '';
+        objPatient.pkDaysToStartVTEProph < 0 ? objPatient.pkDaysToStartVTEProph = 0 : '';
+        console.log(objPatient.pkDaysToStartVTEProph);
+
 
         clearValues();
         executeParamsOfVTEProphyl();
     }
 
     function executeParamsOfVTEProphyl() {
-        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'), defineAllTestsPlan());
+        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'));
     }
 
     function askOfStartDateTakingOfSecMedicine() {
@@ -194,7 +193,6 @@ $(document).ready(function () {
         clearValues();
         executeParamsOfVTEProphyl();
     }
-
 
     $(objChoosedMedicines).each(function (ind, el) {
 
@@ -308,10 +306,7 @@ $(document).ready(function () {
             el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? (testLine[5][2].push(defineGenUrineTest(el)), testLine[1][2].push(defineRenalTestPlan(el))) : '';
         });
         testLine = testLine.filter(el => el[2].length != 0);
-        // console.log(vTL_Fine);
         $(testLine).each(function (ind, el) {
-            // console.log(el[2].length);
-            // el[2].length === 0 ? testLine.splice(ind, 1) : '';
             el[2].length === 1 ? el[1] = el[2][0][2].slice() : '';
             if (el[2].length === 2) {
                 $.merge(el[1], el[2][0][2]);
@@ -320,14 +315,21 @@ $(document).ready(function () {
                 });
             }
         });
+        
+        let elTemp = [];
+        $(testLine).each(function (ind, el) {
+            $(el[1]).each(function (ind, item) {
+                item += objPatient.pkDaysToStartVTEProph;
+                elTemp.push(item);
+            });
+            el[1] = elTemp;
+            elTemp = [];
+        });
         console.log(testLine);
-        // askOfPrevLabExams();
     }
 
-    defineAllTestsPlan(objChoosedMedicines);
-
-
     function askOfPrevLabExams() {
+        defineAllTestsPlan(objChoosedMedicines);
         $('#dialogMain, #btnOne, #br_1').show();
         $('#dialog_2, #inpDate').hide();
         $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить:');
@@ -335,24 +337,26 @@ $(document).ready(function () {
         $(testLine).each(function (ind, el) {
             $('<label/>').attr({
                 for: `chkTest_${ind}`
-            }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${formatDate()}'></input> ${el[0]}`).appendTo('#list_1');
+            }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${el[0]}'></input> ${el[0]}`).appendTo('#list_1');
             $('<br>').appendTo('#list_1');
         });
         $('#btnOne').on('click', definePrevLabExams);
     }
 
     function definePrevLabExams() {
-        let listTests = $('#list_1 input:checked').html;
+        let listTests = [],
+            tL_1 = [],
+            tL_2 = [];
+        $('#list_1 input:checked').each((ind, el) => listTests.push(el.value));
+        $(listTests).each((ind, el) => {
+            tL_1 = testLine.filter(item => item[0] === el)
+            tL_2.push(tL_1[0]);
+        });
         $('#list_1').hide();
-
-        objChoosedMedicines[1].startDateOfVTEProphyl = $('#inpDate').val();
-        console.log(listTests);
+        testLine = tL_2;
         clearValues();
         executeParamsOfVTEProphyl();
     }
-
-
-
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

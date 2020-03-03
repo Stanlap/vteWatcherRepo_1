@@ -199,7 +199,7 @@ $(document).ready(function () {
         el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
         el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
         el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
-        console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter, testBP);
+        // console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter, testBP);
     });
 
     let objAllLabTests = {
@@ -315,7 +315,7 @@ $(document).ready(function () {
                 });
             }
         });
-        
+
         let elTemp = [];
         $(testLine).each(function (ind, el) {
             $(el[1]).each(function (ind, item) {
@@ -330,33 +330,85 @@ $(document).ready(function () {
 
     function askOfPrevLabExams() {
         defineAllTestsPlan(objChoosedMedicines);
-        $('#dialogMain, #btnOne, #br_1').show();
-        $('#dialog_2, #inpDate').hide();
-        $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить:');
+        $('#dialogMain, #btnOne, #br_1, #inpDate').show();
+        $('#inpDate').val(formatDate());
+        $('#dialog_2').hide();
+        $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить и установите дату:');
         $('<br>').appendTo('#dialogMain');
+        $('<br>').appendTo('#list_1');
         $(testLine).each(function (ind, el) {
             $('<label/>').attr({
                 for: `chkTest_${ind}`
             }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${el[0]}'></input> ${el[0]}`).appendTo('#list_1');
             $('<br>').appendTo('#list_1');
         });
+        $('<br>').appendTo('#list_1');
+        $('<label/>').attr({
+            for: 'chkWeekend'
+        }).html('<input type = "checkbox" id = "chkWeekend" checked></input> Не назначать лабораторные исследования в субботу и воскресенье').appendTo('#list_1');
+        $('<br>').appendTo('#list_1');
         $('#btnOne').on('click', definePrevLabExams);
     }
 
+
+    let vDS = 7 - (new Date()).getDay(),
+        vSats = [vDS, vDS + 7],
+        vSuns = [vDS + 1, vDS + 8];
+    console.log(vSats, vSuns);
+
     function definePrevLabExams() {
-        let listTests = [],
-            tL_1 = [],
-            tL_2 = [];
-        $('#list_1 input:checked').each((ind, el) => listTests.push(el.value));
-        $(listTests).each((ind, el) => {
-            tL_1 = testLine.filter(item => item[0] === el)
-            tL_2.push(tL_1[0]);
+        // Функция учитывает выходные дни.
+        if ($('#chkWeekend').is(':checked')) {
+            $(vSats).each((ind, el) => {
+                $(testLine).each((ind, item) => {
+                    item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]-- : '';
+                })
+            });
+            $(vSuns).each((ind, el) => {
+                $(testLine).each((ind, item) => {
+                    item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]++ : '';
+                })
+            });
+            // alert('Анализы в выходные назначаться не будут.');
+        }
+// Функция создает tL_2 - массив исследований, которые надо выполнить до начала проф. ВТЭО.
+        let tL_1 = [],
+            tL_2 = [],
+            tL_3 = [];
+        $('#list_1 input:checked').each((ind, el) => tL_1.push(el.value));
+        $(tL_1).each((ind, el) => {
+            $(testLine).each((ind, item) => item[0] === el ? (tL_2.push(item), tL_3.push(ind)) : '');
         });
+        let vFstInv = 1 + Math.round(diffDates(new Date(correctDate(new Date($('#inpDate').val()))), new Date(correctDate(new Date()))));
+        console.log(vFstInv);
+        $(tL_3).each((ind, el) => delete testLine[el]);
+        testLine = testLine.filter(item => item);
+        $(tL_2).each((ind, el)=> el[1].unshift(vFstInv));
+        console.log(tL_2);
+
+        $.merge(testLine, tL_2);
+        $(testLine).each((ind, el) => {
+            el[1] = [...new Set(el[1])];
+        })
+        console.log(testLine);
+
         $('#list_1').hide();
-        testLine = tL_2;
         clearValues();
         executeParamsOfVTEProphyl();
     }
+    console.log(testLine);
+
+
+    // let vArr = [2, 5, 6, 7, 12, 14, 15];
+
+
+
+
+    // let ind = vArr.indexOf(6);
+    // let ind_2 = vArr.indexOf(7);
+    // vArr.indexOf(6) !== -1 ? vArr[ind]-- : '';
+    // vArr.indexOf(7) !== -1 ? vArr[ind_2] = vArr[ind_2] + 1 : '';
+    // let uniq = [...new Set(vArr)];
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

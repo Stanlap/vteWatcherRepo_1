@@ -79,17 +79,31 @@ $(document).ready(function () {
         lineOfFuncs = [askOfStartDateVTEProphyl];
 
 
+    let vDS = 7 - (new Date()).getDay(),
+        vSats = [vDS, vDS + 7],
+        vSuns = [vDS + 1, vDS + 8];
+    console.log(vSats, vSuns);
+
+    $(objChoosedMedicines).each(function (ind, el) {
+
+        el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
+        el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
+        el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
+        // console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter, testBP);
+    });
+
+    clearValues();
+    defineAllTestsPlan(objChoosedMedicines);
+
     if ($(objChoosedMedicines).length > 1) {
         lineOfFuncs.push(askOfStartDateTakingOfSecMedicine);
         const bridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
         bridgeTher(objChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
-        testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
     };
+    testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
     objPatient.pkIsOrNoSurg && $(objChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
 
-    clearValues();
     executeParamsOfVTEProphyl();
-
 
     function clearValues() {
         $('#inviteToAct').html('')
@@ -97,6 +111,38 @@ $(document).ready(function () {
         $('input[name = chkRadio_1]:checked').prop('checked', false);
         $('#dialogMain:visible').hide();
         $('input[name = chkRadio_1], #btnOne').off('click');
+    }
+
+    function defineAllTestsPlan(choosDrug) {
+
+        $(choosDrug).each(function (ind, el) {
+            el.titleGroupRu === 'Эноксапарин натрия' || el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Гепарин натрия' ? testLine[0][2].push(definePltTestPlan(el)) : '';
+            el.titleGroupRu === 'Надропарин кальция' ? testLine[2][2].push(defineElectrolytesTestPlan(el)) : '';
+            el.titleGroupRu === 'Гепарин натрия' ? testLine[3][2].push(defineCoagulogramPlan(el)) : '';
+            el.titleGroupRu === 'Варфарин' ? testLine[4][2].push(defineINRPlan(el)) : '';
+            el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? (testLine[5][2].push(defineGenUrineTest(el)), testLine[1][2].push(defineRenalTestPlan(el))) : '';
+        });
+        testLine = testLine.filter(el => el[2].length != 0);
+        $(testLine).each(function (ind, el) {
+            el[2].length === 1 ? el[1] = el[2][0][2].slice() : '';
+            if (el[2].length === 2) {
+                $.merge(el[1], el[2][0][2]);
+                $(el[2][1][2]).each(function (ind, item) {
+                    el[1].push(item + el[2][0][1][2]);
+                });
+            }
+        });
+
+        let elTemp = [];
+        $(testLine).each(function (ind, el) {
+            $(el[1]).each(function (ind, item) {
+                item += objPatient.pkDaysToStartVTEProph;
+                elTemp.push(item);
+            });
+            el[1] = elTemp;
+            elTemp = [];
+        });
+        console.log(testLine);
     }
 
     function defineMinTreatmentPeriod(mP, choosDrug, mTP) {
@@ -194,45 +240,6 @@ $(document).ready(function () {
         executeParamsOfVTEProphyl();
     }
 
-    $(objChoosedMedicines).each(function (ind, el) {
-
-        el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
-        el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
-        el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
-        // console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter, testBP);
-    });
-
-    let objAllLabTests = {
-        pltTest: {
-            titleCyr: 'исследование тромбоцитов в крови',
-            plan: []
-        },
-        creatinUreaTest: {
-            titleCyr: 'исследование уровня мочевины и креатинина в крови',
-            plan: []
-        },
-        genBloodTest: {
-            titleCyr: 'общеклинический анализ крови',
-            plan: []
-        },
-        genUrineTest: {
-            titleCyr: 'общеклинический анализ мочи',
-            plan: []
-        },
-        electrolytesTest: {
-            titleCyr: 'электролиты крови',
-            plan: []
-        },
-        coagulogram: {
-            titleCyr: 'коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТВ)',
-            plan: []
-        },
-        INR: {
-            titleCyr: 'коагулограмма (МНО) ',
-            plan: []
-        }
-    };
-
     function buildLine(vP_2, tP) {
         let vLine = [],
             vV = vP_2[0] + 1;
@@ -296,40 +303,8 @@ $(document).ready(function () {
         return tL_1;
     }
 
-    function defineAllTestsPlan(choosDrug) {
-
-        $(choosDrug).each(function (ind, el) {
-            el.titleGroupRu === 'Эноксапарин натрия' || el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Гепарин натрия' ? testLine[0][2].push(definePltTestPlan(el)) : '';
-            el.titleGroupRu === 'Надропарин кальция' ? testLine[2][2].push(defineElectrolytesTestPlan(el)) : '';
-            el.titleGroupRu === 'Гепарин натрия' ? testLine[3][2].push(defineCoagulogramPlan(el)) : '';
-            el.titleGroupRu === 'Варфарин' ? testLine[4][2].push(defineINRPlan(el)) : '';
-            el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? (testLine[5][2].push(defineGenUrineTest(el)), testLine[1][2].push(defineRenalTestPlan(el))) : '';
-        });
-        testLine = testLine.filter(el => el[2].length != 0);
-        $(testLine).each(function (ind, el) {
-            el[2].length === 1 ? el[1] = el[2][0][2].slice() : '';
-            if (el[2].length === 2) {
-                $.merge(el[1], el[2][0][2]);
-                $(el[2][1][2]).each(function (ind, item) {
-                    el[1].push(item + el[2][0][1][2]);
-                });
-            }
-        });
-
-        let elTemp = [];
-        $(testLine).each(function (ind, el) {
-            $(el[1]).each(function (ind, item) {
-                item += objPatient.pkDaysToStartVTEProph;
-                elTemp.push(item);
-            });
-            el[1] = elTemp;
-            elTemp = [];
-        });
-        console.log(testLine);
-    }
-
     function askOfPrevLabExams() {
-        defineAllTestsPlan(objChoosedMedicines);
+        // defineAllTestsPlan(objChoosedMedicines);
         $('#dialogMain, #btnOne, #br_1, #inpDate').show();
         $('#inpDate').val(formatDate());
         $('#dialog_2').hide();
@@ -350,12 +325,6 @@ $(document).ready(function () {
         $('#btnOne').on('click', definePrevLabExams);
     }
 
-
-    let vDS = 7 - (new Date()).getDay(),
-        vSats = [vDS, vDS + 7],
-        vSuns = [vDS + 1, vDS + 8];
-    console.log(vSats, vSuns);
-
     function definePrevLabExams() {
         // Функция учитывает выходные дни.
         if ($('#chkWeekend').is(':checked')) {
@@ -371,7 +340,7 @@ $(document).ready(function () {
             });
             // alert('Анализы в выходные назначаться не будут.');
         }
-// Функция создает tL_2 - массив исследований, которые надо выполнить до начала проф. ВТЭО.
+        // Функция создает tL_2 - массив исследований, которые надо выполнить до начала проф. ВТЭО.
         let tL_1 = [],
             tL_2 = [],
             tL_3 = [];
@@ -383,7 +352,7 @@ $(document).ready(function () {
         console.log(vFstInv);
         $(tL_3).each((ind, el) => delete testLine[el]);
         testLine = testLine.filter(item => item);
-        $(tL_2).each((ind, el)=> el[1].unshift(vFstInv));
+        $(tL_2).each((ind, el) => el[1].unshift(vFstInv));
         console.log(tL_2);
 
         $.merge(testLine, tL_2);
@@ -400,7 +369,35 @@ $(document).ready(function () {
 
 
     // let vArr = [2, 5, 6, 7, 12, 14, 15];
-
+    //     pltTest: {
+    //         titleCyr: 'исследование тромбоцитов в крови',
+    //         plan: []
+    //     },
+    //     creatinUreaTest: {
+    //         titleCyr: 'исследование уровня мочевины и креатинина в крови',
+    //         plan: []
+    //     },
+    //     genBloodTest: {
+    //         titleCyr: 'общеклинический анализ крови',
+    //         plan: []
+    //     },
+    //     genUrineTest: {
+    //         titleCyr: 'общеклинический анализ мочи',
+    //         plan: []
+    //     },
+    //     electrolytesTest: {
+    //         titleCyr: 'электролиты крови',
+    //         plan: []
+    //     },
+    //     coagulogram: {
+    //         titleCyr: 'коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТВ)',
+    //         plan: []
+    //     },
+    //     INR: {
+    //         titleCyr: 'коагулограмма (МНО) ',
+    //         plan: []
+    //     }
+    // };
 
 
 

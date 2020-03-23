@@ -84,12 +84,12 @@ $(document).ready(function () {
         vSuns = [vDS + 1, vDS + 8];
     console.log(vSats, vSuns);
 
+
     $(objChoosedMedicines).each(function (ind, el) {
 
         el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
         el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
         el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
-        // console.log(el.treatPeriod, el.spinalCatheterDrugTakingBeforeAndAfter, testBP);
     });
 
     clearValues();
@@ -102,6 +102,7 @@ $(document).ready(function () {
     };
     testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
     objPatient.pkIsOrNoSurg && $(objChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
+
 
     executeParamsOfVTEProphyl();
 
@@ -172,6 +173,10 @@ $(document).ready(function () {
         return mTP;
     }
 
+    function executeParamsOfVTEProphyl() {
+        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'));
+    }
+
     function askOfStartDateVTEProphyl() {
         $('#dialogMain').show();
         $('#dialog_2').hide();
@@ -182,30 +187,27 @@ $(document).ready(function () {
 
     function defineStartDateVTEProphyl() {
         objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val();
-        console.log(objPatient.pkstartDateOfVTEProphyl);
         $(objChoosedMedicines).length > 0 ? (objChoosedMedicines[0].startDateOfVTEProphyl = $('#inpDate').val(), objPatient.pkDaysToStartVTEProph = Math.round(diffDates(new Date(correctDate(new Date(objChoosedMedicines[0].startDateOfVTEProphyl))), new Date(correctDate(new Date()))))) : '';
         objPatient.pkDaysToStartVTEProph < 0 ? objPatient.pkDaysToStartVTEProph = 0 : '';
+        sheduleMedicineTaking();
         console.log(objPatient.pkDaysToStartVTEProph);
-
-
         clearValues();
         executeParamsOfVTEProphyl();
-    }
-
-    function executeParamsOfVTEProphyl() {
-        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'));
     }
 
     function askOfStartDateTakingOfSecMedicine() {
         $('#dialogMain').show();
         $('#dialog_2').hide();
         $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:');
-        $('#inpDate').val(correctDate(addDays(new Date(), objChoosedMedicines[0].treatPeriod)));
+        $('#inpDate').val(correctDate(addDays(objPatient.pkstartDateOfVTEProphyl, objChoosedMedicines[0].treatPeriod)));
         $('#btnOne').on('click', defineStartDateOfSecondMedicine);
     }
 
     function defineStartDateOfSecondMedicine() {
         objChoosedMedicines[1].startDateOfVTEProphyl = $('#inpDate').val();
+        objChoosedMedicines[0].treatPeriod = Math.round(diffDates(new Date(objChoosedMedicines[1].startDateOfVTEProphyl), new Date(objPatient.pkstartDateOfVTEProphyl)));
+        console.log(objChoosedMedicines[0].treatPeriod);
+        sheduleMedicineTaking();
         clearValues();
         executeParamsOfVTEProphyl();
     }
@@ -367,111 +369,60 @@ $(document).ready(function () {
     }
     console.log(testLine);
 
+    let fillLine = (vSVTEP_1, vSVTEP_2, vTP) => {
+            let vSVTE_3 = Math.round(diffDates(new Date(vSVTEP_2), new Date(vSVTEP_1))) + 1,
+                zArr = [];
+            for (let i = vSVTE_3; i < vSVTE_3 + vTP; i++) {
+                zArr.push(i);
+            }
+            return zArr;
+        },
+        vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
 
-    // let vArr = [2, 5, 6, 7, 12, 14, 15];
-    //     pltTest: {
-    //         titleCyr: 'исследование тромбоцитов в крови',
-    //         plan: []
-    //     },
-    //     creatinUreaTest: {
-    //         titleCyr: 'исследование уровня мочевины и креатинина в крови',
-    //         plan: []
-    //     },
-    //     genBloodTest: {
-    //         titleCyr: 'общеклинический анализ крови',
-    //         plan: []
-    //     },
-    //     genUrineTest: {
-    //         titleCyr: 'общеклинический анализ мочи',
-    //         plan: []
-    //     },
-    //     electrolytesTest: {
-    //         titleCyr: 'электролиты крови',
-    //         plan: []
-    //     },
-    //     coagulogram: {
-    //         titleCyr: 'коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТВ)',
-    //         plan: []
-    //     },
-    //     INR: {
-    //         titleCyr: 'коагулограмма (МНО) ',
-    //         plan: []
-    //     }
-    // };
-
-
-
-    // let ind = vArr.indexOf(6);
-    // let ind_2 = vArr.indexOf(7);
-    // vArr.indexOf(6) !== -1 ? vArr[ind]-- : '';
-    // vArr.indexOf(7) !== -1 ? vArr[ind_2] = vArr[ind_2] + 1 : '';
-    // let uniq = [...new Set(vArr)];
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-    // Коагулограмма № 3 (ПТИ, МНО, фибриноген, АТ3, АЧТВ)
-    // function defineLabTests(choosDrug, allSamples = []) {
-    //     // labSL[0] - наименование назначенных исследований, labSL[1]- исследование до начала профилактики ВТЭО, labSL[2] - первое исследование, после начала профилактики ВТЭО, labSL[3] - интервал между исследованиями (сутки);
-
-    //     let doIt = false,
-    //         labSL = ['', 0, 0, 0];
-    //     switch (choosDrug) {
-    //         case 'Надропарин кальция':
-    //             doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатинина в крови, ОАМ, электролиты крови. Назначить анализы повторно?');
-    //             doIt ? (labSL[0] = 'исследование уровня мочевины и креатинина в крови, ОАМ, электролиты крови', labSL[1] = 1, labSL[2] = 1,  doIt = false) : '';
-    //             break;
-
-    //         case 'Гепарин натрия':
-    //             doIt = confirm('При назначении Гепарина натрия до начала профилактики ВТЭО пациенту должна быть выполнена коагулограмма. Назначить анализ повторно?');
-    //             doIt ? (labSL[0] = 'коагулограмма', labSL[2] = 1, allSamples.push(labSL)) : '';
-    //             break;
-
-    //         case 'Дабигатрана этексилат':
-    //             doIt = confirm('При назначении Надтропарина кальция до начала профилактики ВТЭО пациенту должны быть выполнены: исследование уровня мочевины и креатинина в крови, ОАМ. Назначить анализы повторно?');
-    //             doIt ? (labSL[0] = 'исследование уровня мочевины и креатинина в крови, ОАМ', labSL[2] = 1) : '';
-    //             objPatient.pkIsRenalInsuff ? labSL[3] = 5 : '';
-    //             allSamples.push(labSL);
-    //             break;
-
-    //         case 'Варфарин':
-    //             labSL[3] = 5;
-    //             doIt = confirm('При назначении Варфарина до начала профилактики ВТЭО пациенту должны быть выполнены: исследование МНО. Назначить анализы повторно?');
-    //             doIt ? (labSL[0] = 'МНО', labSL[2] = 1) : '';
-    //             allSamples.push(labSL);
-    //             break;
-    //     };
-    //     return allSamples;
-    // }
-
-
-
-    function defineFactorXaInhibitorsPerioperativeTactics(choosDrug, operBleedingRisk, CC, surgDifficulty, startDrugTakingAfterOper = 24) {
-        let stopDrugTakingBeforeOper = 0;
-
-        if (operBleedingRisk === 1 || surgDifficulty === 1) {
-
-            choosDrug === 'Апиксабан' || choosDrug === 'Ривароксабан' ? stopDrugTakingBeforeOper = 48 : '';
-            if (choosDrug === 'Дабигатрана этексилат') {
-                CC >= 80 ? stopDrugTakingBeforeOper = 48 : CC >= 50 && CC < 80 ? stopDrugTakingBeforeOper = 72 : CC >= 15 && CC < 50 ? stopDrugTakingBeforeOper = 96 : '';
-            };
-        } else {
-            switch (choosDrug) {
-                case 'Апиксабан':
-                    CC >= 30 ? stopDrugTakingBeforeOper = 24 : CC < 30 ? stopDrugTakingBeforeOper = 36 : '';
-                    break;
-                case 'Ривароксабан':
-                    CC >= 30 ? stopDrugTakingBeforeOper = 24 : CC < 30 ? stopDrugTakingBeforeOper = 36 : '';
-                    break;
-
-                case 'Дабигатрана этексилат':
-                    CC >= 80 ? stopDrugTakingBeforeOper = 24 : CC >= 50 && CC < 80 ? stopDrugTakingBeforeOper = 36 : CC >= 15 && CC < 50 ? stopDrugTakingBeforeOper = 48 : '';
-                    break;
-            };
-        }
-        return [stopDrugTakingBeforeOper, startDrugTakingAfterOper];
+    function sheduleMedicineTaking() {
+        $(objChoosedMedicines).each(function (ind, el) {
+            let vComLine = fillLine(objPatient.pkstartDateOfVTEProphyl, el.startDateOfVTEProphyl, el.treatPeriod);
+            console.log(vComLine);
+            if (objPatient.pkIsOrNoSurg) {
+                let relDayOfSurg = 1 + Math.round(diffDates(new Date(objPatient.pkDateOfOper), new Date(objPatient.pkstartDateOfVTEProphyl))),
+                    periopPeriod = [relDayOfSurg, relDayOfSurg];
+                vXaInhibitors(el.titleGroupRu) ? periopPeriod[0] = relDayOfSurg - defineXaInhibitorsPeriopTactics(el.titleGroupRu, objPatient.pkRiskBleed, objPatient.pkCC, objPatient.pkGradeOfOper) : '';
+                console.log(periopPeriod);
+                el.lineOfMedicineTaking = vComLine.filter(el => el < periopPeriod[0]).concat(vComLine.filter(el => el > periopPeriod[1]));
+            }
+            console.log(el.lineOfMedicineTaking);
+        });
     }
 
+    function defineXaInhibitorsPeriopTactics(choosDrug, operBleedingRisk, CC, gradeOfOper) {
+        let vSBO = [0, 0];
+        if (operBleedingRisk === 1) {
+            choosDrug === 'Эдоксабан' || choosDrug === 'Апиксабан' || choosDrug === 'Ривароксабан' ? vSBO[0] = 1 : '';
+            if (choosDrug === 'Дабигатрана этексилат') {
+                CC >= 80 ? vSBO[0] = 1 : CC >= 50 && CC < 80 ? vSBO[0] = 2 : CC >= 15 && CC < 50 ? vSBO[0] = 3 : '';
+            };
+        } else {
+            if (gradeOfOper === 0) {
+                switch (choosDrug) {
+                    case 'Дабигатрана этексилат':
+                        vSBO[1] = 1;
+                        break;
+                };
+            } else {
+                switch (choosDrug) {
+                    case 'Дабигатрана этексилат':
+                        CC > 50 && CC < 81 ? vSBO[1] = 2 : CC > 30 && CC < 51 ? vSBO[1] = 3 : '';
+                        break;
+                    default:
+                        vSBO[1] = 1;
+                        break;
+                };
+            };
+        };
+        return Math.max.apply(null, vSBO);
+    }
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     function changeFactorXaInhibitorsToVitaminKAntagonists(choosDrug_1, choosDrug_2, timeAlg = []) {
         if ((choosDrug_1 === 'Апиксабан' || choosDrug_1 === 'Ривароксабан' || choosDrug_1 === 'Дабигатрана этексилат') && choosDrug_2 === 'Варфарин') {
             // время начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:

@@ -54,4 +54,11 @@ function diffDates(dateOne, dateTwo) {
         // привести к фоормату даты 'en-us';
         // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$2/$3/$1');
 
-
+        function dateToYMD(date) {
+            var d = date.getDate();
+            var m = date.getMonth() + 1; //Month from 0 to 11
+            var y = date.getFullYear();
+            return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+        }
+        
+    

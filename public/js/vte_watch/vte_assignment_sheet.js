@@ -9,20 +9,24 @@ $(document).ready(function () {
     console.log(objPatient, objChoosedMedicines);
 
     $('<div/>').attr({
+            id: 'dialog_1',
+        })
+        .appendTo('#dialogMain');
+    $('<div/>').attr({
             id: 'inviteToAct',
         })
         .html('')
-        .appendTo('#dialogMain');
-    $('<br>').appendTo('#dialogMain');
+        .appendTo('#dialog_1');
+    $('<br>').appendTo('#dialog_1');
     $('<input/>').attr({
             id: 'inpDate',
             type: 'date',
             value: formatDate()
         })
-        .appendTo('#dialogMain');
+        .appendTo('#dialog_1');
     $('<div>').attr({
         id: 'dialog_2'
-    }).appendTo('#dialogMain');
+    }).appendTo('#dialog_1');
     $('<label/>').attr({
         for: 'chkR_1'
     }).html('Да').appendTo('#dialog_2');
@@ -43,16 +47,16 @@ $(document).ready(function () {
     }).appendTo('#dialog_2');
     $('<div>').attr({
         id: 'list_1'
-    }).appendTo('#dialogMain');
+    }).appendTo('#dialog_1');
     $('<br><br>').attr({
         id: 'br_1'
-    }).appendTo('#dialogMain');
+    }).appendTo('#dialog_1');
     $('<input/>').attr({
             id: 'btnOne',
             type: 'button',
             value: 'OK'
         })
-        .appendTo('#dialogMain');
+        .appendTo('#dialog_1');
 
 
     let testLine = [
@@ -76,13 +80,25 @@ $(document).ready(function () {
             ]
         ],
         testBP = [],
-        lineOfFuncs = [askOfStartDateVTEProphyl];
+        lineOfFuncs = [];
 
 
     let vDS = 7 - (new Date()).getDay(),
         vSats = [vDS, vDS + 7],
         vSuns = [vDS + 1, vDS + 8];
     console.log(vSats, vSuns);
+
+    let fillLine = (vSVTEP_1, vSVTEP_2, vTP) => {
+        let vSVTE_3 = Math.round(diffDates(new Date(vSVTEP_2), new Date(vSVTEP_1))) + 1,
+            zArr = [];
+        for (let i = vSVTE_3; i < vSVTE_3 + vTP; i++) {
+            zArr.push(i);
+        }
+        return zArr;
+    },
+    vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
+
+    let ordersCollector = [];
 
 
     $(objChoosedMedicines).each(function (ind, el) {
@@ -95,23 +111,31 @@ $(document).ready(function () {
     clearValues();
     defineAllTestsPlan(objChoosedMedicines);
 
+    let vIsVKI = false;
+    $(objChoosedMedicines).each((ind, el) => {
+        vIsVKI = el.titleGroupRu === 'Варфарин' ? true : false;
+    });
+    (objPatient.pkIsOrNoSurg && vIsVKI) ? lineOfFuncs.push(askOfINRAndVKI): '';
+    lineOfFuncs.push(askOfStartDateVTEProphyl);
     if ($(objChoosedMedicines).length > 1) {
         lineOfFuncs.push(askOfStartDateTakingOfSecMedicine);
         const bridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
         bridgeTher(objChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
+            interactOfXaInhibAndVKA();
     };
+
     testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
     objPatient.pkIsOrNoSurg && $(objChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
 
-
+    clearValues();
     executeParamsOfVTEProphyl();
 
     function clearValues() {
         $('#inviteToAct').html('')
         $('#inpDate').val('');
         $('input[name = chkRadio_1]:checked').prop('checked', false);
-        $('#dialogMain:visible').hide();
-        $('input[name = chkRadio_1], #btnOne').off('click');
+        $('#dialog_1, #dialog_2, #dialog_3').hide();
+        $('input[name = chkRadio_1], #btnOne, #btnTwo').off('click');
     }
 
     function defineAllTestsPlan(choosDrug) {
@@ -177,9 +201,64 @@ $(document).ready(function () {
         lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'));
     }
 
+    function askOfINRAndVKI() {
+        $('<div/>').attr({
+            id: 'dialog_3',
+        }).appendTo('#dialogMain');
+        $('<label/>').attr({
+            for: 'chkB_1'
+        }).html('Исходное значение МНО (5 суток до вмешательства) > 4.0').appendTo('#dialog_3');
+        $('<input/>').attr({
+            type: 'checkbox',
+            id: 'chkB_1'
+        }).appendTo('#dialog_3');
+        $('<br>').appendTo('#dialog_3');
+        $('<label/>').attr({
+            for: 'chkB_2'
+        }).html('Значение МНО (1 сутки до вмешательства) > 2.0').appendTo('#dialog_3');
+        $('<input/>').attr({
+            type: 'checkbox',
+            id: 'chkB_2'
+        }).appendTo('#dialog_3');
+        $('<br>').appendTo('#dialog_3');
+        $('<label/>').attr({
+            for: 'chkB_3'
+        }).html('Суточная доза варфарина > 7,5 mg').appendTo('#dialog_3');
+        $('<input/>').attr({
+            type: 'checkbox',
+            id: 'chkB_3'
+        }).appendTo('#dialog_3');
+        $('<br>').appendTo('#dialog_3');
+        $('<br>').appendTo('#dialog_3');
+        $('<input/>').attr({
+            id: 'btnTwo',
+            type: 'button',
+            value: 'OK'
+        }).appendTo('#dialog_3');
+        $('#btnTwo').on('click', defineINRAndVKI);
+    }
+
+    // Первое исследование МНО: 5 суток до вмешательства - ввести значение
+    // Второе исследование МНО: 1 сутки до вмешательства - ввести значение. Если МНО остается высоким процедуру следует отложить.
+    // Суточная доза варфарина > 7,5 отмена за 3-4 дня до вмешательства.
+    // Риск кровотечения 1 –варфарин отменяют.
+
+    function defineINRAndVKI() {
+        $('input[name = chkRadio_1]:checked').val() === 0 ? objPatient.pkBridgeTher = true : objPatient.pkBridgeTher = false;
+        (objPatient.pkInitINRMore4, objPatient.pkHighDoseVKI);
+        objPatient.pkInitINRMore4 = $('#chkB_1').is(':checked') ? true : false;
+        objPatient.pkHighINRDayBeforeSurg = $('#chkB_2').is(':checked') ? true : false;
+        objPatient.pkHighDoseVKI = $('#chkB_3').is(':checked') ? true : false;
+        objPatient.pkHighINRDayBeforeSurg ? objPatient.pkDateOfOper = dateToYMD(new Date(prompt('МНО выше нормы! Следует перенести операцию на другую дату. Введите дату в формате "yyyy-MM-dd"', ''))) : '';
+        console.log(objPatient.pkDateOfOper);
+        console.log(objPatient.pkInitINRMore4, objPatient.pkHighINRDayBeforeSurg, objPatient.pkHighDoseVKI);
+        clearValues();
+        executeParamsOfVTEProphyl();
+    }
+
+
     function askOfStartDateVTEProphyl() {
-        $('#dialogMain').show();
-        $('#dialog_2').hide();
+        $('#dialog_1').show();
         $('#inviteToAct').html('Укажите дату начала профилактики ВТЭО:');
         objPatient.pkIsOrNoSurg ? $('#inpDate').val(objPatient.pkDateOfOper) : $('#inpDate').val(formatDate());
         $('#btnOne').on('click', defineStartDateVTEProphyl);
@@ -196,7 +275,7 @@ $(document).ready(function () {
     }
 
     function askOfStartDateTakingOfSecMedicine() {
-        $('#dialogMain').show();
+        $('#dialog_1').show();
         $('#dialog_2').hide();
         $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:');
         $('#inpDate').val(correctDate(addDays(objPatient.pkstartDateOfVTEProphyl, objChoosedMedicines[0].treatPeriod)));
@@ -213,11 +292,9 @@ $(document).ready(function () {
     }
 
     function askOfBridgeTherUsage() {
-        $('#dialogMain').show();
+        $('#dialog_1, #dialog_2').show();
         $('#inpDate, #btnOne, #br_1').hide();
         $('#inviteToAct').html('Планируется периоперационная мост-терапия НМГ или НФГ?');
-        $('#inpDate, #btnOne, #br_1').hide();
-        $('#dialog_2').show();
         $('input[name = chkRadio_1]').on('click', defineBridgeTherUsage);
     }
 
@@ -228,11 +305,9 @@ $(document).ready(function () {
     }
 
     function askOfSpinalAnestUsage() {
-        $('#dialogMain').show();
+        $('#dialog_1, #dialog_2').show();
         $('#inpDate, #btnOne, #br_1').hide();
         $('#inviteToAct').html('Операция выполняется под спинномозговой анестезией?');
-        $('#inpDate, #btnOne, #br_1').hide();
-        $('#dialog_2').show();
         $('input[name = chkRadio_1]').on('click', defineSpinalAnestUsage);
     };
 
@@ -307,11 +382,11 @@ $(document).ready(function () {
 
     function askOfPrevLabExams() {
         // defineAllTestsPlan(objChoosedMedicines);
-        $('#dialogMain, #btnOne, #br_1, #inpDate').show();
+        $('#dialog_1, #btnOne, #br_1, #inpDate').show();
         $('#inpDate').val(formatDate());
         $('#dialog_2').hide();
         $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить и установите дату:');
-        $('<br>').appendTo('#dialogMain');
+        $('<br>').appendTo('#dialog_1');
         $('<br>').appendTo('#list_1');
         $(testLine).each(function (ind, el) {
             $('<label/>').attr({
@@ -369,16 +444,6 @@ $(document).ready(function () {
     }
     console.log(testLine);
 
-    let fillLine = (vSVTEP_1, vSVTEP_2, vTP) => {
-            let vSVTE_3 = Math.round(diffDates(new Date(vSVTEP_2), new Date(vSVTEP_1))) + 1,
-                zArr = [];
-            for (let i = vSVTE_3; i < vSVTE_3 + vTP; i++) {
-                zArr.push(i);
-            }
-            return zArr;
-        },
-        vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
-
     function sheduleMedicineTaking() {
         $(objChoosedMedicines).each(function (ind, el) {
             let vComLine = fillLine(objPatient.pkstartDateOfVTEProphyl, el.startDateOfVTEProphyl, el.treatPeriod);
@@ -387,6 +452,7 @@ $(document).ready(function () {
                 let relDayOfSurg = 1 + Math.round(diffDates(new Date(objPatient.pkDateOfOper), new Date(objPatient.pkstartDateOfVTEProphyl))),
                     periopPeriod = [relDayOfSurg, relDayOfSurg];
                 vXaInhibitors(el.titleGroupRu) ? periopPeriod[0] = relDayOfSurg - defineXaInhibitorsPeriopTactics(el.titleGroupRu, objPatient.pkRiskBleed, objPatient.pkCC, objPatient.pkGradeOfOper) : '';
+                el.titleGroupRu === 'Варфарин' ? periopPeriod[0] = relDayOfSurg - stopVitKAntagTakingBeforeOper(objPatient.pkInitINRMore4, objPatient.pkRiskBleed, objPatient.pkHighDoseVKI) : '';
                 console.log(periopPeriod);
                 el.lineOfMedicineTaking = vComLine.filter(el => el < periopPeriod[0]).concat(vComLine.filter(el => el > periopPeriod[1]));
             }
@@ -394,9 +460,9 @@ $(document).ready(function () {
         });
     }
 
-    function defineXaInhibitorsPeriopTactics(choosDrug, operBleedingRisk, CC, gradeOfOper) {
+    function defineXaInhibitorsPeriopTactics(choosDrug, highBleedRisk, CC, gradeOfOper) {
         let vSBO = [0, 0];
-        if (operBleedingRisk === 1) {
+        if (highBleedRisk === 1) {
             choosDrug === 'Эдоксабан' || choosDrug === 'Апиксабан' || choosDrug === 'Ривароксабан' ? vSBO[0] = 1 : '';
             if (choosDrug === 'Дабигатрана этексилат') {
                 CC >= 80 ? vSBO[0] = 1 : CC >= 50 && CC < 80 ? vSBO[0] = 2 : CC >= 15 && CC < 50 ? vSBO[0] = 3 : '';
@@ -422,42 +488,64 @@ $(document).ready(function () {
         return Math.max.apply(null, vSBO);
     }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    function changeFactorXaInhibitorsToVitaminKAntagonists(choosDrug_1, choosDrug_2, timeAlg = []) {
-        if ((choosDrug_1 === 'Апиксабан' || choosDrug_1 === 'Ривароксабан' || choosDrug_1 === 'Дабигатрана этексилат') && choosDrug_2 === 'Варфарин') {
-            // время начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
-            timeAlg[0] = 1;
-            // алгоритм приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
-            timeAlg[1] = 'НОАК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.';
-            // дата первого исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
-            timeAlg[2] = -1;
-            // кратность исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
-            timeAlg[3] = 1;
-            // продолжительность исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
-            timeAlg[4] = 3;
-        };
-        if (choosDrug_1 === 'Варфарин' && (choosDrug_1 === 'Апиксабан' || choosDrug_1 === 'Ривароксабан' || choosDrug_1 === 'Дабигатрана этексилат')) {
-            // Значения timeAlg при приеме антагонистов витамина К  в качестве второго лекарственного средства после ингибиторов фактора Ха:
-            timeAlg[0] = 0;
-            timeAlg[1] = 'При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.';
-            timeAlg[2] = -1;
-            timeAlg[3] = 1;
-            timeAlg[4] = 3;
-        };
-        return timeAlg;
+    const stopVitKAntagTakingBeforeOper = (vINR_5, highBleedRisk, highDoseVKI, vDST) => {
+        vDST = vINR_5 > 4 ? vDST = 5 : 4;
+        highDoseVKI ? vDST = 4 : '';
+        highBleedRisk === 1 ? vDST = 10 : '';
+        return vDST;
     }
+
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+function interactOfXaInhibAndVKA() {
+        if (objChoosedMedicines[0].titleGroupRu === 'Варфарин' && vXaInhibitors(objChoosedMedicines[1].titleGroupRu)) {
+            alert('НОАК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.');
+        };
+        if (objChoosedMedicines[1].titleGroupRu === 'Варфарин' && vXaInhibitors(objChoosedMedicines[0].titleGroupRu)) {
+            // Значения timeAlg при приеме антагонистов витамина К  в качестве второго лекарственного средства после ингибиторов фактора Ха:
+            alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.');
+        };
+        let tArr = [];
+        tArr[0] = objChoosedMedicines[1].signature;
+        tArr[1] = 2;
+        ordersCollector.push(tArr);
+        console.log(ordersCollector);
+    }
+    // function interactOfXaInhibAndVKA(choosDrug_1, choosDrug_2, timeAlg = []) {
+    //     if (vXaInhibitors(choosDrug_1) && choosDrug_2 === 'Варфарин') {
+    //         // время начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+    //         timeAlg[0] = 1;
+    //         // алгоритм приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+    //         timeAlg[1] = 'НОАК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.';
+    //         // дата первого исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+    //         timeAlg[2] = -1;
+    //         // кратность исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+    //         timeAlg[3] = 1;
+    //         // продолжительность исследования МНО относительно начала приема ингибиторов фактора Ха в качестве второго лекарственного средства после антагонистов витамина К:
+    //         timeAlg[4] = 3;
+    //     };
+    //     if (choosDrug_1 === 'Варфарин' && vXaInhibitors(choosDrug_1)) {
+    //         // Значения timeAlg при приеме антагонистов витамина К  в качестве второго лекарственного средства после ингибиторов фактора Ха:
+    //         timeAlg[0] = 0;
+    //         timeAlg[1] = 'При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.';
+    //         timeAlg[2] = -1;
+    //         timeAlg[3] = 1;
+    //         timeAlg[4] = 3;
+    //     };
+    //     return timeAlg;
+    // }
 
     function appointBridgeTherapy(choosDrug_1, choosDrug_2, bTHer, ) {
         //  алгоритм вписать в справку позднее;
         let med_1 = [],
             med_2 = [],
-            vINR = [];
+            vINR_5 = [];
         if (objPatient.pkIsOrNoOper, choosDrug_1 === 'Варфарин' && bTher) {
             med_1[0] = -5;
             med_1[1] = 1;
-            vINR[0] = -1;
-            vINR[1] = 0;
-            vINR[2] = 1;
+            vINR_5[0] = -1;
+            vINR_5[1] = 0;
+            vINR_5[2] = 1;
 
             if (choosDrug_2 === 'Гепарин натрия') {
                 med_2[0] = -2;
@@ -474,30 +562,5 @@ $(document).ready(function () {
 
         }
     }
-
-    function stopVitaminKAntagonistsTakingBeforeOper(choosDrug, vINR, riskBleed) {
-        // Первое исследование МНО: vINRDate[0] даты до операции, vINRDate[1][0] -интервал, vINRDate[1][1] - длительность обследования в днях с данной частотой.
-        let vINRDate = [
-            [5, 1],
-            [1, 3]
-        ]
-        vDayStartTaking = 24,
-            vDayStopTaking = 2;
-
-        if (choosDrug = 'Варфарин') {
-            switch (vINR) {
-
-                case vINR > 4:
-                    vDayStopTaking = 5;
-                    break;
-                case vINR > 3 && vINR <= 4:
-                    vDayStopTaking = 3;
-                    break;
-            }
-        }
-
-    }
-
-    objPatient.pkOperBleedingRisk === 1 ? vDayStopTakingFactorXaInhibitors = 1 : vDayStopTakingFactorXaInhibitors = 2;
 
 });

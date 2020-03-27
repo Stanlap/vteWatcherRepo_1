@@ -5,9 +5,11 @@ $(document).ready(function () {
                 'Enoxaparin sodium': 'Эноксапарин натрия'
             },
             'singleProphDose': 40,
+            officUnits: 'мл',
             delivery: 'п/к',
             container: 'шприц',
             timesADay: 1,
+            potentTimeADay: [1, 2],
             drugs: {
                 Anfibra: {
                     nameCyr: 'Анфибра',
@@ -51,9 +53,11 @@ $(document).ready(function () {
                 'Nadroparin calcium': 'Надропарин кальция'
             },
             'singleProphDose': 0.4,
+            officUnits: 'мл',
             delivery: 'п/к',
             container: 'шприц',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 Fraxiparine: {
                     nameCyr: 'Фраксипарин',
@@ -72,9 +76,11 @@ $(document).ready(function () {
                 'Bemiparinum natrium': 'Бемипарин натрия'
             },
             'singleProphDose': 3500,
+            officUnits: 'МЕ',
             delivery: 'п/к',
             container: 'шприц',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 'Zibor 2500': {
                     nameCyr: 'Цибор 2500',
@@ -93,9 +99,11 @@ $(document).ready(function () {
                 'Heparin sodium': 'Гепарин натрия'
             },
             'singleProphDose': 5000,
+            officUnits: 'МЕ',
             delivery: 'п/к',
             container: 'амп.',
             timesADay: 3,
+            potentTimeADay: [2, 3],
             drugs: {
                 Heparinum: {
                     nameCyr: 'Гепарин',
@@ -114,9 +122,11 @@ $(document).ready(function () {
                 'Fondaparinux sodium': 'Фондапаринукс натрия'
             },
             'singleProphDose': 0.5,
+            officUnits: 'мл',
             delivery: 'п/к',
             container: 'шприц',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 Arixrta: {
                     nameCyr: 'Арикстра',
@@ -130,9 +140,11 @@ $(document).ready(function () {
                 'Acetylsalicylic acid': 'Ацетилсалициловая кислота'
             },
             'singleProphDose': 100,
+            officUnits: 'мг',
             delivery: 'внутрь',
             container: 'таб.',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 'Acetylsalicylic acid': {
                     nameCyr: 'Ацетилсалициловая кислота',
@@ -200,9 +212,11 @@ $(document).ready(function () {
                 'Dabigatran etexilate': 'Дабигатрана этексилат'
             },
             'singleProphDose': 150,
+            officUnits: 'мг',
             delivery: 'внутрь',
             container: 'капс.',
             timesADay: 2,
+            potentTimeADay: [1, 2],
             drugs: {
                 Pradaxa: {
                     nameCyr: 'Прадакса',
@@ -216,9 +230,11 @@ $(document).ready(function () {
                 'Rivaroxaban': 'Ривароксабан'
             },
             'singleProphDose': 20,
+            officUnits: 'мг',
             delivery: 'внутрь',
             container: 'таб.',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 Xarelto: {
                     nameCyr: 'Ксарелто',
@@ -232,9 +248,11 @@ $(document).ready(function () {
                 'Apixaban': 'Апиксабан'
             },
             'singleProphDose': 2.5,
+            officUnits: 'мг',
             delivery: 'внутрь',
             container: 'таб.',
             timesADay: 1,
+            potentTimeADay: [1, 2],
             drugs: {
                 Eliquis: {
                     nameCyr: 'Эликвис',
@@ -248,9 +266,11 @@ $(document).ready(function () {
                 'Edoxaban': 'Эдоксабан'
             },
             'singleProphDose': 60,
+            officUnits: 'мг',
             delivery: 'внутрь',
             container: 'таб.',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 Lixiana: {
                     nameCyr: 'Ликсиана',
@@ -264,9 +284,11 @@ $(document).ready(function () {
                 'Warfarin': 'Варфарин'
             },
             'singleProphDose': 5.0,
+            officUnits: 'мг',
             delivery: 'внутрь',
             container: 'таб.',
             timesADay: 1,
+            potentTimeADay: [1],
             drugs: {
                 Warfarex: {
                     nameCyr: 'Варфарекс',
@@ -297,6 +319,8 @@ $(document).ready(function () {
         }
     },
     objChoosedDrug = {
+        titleGroupRu: '',
+        titleGroupLat: '',
         titleCyr: '',
         titleLat: '',
         officDose: {},

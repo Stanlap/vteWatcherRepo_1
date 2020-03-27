@@ -1,9 +1,57 @@
 $(document).ready(function () {
+
+    // 3
     let objPatient = JSON.parse(localStorage.getItem('Patient'));
-    // localStorage.clear();
-    console.log(objPatient.pkMedProfile);
+    localStorage.removeItem('Patient');
+    // console.log(objPatient.pkMedProfile);
 
+    // 2
+    $('<div/>').attr({
+            id: 'invitToAct_11'
+        })
+        .html('')
+        .appendTo('#dialogMain');
+    $('<div/>').attr({
+        id: 'dialog_0'
+    }).appendTo('#dialogMain');
+    $('<div/>').attr({
+        id: 'dialog_1'
+    }).appendTo('#dialogMain');
+    $('<select/>').attr({
+            id: 'select_1'
+        })
+        .appendTo('#dialog_1');
+    $('<div/>').attr({
+        id: 'dialog_2'
+    }).appendTo('#dialogMain');
+    $('<div/>').attr({
+            id: 'invitToAct_21'
+        })
+        .appendTo('#dialog_2');
+    $('<select/>').attr({
+            id: 'select_2'
+        })
+        .appendTo('#dialog_2');
+    $('<div/>').attr({
+        id: 'dialog_3'
+    }).appendTo('#dialogMain');
+    $('<div/>').attr({
+            id: 'invitToAct_31'
+        })
+        .appendTo('#dialog_3');
+    $('<select/>').attr({
+            id: 'select_3'
+        })
+        .appendTo('#dialog_3');
+    $('<br>').attr({}).appendTo('#dialogMain');
+    $('<input/>').attr({
+            id: 'btnOne_1',
+            type: 'button',
+            value: 'OK'
+        })
+        .appendTo('#dialogMain');
 
+    // 1
     $('<div/>').attr({
             id: 'invitToAct_1'
         }) // .html('Выберите препарат по МНН:')
@@ -14,10 +62,6 @@ $(document).ready(function () {
             list: 'dlstList_1'
         })
         .appendTo('#drugChooser');
-    // $('<datalist/>').attr({
-    //         id: 'dlstList_1',
-    //     })
-    // .appendTo('#inpText_1');
     $('<br>').appendTo('#drugChooser');
     $('<label/>').attr({
             id: 'lblLatinTitle',
@@ -49,8 +93,11 @@ $(document).ready(function () {
         })
         .appendTo('#inpText_2');
 
-    let ChoosedMedicinesArr = [];
 
+    let vHasVTEProph = confirm('Если пациент уже получает антикоагулянтную терапию, нажмите "OK"');
+    // console.log(vHasVTEProph);
+
+    // 3
     objPatient.pkRiskVTE === 1 ? delete objDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : objPatient.pkRiskVTE === 2 ? delete objDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
 
     function getArrPairs(vArr, ) {
@@ -72,7 +119,26 @@ $(document).ready(function () {
     let vObjDrugPairs = getObjFromArrPairs(vArrPairs);
     console.log(vObjDrugPairs);
     vObjDrugPairs = checkConditions();
+
+    function getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+
+    // 2 
+    let ChoosedMedicinesArr = [],
+        lineOfFuncs = [],
+        objChoosedMedicine_1 = {};
+    lineOfFuncs.push(askGroupOfMedicine, askNameOfMedicine, askOfficDoseOfMedicine);
+
+    // console.log(lineOfFuncs)
+    // vHasVTEProph ? lineOfFuncs.push(askExistedDoseOfMedicine) : '';
+    clearValues();
+    executeFuncsLine();
+
+
+    // 1
     addOptionsToDatalist(vObjDrugPairs, $('#dlstList_1'));
+
     let vPrevUsedDrugGroup = '';
 
     $('#invitToAct_1').html('Выберите лек. группу препарата:');
@@ -82,12 +148,42 @@ $(document).ready(function () {
     $('#btnOne').hide();
 
 
-    function getKeyByValue(object, value) {
-        return Object.keys(object).find(key => object[key] === value);
+    // 2
+    function clearValues() {
+        $('#invitToAct_11, #invitToAct_21').html('');
+        $('#dialog_1, #dialog_2, #dialog_3').hide();
+        $('#select_1, #select_2, #select_3').off('input').empty();
+        $('#btnOne_1').off('click');
     }
 
+    function executeFuncsLine() {
+        lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : '';
+    }
+
+    function askGroupOfMedicine() {
+        console.log('askGroupOfMedicine');
+        $('#invitToAct_11').html('Выберите лек. группу препарата:');
+        $('#dialog_1').show();
+        $.each(vObjDrugPairs, function (key, value) {
+            $('#select_1').append('<option value="' + value + '">' + value + '</option>');
+        });
+        $('#btnOne_1').on('click', defineOfGroupOfMedicine);
+        $('#select_1').on('input', tryChooseDrugGroup_2);
+    }
+
+    function defineOfGroupOfMedicine() {
+        objChoosedMedicine_1.titleGroupRu = $('#select_1').val();
+        $.each(vObjDrugPairs, function (index, value) {
+            value === objChoosedMedicine_1.titleGroupRu ? objChoosedMedicine_1.titleGroupLat = index : '';
+        });
+        console.log(objChoosedMedicine_1.titleGroupRu, objChoosedMedicine_1.titleGroupLat);
+        clearValues();
+        executeFuncsLine();
+    }
+
+    // 1
     function doFirstChoice() {
-        console.log('func_0');        
+        console.log('func_0');
         // vObjDrugPairs = checkConditions();
         vPrevUsedDrugGroup = getKeyByValue(vObjDrugPairs, $('#inpText_4').val());
         $('#btnOne').show();
@@ -97,18 +193,7 @@ $(document).ready(function () {
 
     };
 
-    function formatDate() {
-        var d = new Date(),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear(),
-            vDateNow = '';
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-        vDateNow = [year, month, day].join('-');
-        return vDateNow;
-    }
-
+    // 3
     function checkConditions() {
         objPatient.pkDateOfChildbirth === formatDate() ? delete vObjDrugPairs['Heparin sodium'] : '';
         if (objPatient.pkAge < 18) {
@@ -136,7 +221,7 @@ $(document).ready(function () {
         (objPatient.pkHeartInsuff3_4 || objPatient.pkActiveUlcerOfStomachOrDuodenum) ? delete vObjDrugPairs['Acetylsalicylic acid']: '';
         objPatient.pkUncontrolledSystemicHypertension ? delete vObjDrugPairs['Heparin sodium'] : '';
         (objPatient.pkIsOrNoSurg && objPatient.pkPullOfSurg) ? delete vObjDrugPairs['Heparin sodium']: '';
-        objPatient.pkSevereHepaticFailure ? delete vObjDrugPairs['Bemiparinum natrium']: '';
+        objPatient.pkSevereHepaticFailure ? delete vObjDrugPairs['Bemiparinum natrium'] : '';
         (objPatient.pkCC < 15 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs.Rivaroxaban, delete vObjDrugPairs.Edoxaban) : '';
         (objPatient.pkCC < 30 || objPatient.pkChronicDialysis) ? (delete vObjDrugPairs['Acetylsalicylic acid'], delete vObjDrugPairs['Dabigatran etexilate'], delete vObjDrugPairs['Fondaparinux sodium'], delete vObjDrugPairs.Warfarin) : '';
 
@@ -161,6 +246,8 @@ $(document).ready(function () {
         };
         return vObjDrugPairs;
     };
+
+    // 1
 
     function addOptionsToDatalist(vDrug, vDL) {
         vDL.find('option').remove();
@@ -202,12 +289,74 @@ $(document).ready(function () {
         $('#btnOne').hide();
         $('#inpText_4').unbind('input', doFirstChoice);
         $('#inpText_4').bind('input', passManagementToButtonOne);
+    }
+
+    // 2
+    let tCtr = [0, 0, 0, 0];
+
+    function tryChooseDrugGroup_2() {
+        console.log('func_1');
+        if (!objPatient.pkIsOrNoSurg && objPatient.pkPullOfSurg && $('#select_1').val() === 'Гепарин натрия' && tCtr[0] === 0) {
+            vDecision = confirm('Гепарин противопоказан при офтальмологических операциях. Отказаться от данного препарата?');
+            vDecision ? ($('#select_1 :selected').remove(), !vDecision) : tCtr[0] = 1;
+        };
+        if ($('#select_1').val() === 'Гепарин натрия' && objPatient.pkDiabetes && tCtr[1] === 0) {
+            vDecision = confirm('Гепарин противопоказан при наличии диабетической ретинопатии. Отказаться от данного препарата?');
+            vDecision ? ($('#select_1 :selected').remove(), !vDecision) : tCtr[1] = 0;
+        };
+        if ($('#select_1').val() === 'Ацетилсалициловая кислота' && tCtr[2] === 0) {
+            vDecision = confirm('Ацетилсалициловая кислота противопоказана при приеме с метотрексатом в дозе 15 мг в неделю и более, бронх. астме, индуцированной приемом салицилатов. Отказаться от данного препарата?');
+            vDecision ? ($('#select_1 :selected').remove(), !vDecision) : tCtr[2] = 1;
+        };
+        if ($('#select_1').val() === 'Ривароксабан' && tCtr[3] === 0) {
+            vDecision = confirm('Ривароксабан противопоказан при врожденном дефиците лактозы. Отказаться от данного препарата?');
+            vDecision ? ($('#select_1 :selected').remove(), !vDecision, $('#select_1').val('')) : tCtr[3] = 1;
+        };
     };
 
+    // 1
     function passManagementToButtonOne() {
         $('#btnOne').show().bind('click', chooseDrugGroup);
     };
     let choosedDrugGroupRu = '';
+
+    // 2
+    function askNameOfMedicine() {
+        console.log('askNameOfMedicine');
+        $('#invitToAct_11').text('Выберите препарат по коммерческому названию:');
+        $('#dialog_1').show();
+
+        $.each(vObjDrugPairs, function (index, value) {
+            value === objChoosedMedicine_1.titleGroupRu ? objChoosedDrug.objChoosedDrugGroupLat = index : '';
+        });
+        console.log(vObjDrugPairs);
+
+        vArrPairs = Object.keys(objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs).map(function (name) {
+            return [objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs[name].nameCyr, objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs[name].nameLat];
+        });
+
+        vObjDrugPairs = {};
+        vArrPairs.forEach(item => vObjDrugPairs[item[1]] = item[0]);
+        console.log(vObjDrugPairs);
+
+        $.each(vObjDrugPairs, function (key, value) {
+            $('#select_1').append('<option value="' + value + '">' + value + '</option>');
+        });
+
+        $('#btnOne_1').on('click', defineNameOfMedicine);
+    };
+
+    function defineNameOfMedicine() {
+        objChoosedMedicine_1.titleMedicineRu = $('#select_1').val();
+        $.each(vObjDrugPairs, function (index, value) {
+            value === objChoosedMedicine_1.titleMedicineRu ? objChoosedMedicine_1.titleMedicineLat = index : '';
+        });
+        console.log(objChoosedMedicine_1.titleMedicineLat, objChoosedMedicine_1.titleMedicineRu);
+        clearValues();
+        executeFuncsLine();
+    }
+
+    // 1
     function chooseDrugGroup() {
         $('#invitToAct_1').text('Выберите препарат по коммерческому названию:');
 
@@ -226,20 +375,13 @@ $(document).ready(function () {
         $.each(vObjDrugPairs, function (index, value) {
             value === objChoosedDrug.objChoosedDrugGroup ? objChoosedDrug.objChoosedDrugGroupLat = index : '';
         });
-        
+
         vArrPairs = Object.keys(objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs).map(function (name) {
             return [objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs[name].nameCyr, objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs[name].nameLat];
 
         });
         vObjDrugPairs = {};
-                vArrPairs.forEach(item => vObjDrugPairs[item[1]] = item[0]);
-
-        // vObjDrugPairs = {};
-        // vArrPairs.forEach(entry => {
-        //     let key = entry[0];
-        //     let value = entry[1];
-        //     vObjDrugPairs[entry[1]] = entry[0];
-        // });
+        vArrPairs.forEach(item => vObjDrugPairs[item[1]] = item[0]);
 
         console.log(vObjDrugPairs);
         addOptionsToDatalist(vObjDrugPairs, $('#dlstList_1'));
@@ -249,7 +391,6 @@ $(document).ready(function () {
         $('#btnOne').unbind('click', chooseDrugGroup);
 
     };
-    //    $('#btnOne').bind('click', chooseDrugGroup);
 
     function chooseDrug() {
         console.log('func_3');
@@ -290,8 +431,8 @@ $(document).ready(function () {
             objPatient.pkAge < 76 ? (vTPath_1.singleProphDose = 220, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
         };
 
-        let vTPath_2 = objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs;
-        addOptionsToDatalist(vTPath_2[objChoosedDrug.titleLat].officDose, $('#dlstList_1'));
+        let vTPath_3 = objDrugsList[objChoosedDrug.objChoosedDrugGroupLat].drugs;
+        addOptionsToDatalist(vTPath_3[objChoosedDrug.titleLat].officDose, $('#dlstList_1'));
 
         $('#inpText_4').unbind('input', chooseDrug);
         console.log(objChoosedDrug.titleLat);
@@ -300,6 +441,78 @@ $(document).ready(function () {
         $('#btnOne').unbind('click', addDrugTitles).hide();
 
     };
+
+    // 2 
+    let vTPath_2 = '', vTPath_3 = '';
+
+    function askOfficDoseOfMedicine() {
+        console.log('askOfficDoseOfMedicine');
+
+            let vTPath_1 = objDrugsList['Dabigatran etexilate'];
+            vTPath_2 = objDrugsList[objChoosedMedicine_1.titleGroupLat],
+            vTPath_3 = vTPath_2.drugs;
+
+        (objPatient.vMedProfile === 2 && (objPatient.pkAge > 75 || objPatient.pkCC < 51)) ? (vTPath_1.singleProphDose = 110, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
+        if (objPatient.vMedProfile === 4) {
+            vTPath_1.timesADay = 1;
+            objPatient.pkAge < 76 ? (vTPath_1.singleProphDose = 220, vTPath_1.drugs.Pradaxa.officDose = [110]) : '';
+        };
+
+        $('#invitToAct_11').text(`Выберите аптечную дозу препарата (${vTPath_2.officUnits}):`);
+        $('#dialog_1').show();
+
+        $.each(vTPath_3[objChoosedMedicine_1.titleMedicineLat].officDose, function (key, value) {
+            $('#select_1').append('<option value="' + value + '">' + value + '</option>');
+        });
+        if (objChoosedMedicine_1.titleGroupLat === 'Acetylsalicylic acid') {
+            $('#invitToAct_21').text(`Выберите разовую дозу препарата (${vTPath_2.officUnits}):`);
+            $('#dialog_2').show();
+            $.each([100, 200, 300], function (key, value) {
+                $('#select_2').append('<option value="' + key + '">' + value + '</option>');
+            });
+            $('#select_2').on('input', askAspirineTakingShedule);
+        };
+        $('#btnOne_1').on('click', defineOfficDoseOfMedicine);
+    };
+
+    function defineOfficDoseOfMedicine() {
+        console.log('defineDoseOfMedicine');
+        clearValues();
+        executeFuncsLine();
+    }
+
+    function askAspirineTakingShedule() {
+        console.log('askAspirineTakingShedule', $('#select_2').val());
+        if (+($('#select_2').val()) === 2) {
+            $('#dialog_3').show();
+            $('#invitToAct_31').text('Выберите частоту приема препарата:');
+            $.each(['ежедневно', 'через день'], function (key, value) {
+                $('#select_3').append('<option value="' + key + '">' + value + '</option>');
+            });
+        }
+    }
+
+// 2
+    // function askExistedDoseOfMedicine() {
+    //     console.log('askExistedDoseOfMedicine');
+    //             $('#invitToAct_11').text(`Укажите разовую дозу препарата, которую уже получает пациент (${vTPath_2.officUnits}):`);
+    //             $('<input/>').attr({
+    //                 id: 'inpText_11',
+    //                 type: 'text',
+    //                 value: 0
+    //             }).appendTo('#dialog_0');
+    //         };
+    //     $('#btnOne_1').on('click', defineExistedDoseOfMedicine);
+
+    // function defineExistedDoseOfMedicine() {
+    //     console.log('defineExistedDoseOfMedicine');
+    //     clearValues();
+    //     executeFuncsLine();
+    // }
+
+
+
+
 
     $('#inpText_2').on('input', function () {
         if (+($(this).val()) === 300 && objPatient.pkMedProfile === 4) {
@@ -325,7 +538,7 @@ $(document).ready(function () {
             };
             addOptionsToDatalist(vDailyDosesList, $('#dlstList_3'));
         }
-    })
+    });
 
     function attachFunc_makeNoteOfDrug() {
         console.log('func_5');
@@ -482,7 +695,7 @@ $(document).ready(function () {
 
                 // treatPeriod: 10
             };
-console.log(objChoosedMedicine.signature);
+        console.log(objChoosedMedicine.signature);
         ChoosedMedicinesArr.push(objChoosedMedicine);
 
         function goToAssignSheet() {
@@ -498,7 +711,7 @@ console.log(objChoosedMedicine.signature);
                 $('#btnOne').unbind('click', makeNoteOfDrug).hide();
                 vArrPairs = getArrPairs(objDrugsList);
                 vObjDrugPairs = getObjFromArrPairs(vArrPairs);
-                vObjDrugPairs = checkConditions();                
+                vObjDrugPairs = checkConditions();
                 addOptionsToDatalist(vObjDrugPairs, $('#dlstList_1'));
                 $('#invitToAct_1').html('Выберите лек. группу препарата:');
                 $('#inpText_4').bind('input', doFirstChoice);

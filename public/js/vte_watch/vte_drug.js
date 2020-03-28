@@ -18,7 +18,8 @@ $(document).ready(function () {
         id: 'dialog_1'
     }).appendTo('#dialogMain');
     $('<select/>').attr({
-            id: 'select_1'
+            id: 'select_1',
+            value: ''
         })
         .appendTo('#dialog_1');
     $('<div/>').attr({
@@ -29,7 +30,8 @@ $(document).ready(function () {
         })
         .appendTo('#dialog_2');
     $('<select/>').attr({
-            id: 'select_2'
+            id: 'select_2',
+            value: ''
         })
         .appendTo('#dialog_2');
     $('<div/>').attr({
@@ -40,7 +42,8 @@ $(document).ready(function () {
         })
         .appendTo('#dialog_3');
     $('<select/>').attr({
-            id: 'select_3'
+            id: 'select_3',
+            value: ''
         })
         .appendTo('#dialog_3');
     $('<br>').attr({}).appendTo('#dialogMain');
@@ -129,9 +132,8 @@ $(document).ready(function () {
         lineOfFuncs = [],
         objChoosedMedicine_1 = {};
     lineOfFuncs.push(askGroupOfMedicine, askNameOfMedicine, askOfficDoseOfMedicine);
-
     // console.log(lineOfFuncs)
-    // vHasVTEProph ? lineOfFuncs.push(askExistedDoseOfMedicine) : '';
+    vHasVTEProph ? lineOfFuncs.push(askRealSingleDoseOfMedicine) : '';
     clearValues();
     executeFuncsLine();
 
@@ -150,7 +152,7 @@ $(document).ready(function () {
 
     // 2
     function clearValues() {
-        $('#invitToAct_11, #invitToAct_21').html('');
+        $('#invitToAct_11, #invitToAct_21, #invitToAct_31').html('');
         $('#dialog_1, #dialog_2, #dialog_3').hide();
         $('#select_1, #select_2, #select_3').off('input').empty();
         $('#btnOne_1').off('click');
@@ -347,9 +349,8 @@ $(document).ready(function () {
     };
 
     function defineNameOfMedicine() {
-        objChoosedMedicine_1.titleMedicineRu = $('#select_1').val();
         $.each(vObjDrugPairs, function (index, value) {
-            value === objChoosedMedicine_1.titleMedicineRu ? objChoosedMedicine_1.titleMedicineLat = index : '';
+            value === $('#select_1').val() ? (objChoosedMedicine_1.titleMedicineLat = index, objChoosedMedicine_1.titleMedicineRu = value) : '';
         });
         console.log(objChoosedMedicine_1.titleMedicineLat, objChoosedMedicine_1.titleMedicineRu);
         clearValues();
@@ -476,7 +477,11 @@ $(document).ready(function () {
     };
 
     function defineOfficDoseOfMedicine() {
-        console.log('defineDoseOfMedicine');
+        console.log('defineOfficDoseOfMedicine');
+        objChoosedMedicine_1.officDose = + $('#select_1').val();
+        $('#select_2').val() ? objChoosedMedicine_1.singleDoseOfAspirin = $('#select_2 :selected').text() : objChoosedMedicine_1.singleDoseOfAspirin = '';
+        $('#select_3').val() ? objChoosedMedicine_1.sheduleAspirinTakingDaily = $('#select_3 :selected').text() : objChoosedMedicine_1.sheduleAspirinTakingDaily = '';
+        console.log(objChoosedMedicine_1.officDose, objChoosedMedicine_1.singleDoseOfAspirin, objChoosedMedicine_1.sheduleAspirinTakingDaily);
         clearValues();
         executeFuncsLine();
     }
@@ -493,24 +498,39 @@ $(document).ready(function () {
     }
 
 // 2
-    // function askExistedDoseOfMedicine() {
-    //     console.log('askExistedDoseOfMedicine');
-    //             $('#invitToAct_11').text(`Укажите разовую дозу препарата, которую уже получает пациент (${vTPath_2.officUnits}):`);
-    //             $('<input/>').attr({
-    //                 id: 'inpText_11',
-    //                 type: 'text',
-    //                 value: 0
-    //             }).appendTo('#dialog_0');
-    //         };
-    //     $('#btnOne_1').on('click', defineExistedDoseOfMedicine);
+    function askRealSingleDoseOfMedicine() {
+        console.log('askRealSingleDoseOfMedicine');
+                $('#invitToAct_11').text(`Укажите разовую дозу препарата, которую уже получает пациент (${vTPath_2.officUnits}):`);
+                $('<input/>').attr({
+                    id: 'inpText_11',
+                    type: 'number',
+                    value: objChoosedMedicine_1.officDose
+                }).appendTo('#dialog_0');
+                $('#btnOne_1').on('click', defineRealSingleDoseOfMedicine);
+            }
 
-    // function defineExistedDoseOfMedicine() {
-    //     console.log('defineExistedDoseOfMedicine');
-    //     clearValues();
-    //     executeFuncsLine();
-    // }
+    function defineRealSingleDoseOfMedicine() {
+        console.log('defineRealSingleDoseOfMedicine');
+        let tRSD = correctEnteredValue($('#inpText_11').val()); 
+        !isFinite(tRSD) || tRSD === 0 ? (alert(`Вы ввели некорректное значение ${$('#inpText_11').val()}`), $('#inpText_11').val('').focus()) : (objChoosedMedicine_1.realSingleDose = correctEnteredValue($('#inpText_11').val()), $('#inpText_11').hide(), $('#inpText_11').off('input'), clearValues(), executeFuncsLine());
+console.log(objChoosedMedicine_1);
+    }
+
+function correctEnteredValue(el){
+    el = + el.replace(/\s+/g,'').replace(",",".");
+  return parseFloat(el.toFixed(1));
+}
+
+// objChoosedMedicine_1.realSingleDose = correctEnteredValue(objChoosedMedicine_1.realSingleDose);
+// !isFinite(el) || el === 0 ? (alert(`Вы ввели некорректное значение ${el}`), $('#inpText_11').val('')) : '';
 
 
+// console.log(correctEnteredValue('3, 55'));
+
+// let num = +prompt("Enter a number", '');
+
+// вернёт true всегда, кроме ситуаций, когда аргумент - Infinity/-Infinity или не число
+// alert( isFinite(num) );
 
 
 

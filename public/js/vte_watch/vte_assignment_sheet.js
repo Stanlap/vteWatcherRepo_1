@@ -170,7 +170,7 @@ $(document).ready(function () {
         console.log(testLine);
     }
 
-    function defineMinTreatmentPeriod(mP, choosDrug, mTP) {
+    function defineMinTreatmentPeriod(mP, choosDrug, mTP = 10) {
         switch (choosDrug) {
             case 'Эноксапарин натрия':
                 (mP === 1 || mP === 2) ? mTP = 6: (mP === 3 || mP === 4) ? mTP = 7 : '';

@@ -335,7 +335,9 @@ $(document).ready(function () {
             numberOfOfficDose: 1,
             frequencyOfDrugTaking: 'сут.',
             oOfficDose: {},
-            startDateOfVTEProphyl: ''
+            startDateOfVTEProphyl: '', 
+            endDateOfVTEProphyl: '',
+            minTreatPeriod: 0
         },
 
         oChoosDrug_2 = {
@@ -351,7 +353,10 @@ $(document).ready(function () {
             realSingleDose: oChoosDrug.realSingleDose,
             numberOfOfficDose: oChoosDrug.numberOfOfficDose,
             frequencyOfDrugTaking: oChoosDrug.frequencyOfDrugTaking,
-            startDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl
+            startDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
+            endDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
+            minTreatPeriod: oChoosDrug.minTreatPeriod
+
         };
 
 });

@@ -9,75 +9,75 @@ $(document).ready(function () {
 
     localStorage.removeItem('Patient');
 
-    $('<div/>').attr({
+    $('<div/>').prop({
             id: 'invitToAct_1',
             class: 'invits'
         })
         .html('')
         .appendTo('#dialogMain');
-    $('<div/>').attr({
+    $('<div/>').prop({
         id: 'dialog_0'
     }).appendTo('#dialogMain');
-    $('<div/>').attr({
+    $('<div/>').prop({
         id: 'dialog_1',
         class: 'dialogs'
     }).appendTo('#dialogMain');
-    $('<select/>').attr({
+    $('<select/>').prop({
             id: 'select_1',
             value: '',
             class: 'selects'
         })
         .appendTo('#dialog_1');
-    $('<div/>').attr({
+    $('<div/>').prop({
         id: 'dialog_2',
         class: 'dialogs'
     }).appendTo('#dialogMain');
-    $('<div/>').attr({
+    $('<div/>').prop({
             id: 'invitToAct_2',
             class: 'invits'
         })
         .appendTo('#dialog_2');
-    $('<select/>').attr({
+    $('<select/>').prop({
             id: 'select_2',
             value: '',
             class: 'selects'
         })
         .appendTo('#dialog_2');
-    $('<div/>').attr({
+    $('<div/>').prop({
         id: 'dialog_3',
         class: 'dialogs'
     }).appendTo('#dialogMain');
-    $('<div/>').attr({
+    $('<div/>').prop({
             id: 'invitToAct_3',
             class: 'invits'
         })
         .appendTo('#dialog_3');
-    $('<select/>').attr({
+    $('<select/>').prop({
             id: 'select_3',
             value: '',
             class: 'selects'
         })
         .appendTo('#dialog_3');
-        $('<div/>').attr({
+        $('<div/>').prop({
             id: 'dialog_4',
             class: 'dialogs'
         }).appendTo('#dialogMain');
-        $('<input/>').attr({
-            id: 'inpDate',
+        $('<input/>').prop({
+            id: 'inpDate_4',
             type: 'date',
             value: formatDate()
         })
         .appendTo('#dialog_4');
-    $('<br>').attr({}).appendTo('#dialogMain');
-    $('<input/>').attr({
+    $('<br>').prop({}).appendTo('#dialogMain');
+    $('<input/>').prop({
             id: 'btnOne',
             type: 'button',
             value: 'OK'
         })
         .appendTo('#dialogMain');
 
-    oPat.pkIsOrNoSurg ? oPat.pkstartDateOfVTEProphyl = oPat.pkDateOfOper : oPat.pkstartDateOfVTEProphyl = formatDate();
-    console.log(oPat.pkstartDateOfVTEProphyl);
+    oPat.pkIsOrNoSurg ? oPat.pkStartDateOfVTEProphyl = oPat.pkDateOfOper : oPat.pkStartDateOfVTEProphyl = formatDate();
+    console.log(oPat.pkStartDateOfVTEProphyl);
 
     oPat.pkRiskVTE === 1 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : oPat.pkRiskVTE === 2 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
 
@@ -166,7 +166,7 @@ $(document).ready(function () {
         oDrugsPairs = checkConditions(getObjFromArrPairs(getArrPairs(oDrugsList)));
         aLineOfFuncs.push(askGroupOfMedicine, askNameOfMedicine, askOfficDoseOfMedicine);
         vTakesVTEProph ? aLineOfFuncs.push(askHadTakenSingleDoseOfMedicine) : '';
-        aLineOfFuncs.push(askAnotherDrug);
+        aLineOfFuncs.push(askStartDateMedicineTaking, askEndDateMedicineTaking, askAnotherDrug);
         clearValues();
         executeFuncsLine();
     }
@@ -303,7 +303,7 @@ $(document).ready(function () {
     function askHadTakenSingleDoseOfMedicine() {
         console.log('askHadTakenSingleDoseOfMedicine');
         $('#invitToAct_1').text(`Укажите разовую дозу препарата, которую уже получает пациент (${vPath_2.officUnits}):`);
-        $('<input/>').attr({
+        $('<input/>').prop({
             id: 'inpText_1',
             type: 'number',
             value: oChoosDrug.officDose
@@ -472,24 +472,41 @@ $(document).ready(function () {
         return vText;
     }
 
-    function askOfStartDateVTEProphyl() {
-        console.log('askOfStartDateVTEProphyl');
-        $('#invitToAct').html('Укажите дату начала профилактики ВТЭО:');
+    function askStartDateMedicineTaking() {
+        console.log('askStartDateMedicineTaking');
+        $('#invitToAct_1').html('Укажите дату начала профилактики ВТЭО:');
         $('#dialog_4').show();
-        objPatient.pkIsOrNoSurg ? $('#inpDate').val(objPatient.pkDateOfOper) : $('#inpDate').val(formatDate());
-        $('#btnOne').on('click', defineStartDateVTEProphyl);
+        $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
+        $('#btnOne').on('click', defineStartDateMedicineTaking);
     }
 
-    function defineStartDateVTEProphyl() {
-        oChoosDrug.startDateOfVTEProphyl = $('#inpDate').val();
+    function defineStartDateMedicineTaking() {
+        oChoosDrug.startDateOfVTEProphyl = $('#inpDate_4').val();
+        console.log(oChoosDrug.startDateOfVTEProphyl);      
         clearValues();
         executeFuncsLine();
     }
 
+    function askEndDateMedicineTaking() {
+        console.log('askEndDateMedicineTaking');
+        oChoosDrug.minTreatPeriod = defineMinTreatmentPeriod(oPat.pkMedProfile, oChoosDrug.titleGroupCyr, mTP = 10);
+        $('#invitToAct_1').html(`Укажите дату окончания профилактики ВТЭО (мин. рекомендуемый период ${oChoosDrug.minTreatPeriod} сут.):`);
+        $('#dialog_4').show();
+            $('#inpDate_4').val(correctDate(addDays($('#inpDate_4').val(), oChoosDrug.minTreatPeriod)));
+        $('#btnOne').on('click', defineEndDateMedicineTaking);
+    }
+
+    function defineEndDateMedicineTaking() {
+        oChoosDrug.endDateOfVTEProphyl = $('#inpDate_4').val();
+        oPat.pkStartDateOfVTEProphyl = correctDate(addDays($('#inpDate_4').val(), 1));
+        console.log(oChoosDrug.endDateOfVTEProphyl, oPat.pkStartDateOfVTEProphyl);      
+        clearValues();
+        executeFuncsLine();
+    }
 
     function askAnotherDrug() {
         $('#invitToAct_1').html('Выбрать следующий препарат?');
-        $('<input/>').attr({
+        $('<input/>').prop({
                 id: 'btnTwo',
                 type: 'button',
                 value: 'Exit'
@@ -539,7 +556,7 @@ $(document).ready(function () {
         localStorage.setItem('Patient', serialObj);
         serialObj = JSON.stringify(aChoosedMedicines);
         localStorage.setItem('ChoosedMedicines', serialObj);
-        $(location).attr('href', '/vte_assignment_sheet');
+        $(location).prop('href', '/vte_assignment_sheet');
     }
 
 });

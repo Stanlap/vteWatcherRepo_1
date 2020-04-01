@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
-    let oPat = JSON.parse(localStorage.getItem('Patient')),
-        oChoosedMedicines = JSON.parse(localStorage.getItem('ChoosedMedicines'));
+    let objPatient = JSON.parse(localStorage.getItem('Patient')),
+        objChoosedMedicines = JSON.parse(localStorage.getItem('ChoosedMedicines'));
 
     localStorage.removeItem('Patient');
     localStorage.removeItem('ChoosedMedicines');
 
-    console.log(oPat, oChoosedMedicines);
+    console.log(objPatient, objChoosedMedicines);
 
     $('<div/>').attr({
             id: 'dialog_1',
@@ -88,45 +88,44 @@ $(document).ready(function () {
         vSuns = [vDS + 1, vDS + 8];
     console.log(vSats, vSuns);
 
-    // let fillLine = (vSVTEP_1, vSVTEP_2, vTP) => {
-    //     let vSVTE_3 = Math.round(diffDates(new Date(vSVTEP_2), new Date(vSVTEP_1))) + 1,
-    //         zArr = [];
-    //     for (let i = vSVTE_3; i < vSVTE_3 + vTP; i++) {
-    //         zArr.push(i);
-    //     }
-    //     return zArr;
-    // },
-
-
+    let fillLine = (vSVTEP_1, vSVTEP_2, vTP) => {
+        let vSVTE_3 = Math.round(diffDates(new Date(vSVTEP_2), new Date(vSVTEP_1))) + 1,
+            zArr = [];
+        for (let i = vSVTE_3; i < vSVTE_3 + vTP; i++) {
+            zArr.push(i);
+        }
+        return zArr;
+    },
     vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
 
     let ordersCollector = [];
 
 
-    // $(oChoosedMedicines).each(function (ind, el) {
-    //     el.treatPeriod = defineMinTreatmentPeriod(oPat.pkMedProfile, el.titleGroupRu, 10);
-    //     el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
-    //     el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
-    // });
+    $(objChoosedMedicines).each(function (ind, el) {
+
+        el.treatPeriod = defineMinTreatmentPeriod(objPatient.pkMedProfile, el.titleGroupRu, 10);
+        el.titleGroupRu !== 'Апиксабан' ? el.spinalCatheterDrugTakingBeforeAndAfter = [10, 2] : el.spinalCatheterDrugTakingBeforeAndAfter = [10, 5];
+        el.titleGroupRu === 'Гепарин натрия' ? testBP.push('контроль АД', [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod], buildLine([1, 1], el.treatPeriod)) : '';
+    });
 
     clearValues();
-    defineAllTestsPlan(oChoosedMedicines);
+    defineAllTestsPlan(objChoosedMedicines);
 
     let vIsVKI = false;
-    $(oChoosedMedicines).each((ind, el) => {
+    $(objChoosedMedicines).each((ind, el) => {
         vIsVKI = el.titleGroupRu === 'Варфарин' ? true : false;
     });
-    (oPat.pkIsOrNoSurg && vIsVKI) ? lineOfFuncs.push(askOfINRAndVKI): '';
+    (objPatient.pkIsOrNoSurg && vIsVKI) ? lineOfFuncs.push(askOfINRAndVKI): '';
     lineOfFuncs.push(askOfStartDateVTEProphyl);
-    if ($(oChoosedMedicines).length > 1) {
+    if ($(objChoosedMedicines).length > 1) {
         lineOfFuncs.push(askOfStartDateTakingOfSecMedicine);
         const bridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
-        bridgeTher(oChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
+        bridgeTher(objChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
             interactOfXaInhibAndVKA();
     };
 
     testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
-    oPat.pkIsOrNoSurg && $(oChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
+    objPatient.pkIsOrNoSurg && $(objChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
 
     clearValues();
     executeParamsOfVTEProphyl();
@@ -162,7 +161,7 @@ $(document).ready(function () {
         let elTemp = [];
         $(testLine).each(function (ind, el) {
             $(el[1]).each(function (ind, item) {
-                item += oPat.pkDaysToStartVTEProph;
+                item += objPatient.pkDaysToStartVTEProph;
                 elTemp.push(item);
             });
             el[1] = elTemp;
@@ -171,32 +170,32 @@ $(document).ready(function () {
         console.log(testLine);
     }
 
-    // function defineMinTreatmentPeriod(mP, choosDrug, mTP = 10) {
-    //     switch (choosDrug) {
-    //         case 'Эноксапарин натрия':
-    //             (mP === 1 || mP === 2) ? mTP = 6: (mP === 3 || mP === 4) ? mTP = 7 : '';
-    //             break;
-    //         case 'Надропарин кальция':
-    //             (mP < 4) ? mTP = 7: '';
-    //             break;
-    //         case 'Гепарин натрия':
-    //             mTP = 7;
-    //             break;
-    //         case 'Фондапаринукс натрия':
-    //             (mP === 1 || mP === 2) ? mTP = 6: (mP === 3) ? mTP = 5 : '';
-    //             break;
-    //         case 'Дабигатрана этексилат':
-    //             (mP === 4 && oPat.pkArtroplastyKneeJoint === true) ? mTP = 28: '';
-    //             break;
-    //         case 'Апиксабан':
-    //             (mP === 4 && oPat.pkArtroplastyKneeJoint === true) ? mTP = 32: '';
-    //             break;
-    //         case 'Варфарин':
-    //             mTP = 4;
-    //             break;
-    //     };
-    //     return mTP;
-    // }
+    function defineMinTreatmentPeriod(mP, choosDrug, mTP = 10) {
+        switch (choosDrug) {
+            case 'Эноксапарин натрия':
+                (mP === 1 || mP === 2) ? mTP = 6: (mP === 3 || mP === 4) ? mTP = 7 : '';
+                break;
+            case 'Надропарин кальция':
+                (mP < 4) ? mTP = 7: '';
+                break;
+            case 'Гепарин натрия':
+                mTP = 7;
+                break;
+            case 'Фондапаринукс натрия':
+                (mP === 1 || mP === 2) ? mTP = 6: (mP === 3) ? mTP = 5 : '';
+                break;
+            case 'Дабигатрана этексилат':
+                (mP === 4 && objPatient.pkArtroplastyKneeJoint === true) ? mTP = 28: '';
+                break;
+            case 'Апиксабан':
+                (mP === 4 && objPatient.pkArtroplastyKneeJoint === true) ? mTP = 32: '';
+                break;
+            case 'Варфарин':
+                mTP = 4;
+                break;
+        };
+        return mTP;
+    }
 
     function executeParamsOfVTEProphyl() {
         lineOfFuncs.length > 0 ? (lineOfFuncs[0](), lineOfFuncs.shift()) : ($('input[name = chkRadio_1], #btnOne').off('click'));
@@ -245,52 +244,52 @@ $(document).ready(function () {
     // Риск кровотечения 1 –варфарин отменяют.
 
     function defineINRAndVKI() {
-        $('input[name = chkRadio_1]:checked').val() === 0 ? oPat.pkBridgeTher = true : oPat.pkBridgeTher = false;
-        (oPat.pkInitINRMore4, oPat.pkHighDoseVKI);
-        oPat.pkInitINRMore4 = $('#chkB_1').is(':checked') ? true : false;
-        oPat.pkHighINRDayBeforeSurg = $('#chkB_2').is(':checked') ? true : false;
-        oPat.pkHighDoseVKI = $('#chkB_3').is(':checked') ? true : false;
-        oPat.pkHighINRDayBeforeSurg ? oPat.pkDateOfOper = dateToYMD(new Date(prompt('МНО выше нормы! Следует перенести операцию на другую дату. Введите дату в формате "yyyy-MM-dd"', ''))) : '';
-        console.log(oPat.pkDateOfOper);
-        console.log(oPat.pkInitINRMore4, oPat.pkHighINRDayBeforeSurg, oPat.pkHighDoseVKI);
+        $('input[name = chkRadio_1]:checked').val() === 0 ? objPatient.pkBridgeTher = true : objPatient.pkBridgeTher = false;
+        (objPatient.pkInitINRMore4, objPatient.pkHighDoseVKI);
+        objPatient.pkInitINRMore4 = $('#chkB_1').is(':checked') ? true : false;
+        objPatient.pkHighINRDayBeforeSurg = $('#chkB_2').is(':checked') ? true : false;
+        objPatient.pkHighDoseVKI = $('#chkB_3').is(':checked') ? true : false;
+        objPatient.pkHighINRDayBeforeSurg ? objPatient.pkDateOfOper = dateToYMD(new Date(prompt('МНО выше нормы! Следует перенести операцию на другую дату. Введите дату в формате "yyyy-MM-dd"', ''))) : '';
+        console.log(objPatient.pkDateOfOper);
+        console.log(objPatient.pkInitINRMore4, objPatient.pkHighINRDayBeforeSurg, objPatient.pkHighDoseVKI);
         clearValues();
         executeParamsOfVTEProphyl();
     }
 
 
-    // function askOfStartDateVTEProphyl() {
-    //     $('#dialog_1').show();
-    //     $('#inviteToAct').html('Укажите дату начала профилактики ВТЭО:');
-    //     oPat.pkIsOrNoSurg ? $('#inpDate').val(oPat.pkDateOfOper) : $('#inpDate').val(formatDate());
-    //     $('#btnOne').on('click', defineStartDateVTEProphyl);
-    // }
+    function askOfStartDateVTEProphyl() {
+        $('#dialog_1').show();
+        $('#inviteToAct').html('Укажите дату начала профилактики ВТЭО:');
+        objPatient.pkIsOrNoSurg ? $('#inpDate').val(objPatient.pkDateOfOper) : $('#inpDate').val(formatDate());
+        $('#btnOne').on('click', defineStartDateVTEProphyl);
+    }
 
-    // function defineStartDateVTEProphyl() {
-    //     oPat.pkstartDateOfVTEProphyl = $('#inpDate').val();
-    //     $(oChoosedMedicines).length > 0 ? (oChoosedMedicines[0].startDateOfVTEProphyl = $('#inpDate').val(), oPat.pkDaysToStartVTEProph = Math.round(diffDates(new Date(correctDate(new Date(oChoosedMedicines[0].startDateOfVTEProphyl))), new Date(correctDate(new Date()))))) : '';
-    //     oPat.pkDaysToStartVTEProph < 0 ? oPat.pkDaysToStartVTEProph = 0 : '';
-    //     sheduleMedicineTaking();
-    //     console.log(oPat.pkDaysToStartVTEProph);
-    //     clearValues();
-    //     executeParamsOfVTEProphyl();
-    // }
+    function defineStartDateVTEProphyl() {
+        objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val();
+        $(objChoosedMedicines).length > 0 ? (objChoosedMedicines[0].startDateOfVTEProphyl = $('#inpDate').val(), objPatient.pkDaysToStartVTEProph = Math.round(diffDates(new Date(correctDate(new Date(objChoosedMedicines[0].startDateOfVTEProphyl))), new Date(correctDate(new Date()))))) : '';
+        objPatient.pkDaysToStartVTEProph < 0 ? objPatient.pkDaysToStartVTEProph = 0 : '';
+        sheduleMedicineTaking();
+        console.log(objPatient.pkDaysToStartVTEProph);
+        clearValues();
+        executeParamsOfVTEProphyl();
+    }
 
-    // function askOfStartDateTakingOfSecMedicine() {
-    //     $('#dialog_1').show();
-    //     $('#dialog_2').hide();
-    //     $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:');
-    //     $('#inpDate').val(correctDate(addDays(oPat.pkstartDateOfVTEProphyl, oChoosedMedicines[0].treatPeriod)));
-    //     $('#btnOne').on('click', defineStartDateOfSecondMedicine);
-    // }
+    function askOfStartDateTakingOfSecMedicine() {
+        $('#dialog_1').show();
+        $('#dialog_2').hide();
+        $('#inviteToAct').html('Укажите дату окончания профилактики ВТЭО первым препаратом:');
+        $('#inpDate').val(correctDate(addDays(objPatient.pkstartDateOfVTEProphyl, objChoosedMedicines[0].treatPeriod)));
+        $('#btnOne').on('click', defineStartDateOfSecondMedicine);
+    }
 
-    // function defineStartDateOfSecondMedicine() {
-    //     oChoosedMedicines[1].startDateOfVTEProphyl = $('#inpDate').val();
-    //     oChoosedMedicines[0].treatPeriod = Math.round(diffDates(new Date(oChoosedMedicines[1].startDateOfVTEProphyl), new Date(oPat.pkstartDateOfVTEProphyl)));
-    //     console.log(oChoosedMedicines[0].treatPeriod);
-    //     sheduleMedicineTaking();
-    //     clearValues();
-    //     executeParamsOfVTEProphyl();
-    // }
+    function defineStartDateOfSecondMedicine() {
+        objChoosedMedicines[1].startDateOfVTEProphyl = $('#inpDate').val();
+        objChoosedMedicines[0].treatPeriod = Math.round(diffDates(new Date(objChoosedMedicines[1].startDateOfVTEProphyl), new Date(objPatient.pkstartDateOfVTEProphyl)));
+        console.log(objChoosedMedicines[0].treatPeriod);
+        sheduleMedicineTaking();
+        clearValues();
+        executeParamsOfVTEProphyl();
+    }
 
     function askOfBridgeTherUsage() {
         $('#dialog_1, #dialog_2').show();
@@ -300,7 +299,7 @@ $(document).ready(function () {
     }
 
     function defineBridgeTherUsage() {
-        $('input[name = chkRadio_1]:checked').val() === 0 ? oPat.pkBridgeTher = true : oPat.pkBridgeTher = false;
+        $('input[name = chkRadio_1]:checked').val() === 0 ? objPatient.pkBridgeTher = true : objPatient.pkBridgeTher = false;
         clearValues();
         executeParamsOfVTEProphyl();
     }
@@ -313,22 +312,22 @@ $(document).ready(function () {
     };
 
     function defineSpinalAnestUsage() {
-        $('input[name = chkRadio_1]:checked').val() === 0 ? oPat.pkSpinalAnest = true : oPat.pkSpinalAnest = false;
+        $('input[name = chkRadio_1]:checked').val() === 0 ? objPatient.pkSpinalAnest = true : objPatient.pkSpinalAnest = false;
         clearValues();
         executeParamsOfVTEProphyl();
     }
 
-    // function buildLine(vP_2, tP) {
-    //     let vLine = [],
-    //         vV = vP_2[0] + 1;
-    //     vLine.push(vV);
-    //     while (vV + vP_2[1] <= tP) {
-    //         vV = vV + vP_2[1];
-    //         vLine.push(vV);
-    //     }
-    //     console.log(vLine);
-    //     return vLine;
-    // }
+    function buildLine(vP_2, tP) {
+        let vLine = [],
+            vV = vP_2[0] + 1;
+        vLine.push(vV);
+        while (vV + vP_2[1] <= tP) {
+            vV = vV + vP_2[1];
+            vLine.push(vV);
+        }
+        console.log(vLine);
+        return vLine;
+    }
 
     function definePltTestPlan(el) {
         // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
@@ -382,7 +381,7 @@ $(document).ready(function () {
     }
 
     function askOfPrevLabExams() {
-        // defineAllTestsPlan(oChoosedMedicines);
+        // defineAllTestsPlan(objChoosedMedicines);
         $('#dialog_1, #btnOne, #br_1, #inpDate').show();
         $('#inpDate').val(formatDate());
         $('#dialog_2').hide();
@@ -446,14 +445,14 @@ $(document).ready(function () {
     console.log(testLine);
 
     function sheduleMedicineTaking() {
-        $(oChoosedMedicines).each(function (ind, el) {
-            let vComLine = fillLine(oPat.pkstartDateOfVTEProphyl, el.startDateOfVTEProphyl, el.treatPeriod);
+        $(objChoosedMedicines).each(function (ind, el) {
+            let vComLine = fillLine(objPatient.pkstartDateOfVTEProphyl, el.startDateOfVTEProphyl, el.treatPeriod);
             console.log(vComLine);
-            if (oPat.pkIsOrNoSurg) {
-                let relDayOfSurg = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkstartDateOfVTEProphyl))),
+            if (objPatient.pkIsOrNoSurg) {
+                let relDayOfSurg = 1 + Math.round(diffDates(new Date(objPatient.pkDateOfOper), new Date(objPatient.pkstartDateOfVTEProphyl))),
                     periopPeriod = [relDayOfSurg, relDayOfSurg];
-                vXaInhibitors(el.titleGroupRu) ? periopPeriod[0] = relDayOfSurg - defineXaInhibitorsPeriopTactics(el.titleGroupRu, oPat.pkRiskBleed, oPat.pkCC, oPat.pkGradeOfOper) : '';
-                el.titleGroupRu === 'Варфарин' ? periopPeriod[0] = relDayOfSurg - stopVitKAntagTakingBeforeOper(oPat.pkInitINRMore4, oPat.pkRiskBleed, oPat.pkHighDoseVKI) : '';
+                vXaInhibitors(el.titleGroupRu) ? periopPeriod[0] = relDayOfSurg - defineXaInhibitorsPeriopTactics(el.titleGroupRu, objPatient.pkRiskBleed, objPatient.pkCC, objPatient.pkGradeOfOper) : '';
+                el.titleGroupRu === 'Варфарин' ? periopPeriod[0] = relDayOfSurg - stopVitKAntagTakingBeforeOper(objPatient.pkInitINRMore4, objPatient.pkRiskBleed, objPatient.pkHighDoseVKI) : '';
                 console.log(periopPeriod);
                 el.lineOfMedicineTaking = vComLine.filter(el => el < periopPeriod[0]).concat(vComLine.filter(el => el > periopPeriod[1]));
             }
@@ -499,15 +498,15 @@ $(document).ready(function () {
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 function interactOfXaInhibAndVKA() {
-        if (oChoosedMedicines[0].titleGroupRu === 'Варфарин' && vXaInhibitors(oChoosedMedicines[1].titleGroupRu)) {
+        if (objChoosedMedicines[0].titleGroupRu === 'Варфарин' && vXaInhibitors(objChoosedMedicines[1].titleGroupRu)) {
             alert('НОАК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.');
         };
-        if (oChoosedMedicines[1].titleGroupRu === 'Варфарин' && vXaInhibitors(oChoosedMedicines[0].titleGroupRu)) {
+        if (objChoosedMedicines[1].titleGroupRu === 'Варфарин' && vXaInhibitors(objChoosedMedicines[0].titleGroupRu)) {
             // Значения timeAlg при приеме антагонистов витамина К  в качестве второго лекарственного средства после ингибиторов фактора Ха:
             alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.');
         };
         let tArr = [];
-        tArr[0] = oChoosedMedicines[1].signature;
+        tArr[0] = objChoosedMedicines[1].signature;
         tArr[1] = 2;
         ordersCollector.push(tArr);
         console.log(ordersCollector);
@@ -541,7 +540,7 @@ function interactOfXaInhibAndVKA() {
         let med_1 = [],
             med_2 = [],
             vINR_5 = [];
-        if (oPat.pkIsOrNoOper, choosDrug_1 === 'Варфарин' && bTher) {
+        if (objPatient.pkIsOrNoOper, choosDrug_1 === 'Варфарин' && bTher) {
             med_1[0] = -5;
             med_1[1] = 1;
             vINR_5[0] = -1;
@@ -552,16 +551,16 @@ function interactOfXaInhibAndVKA() {
                 med_2[0] = -2;
                 med_2[1] = -6;
                 med_2[3] = 3;
-                oPat.IsSmallOper ? med_2[2] = 12 : med_2[2] = 48;
+                objPatient.IsSmallOper ? med_2[2] = 12 : med_2[2] = 48;
             };
             if (choosDrug_2 === 'Эноксапарин натрия' || choosDrug_2 === 'Надропарин кальция') {
                 med_2[0] = -2;
                 med_2[1] = -24;
                 med_2[3] = 3;
-                oPat.IsSmallOper ? med_2[2] = 24 : med_2[2] = 48;
+                objPatient.IsSmallOper ? med_2[2] = 24 : med_2[2] = 48;
             };
 
         }
     }
-
+    
 });

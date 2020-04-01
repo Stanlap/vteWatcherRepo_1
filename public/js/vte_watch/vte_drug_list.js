@@ -337,7 +337,8 @@ $(document).ready(function () {
             oOfficDose: {},
             startDateOfVTEProphyl: '', 
             endDateOfVTEProphyl: '',
-            minTreatPeriod: 0
+            minTreatPeriod: 0,
+            aLine: []
         },
 
         oChoosDrug_2 = {
@@ -355,7 +356,9 @@ $(document).ready(function () {
             frequencyOfDrugTaking: oChoosDrug.frequencyOfDrugTaking,
             startDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
             endDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
-            minTreatPeriod: oChoosDrug.minTreatPeriod
+            minTreatPeriod: oChoosDrug.minTreatPeriod,
+            aLine: oChoosDrug.aLine
+
 
         };
 

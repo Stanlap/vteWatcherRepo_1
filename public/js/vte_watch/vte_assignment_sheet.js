@@ -562,5 +562,5 @@ function interactOfXaInhibAndVKA() {
 
         }
     }
-
+    
 });

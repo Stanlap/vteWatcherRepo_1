@@ -318,8 +318,7 @@ $(document).ready(function () {
                 },
             }
         },
-
-
+        
         oChoosDrug = {
             titleGroupCyr: '',
             titleGroupLat: '',
@@ -339,27 +338,6 @@ $(document).ready(function () {
             endDateOfVTEProphyl: '',
             minTreatPeriod: 0,
             aLine: []
-        },
-
-        oChoosDrug_2 = {
-            titleGroupCyr: oChoosDrug.titleGroupCyr,
-            titleGroupLat: oChoosDrug.titleGroupLat,
-            titleDrugLat: oChoosDrug.titleDrugLat,
-            titleDrugCyr: oChoosDrug.titleDrugCyr,
-            officDose: oChoosDrug.officDose,
-            singleDoseOfAspirin: oChoosDrug.singleDoseOfAspirin,
-            sheduleAspirinTakingDaily: oChoosDrug.sheduleAspirinTakingDaily,
-            singleProphDose: oChoosDrug.singleProphDose,
-            signature: oChoosDrug.signature,
-            realSingleDose: oChoosDrug.realSingleDose,
-            numberOfOfficDose: oChoosDrug.numberOfOfficDose,
-            frequencyOfDrugTaking: oChoosDrug.frequencyOfDrugTaking,
-            startDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
-            endDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
-            minTreatPeriod: oChoosDrug.minTreatPeriod,
-            aLine: oChoosDrug.aLine
-
-
         };
 
 });

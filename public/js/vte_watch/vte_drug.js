@@ -4,7 +4,6 @@ $(document).ready(function () {
         aPairs = [],
         oDrugsPairs = {},
         aChoosedMedicines = [],
-        oChoosDrug_2 = {},
         aLineOfFuncs = [],
         aTitles = [];
 
@@ -458,9 +457,6 @@ $(document).ready(function () {
             vText_2 = (`${oChoosDrug.tempCont} ${oChoosDrug.singleProphDose}`);
         vOCD.signature = `${vOCD.titleDrugCyr} (${vOCD.titleDrugLat}${vText_1}, ${vTGLat.container} 1) ${vTGLat.delivery}, ${vText_2} ${vTGLat.timesADay} ${vTimE_S}/${oChoosDrug.frequencyOfDrugTaking}`;
         console.log(vOCD);
-
-
-        aChoosedMedicines.push(oChoosDrug_2);
     }
 
     function convertObjPairsToString(vObj) {
@@ -568,7 +564,6 @@ $(document).ready(function () {
         executeFuncsLine();
     }
 
-
     function sheduleMedicineTaking() {
         let aSplitPeriod = [0, 0];
         if (oPat.pkIsOrNoSurg) {
@@ -585,6 +580,29 @@ $(document).ready(function () {
         console.log(aSplitPeriod);
         oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < aSplitPeriod[0]).concat(oChoosDrug.aLine.filter(el => el > aSplitPeriod[1]));
         console.log(oChoosDrug.aLine);
+
+        oChoosDrug_2 = {
+            titleGroupCyr: oChoosDrug.titleGroupCyr,
+            titleGroupLat: oChoosDrug.titleGroupLat,
+            titleDrugLat: oChoosDrug.titleDrugLat,
+            titleDrugCyr: oChoosDrug.titleDrugCyr,
+            officDose: oChoosDrug.officDose,
+            singleDoseOfAspirin: oChoosDrug.singleDoseOfAspirin,
+            sheduleAspirinTakingDaily: oChoosDrug.sheduleAspirinTakingDaily,
+            singleProphDose: oChoosDrug.singleProphDose,
+            signature: oChoosDrug.signature,
+            realSingleDose: oChoosDrug.realSingleDose,
+            numberOfOfficDose: oChoosDrug.numberOfOfficDose,
+            frequencyOfDrugTaking: oChoosDrug.frequencyOfDrugTaking,
+            startDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
+            endDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
+            minTreatPeriod: oChoosDrug.minTreatPeriod,
+            aLine: oChoosDrug.aLine
+        };
+        aChoosedMedicines.push(oChoosDrug_2);
+        interactOfXaInhibAndVKA();
+        console.log(aChoosedMedicines);
+
     }
 
     function defineXaInhibitorsPeriopTactics(choosDrug, highBleedRisk, CC, gradeOfOper) {
@@ -626,8 +644,6 @@ $(document).ready(function () {
 
         // При переходе с НОАК на АВК надо в план исследований добавить иследование МНО в последний день приема НОАК и на следующие сутки после отмены НОАК.
         // При переходе с АВК на НОАК надо в план исследований добавить иследование МНО в последний день приема НОАК и на следующие сутки после отмены НОАК. Очередь назначений aLine - оставить пустой массив. 
-
-
         let findIndXaInhibitors = (vArr, vInd = -1) => {
             $(vArr).each((ind, el) => {
                 vXaInhibitors(el) ? vInd = ind : '';
@@ -636,9 +652,18 @@ $(document).ready(function () {
         }
 
         if (aTitles.length > 1 && (findIndXaInhibitors(aTitles, vInd = -1) !== -1 && aTitles.indexOf('Варфарин') !== -1)) {
-            diffDates(new Date(aStartDatesNative[findIndXaInhibitors(aTitles, vInd = -1)]), new Date(aStartDatesNative[aTitles.indexOf('Варфарин')])) < 0 ?  alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.') : alert('НОАК  после АВК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.');
-            // console.log('aTitles  ', aTitles, findIndXaInhibitors(aTitles, vInd = -1), aTitles.indexOf('Варфарин'));
-        }
+            if (diffDates(new Date(aStartDatesNative[findIndXaInhibitors(aTitles, vInd = -1)]), new Date(aStartDatesNative[aTitles.indexOf('Варфарин')])) < 0) {
+                alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.')
+            } else {
+                alert('НОАК  после АВК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.');
+                $(aChoosedMedicines).each((ind, el) => {
+                    vXaInhibitors(el.titleGroupCyr) ? (el.aLine = [], console.log(el)) : '';
+                });
+            };
+        };
+
+
+
     }
 
     function askAnotherDrug() {

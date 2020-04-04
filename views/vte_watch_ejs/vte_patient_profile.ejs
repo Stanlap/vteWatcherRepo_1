@@ -158,6 +158,15 @@
                 <input type='date' id='inpDateOfOper' hidden>
             </div><br>
 
+            <div id='divAnesthesia' hidden>
+                Укажите вид анестезиологического пособия:
+                <select id='selKindOfAnesth'>
+                    <option value='1'>Эндотрахеальный наркоз</option>
+                    <option value='2'>В/в наркоз</option>
+                    <option value='3'>Спинномозговая анестезия</option>
+                    <option value='4'>М/анестезия</option>
+                </select>
+            </div><br>   
 
         <label for='chkCalculateRiskOfBleeding'><input type='checkbox' id='chkCalculateRiskOfBleeding' checked /> Вычислять риск кровотечения при профилактике ВТЭО<br></label>
     </div>
@@ -167,6 +176,7 @@
             <br><br>
     <footer>&copy;SmartMedInterface</footer>
     <script src="/scripts/jquery.min.js"></script>
+    <script src="/scripts/date_manager.js"></script>
     <script src="/js/vte_watch/vte_patient_profile.js" defer></script>
 </body>
 <html>

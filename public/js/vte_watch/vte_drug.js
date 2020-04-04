@@ -572,15 +572,22 @@ $(document).ready(function () {
     }
 
     function sheduleSplitPeriod() {
-        let relDayOfSurg = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
-        aSplitPeriod = [relDayOfSurg, relDayOfSurg];
+        let relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
+        aSplitPeriod = [relDayOfManipul, relDayOfManipul];
         console.log(oPat.pkDateOfOper, aStartDates[0], aSplitPeriod);
-        vXaInhibitors(oChoosDrug.titleGroupCyr) ? aSplitPeriod[0] = relDayOfSurg - defineXaInhibitorsPeriopTactics(oChoosDrug.titleGroupCyr, oPat.pkRiskBleed, oPat.pkCC, oPat.pkGradeOfOper) : '';
-        oChoosDrug.titleGroupCyr === 'Варфарин' ? aSplitPeriod[0] = relDayOfSurg - stopVitKAntagTakingBeforeOper(oPat.pkInitINRMore4, oPat.pkRiskBleed, oPat.pkHighDoseVKI) : '';
+        vXaInhibitors(oChoosDrug.titleGroupCyr) ? aSplitPeriod[0] = relDayOfManipul - defineXaInhibitorsPeriopTactics(oChoosDrug.titleGroupCyr, oPat.pkRiskBleed, oPat.pkCC, oPat.pkGradeOfOper) : '';
+        oChoosDrug.titleGroupCyr === 'Варфарин' ? aSplitPeriod[0] = relDayOfManipul - stopVitKAntagTakingBeforeOper(oPat.pkInitINRMore4, oPat.pkRiskBleed, oPat.pkHighDoseVKI) : '';
         console.log(aSplitPeriod);
         oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < aSplitPeriod[0]).concat(oChoosDrug.aLine.filter(el => el > aSplitPeriod[1]));
+        if(oPat.pkIsSpinalAnesth) {
+            relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkStandDateITCath), new Date(aStartDates[0])));
+            oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
+            if(oPat.pkStandDateITCath !== oPat.pkRemoveDateITCath){
+                relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkRemoveDateITCath), new Date(aStartDates[0])));
+                oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));   
+            }; 
+        };
         console.log(oChoosDrug.aLine);
-
         oChoosDrug_2 = {
             titleGroupCyr: oChoosDrug.titleGroupCyr,
             titleGroupLat: oChoosDrug.titleGroupLat,

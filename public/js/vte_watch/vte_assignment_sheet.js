@@ -189,6 +189,10 @@ $(document).ready(function () {
     }
     console.log(testLine);
 
+
+
+
+
     function appointBridgeTherapy(choosDrug_1, choosDrug_2, bTHer, ) {
         //  алгоритм вписать в справку позднее;
         let med_1 = [],
@@ -216,8 +220,6 @@ $(document).ready(function () {
 
         }
     }
-
-
 
     function askOfBridgeTherUsage() {
         $('#dialog_1, #dialog_2').show();

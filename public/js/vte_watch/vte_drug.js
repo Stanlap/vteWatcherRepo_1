@@ -220,12 +220,12 @@ $(document).ready(function () {
         console.log('askNameOfMedicine');
         $('#invitToAct_1').text('Выберите препарат по коммерческому названию:');
         $('#dialog_1').show();
-        let vPath = '';
+        let vComName = '';
         $.each(oDrugsPairs, function (index, value) {
-            value === oChoosDrug.titleGroupCyr ? vPath = index : '';
+            value === oChoosDrug.titleGroupCyr ? vComName = index : '';
         });
-        aPairs = Object.keys(oDrugsList[vPath].drugs).map(function (name) {
-            return [oDrugsList[vPath].drugs[name].nameCyr, oDrugsList[vPath].drugs[name].nameLat];
+        aPairs = Object.keys(oDrugsList[vComName].drugs).map(function (name) {
+            return [oDrugsList[vComName].drugs[name].nameCyr, oDrugsList[vComName].drugs[name].nameLat];
         });
         oDrugsPairs = {};
         aPairs.forEach(item => oDrugsPairs[item[1]] = item[0]);
@@ -502,7 +502,11 @@ $(document).ready(function () {
     function defineEndDateMedicineTaking() {
         oPat.pkStartDateOfVTEProphyl = oChoosDrug.endDateOfVTEProphyl = $('#inpDate_4').val();
         oChoosDrug.aLine = fillLine(aStartDates[0], oChoosDrug.startDateOfVTEProphyl, oChoosDrug.endDateOfVTEProphyl);
-        sheduleMedicineTaking();
+        if (oChoosDrug.titleGroupCyr === 'Варфарин' && oPat.pkIsOrNoSurg && oChoosDrug.startDateOfVTEProphyl < oPat.pkDateOfOper && oPat.pkIsOrNoSurg && oChoosDrug.endDateOfVTEProphyl > oPat.pkDateOfOper) {
+            aLineOfFuncs.unshift(askOfBridgeTherUsage);
+        } else {
+            sheduleMedicineTaking();
+        };
         interactOfXaInhibAndVKA();
         clearValues();
         executeFuncsLine();
@@ -564,8 +568,9 @@ $(document).ready(function () {
         executeFuncsLine();
     }
 
+    let aSplitPeriod = [0, 0];
+
     function sheduleMedicineTaking() {
-        let aSplitPeriod = [0, 0];
         if (oPat.pkIsOrNoSurg) {
             sheduleSplitPeriod();
         };
@@ -576,16 +581,19 @@ $(document).ready(function () {
         aSplitPeriod = [relDayOfManipul, relDayOfManipul];
         console.log(oPat.pkDateOfOper, aStartDates[0], aSplitPeriod);
         vXaInhibitors(oChoosDrug.titleGroupCyr) ? aSplitPeriod[0] = relDayOfManipul - defineXaInhibitorsPeriopTactics(oChoosDrug.titleGroupCyr, oPat.pkRiskBleed, oPat.pkCC, oPat.pkGradeOfOper) : '';
-        oChoosDrug.titleGroupCyr === 'Варфарин' ? aSplitPeriod[0] = relDayOfManipul - stopVitKAntagTakingBeforeOper(oPat.pkInitINRMore4, oPat.pkRiskBleed, oPat.pkHighDoseVKI) : '';
+        if (oChoosDrug.titleGroupCyr === 'Варфарин') {
+            aSplitPeriod[0] = relDayOfManipul - stopVitKAntagTakingBeforeOper(oPat.pkInitINRMore4, oPat.pkRiskBleed, oPat.pkHighDoseVKI);
+            oPat.pkBridgeTherMedGroup !== '' ? aSplitPeriod[0] = relDayOfManipul - 5 : '';
+        };
         console.log(aSplitPeriod);
         oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < aSplitPeriod[0]).concat(oChoosDrug.aLine.filter(el => el > aSplitPeriod[1]));
-        if(oPat.pkIsSpinalAnesth) {
+        if (oPat.pkIsSpinalAnesth) {
             relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkStandDateITCath), new Date(aStartDates[0])));
             oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
-            if(oPat.pkStandDateITCath !== oPat.pkRemoveDateITCath){
+            if (oPat.pkStandDateITCath !== oPat.pkRemoveDateITCath) {
                 relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkRemoveDateITCath), new Date(aStartDates[0])));
-                oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));   
-            }; 
+                oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
+            };
         };
         console.log(oChoosDrug.aLine);
         oChoosDrug_2 = {
@@ -725,5 +733,88 @@ $(document).ready(function () {
         localStorage.setItem('ChoosedMedicines', serialObj);
         $(location).prop('href', '/vte_assignment_sheet');
     }
+
+    oPat.pkBridgeTherMedGroup = '';
+let oBridgeTherDrugsList = {
+    'Enoxaparin sodium': 'Эноксапарин натрия',
+    'Nadroparin calcium': 'Надропарин кальция',
+    'Bemiparinum natrium': 'Бемипарин натрия',
+    'Heparin sodium': 'Гепарин натрия'
+};
+    function askOfBridgeTherUsage() {
+        vBridge = confirm('Планируется периоперационная мост-терапия?');
+        !vBridge ? (clearValues(), executeFuncsLine()) : (
+            $('#invitToAct_1').html('Выберите группу препарата для мост-терапии:'),
+            $('#dialog_1').show(),
+            $.each(oBridgeTherDrugsList, function (key, value) {
+                $('#select_1').append('<option value="' + key + '">' + value + '</option>');
+            }),
+            $('#btnOne').on('click', defineBridgeTherUsage));
+    }
+
+
+    function defineBridgeTherUsage() {
+        oPat.pkBridgeTherMedGroup = $('#select_1 :selected').val();
+        sheduleMedicineTaking();
+        oBridgeTherDrugsList = {};
+        $('#select_1 option').remove();
+        aLineOfFuncs.unshift(askNameOfMedicineForBridgeTher);
+        clearValues();
+        executeFuncsLine();
+    }
+
+    function askNameOfMedicineForBridgeTher() {
+        console.log('askNameOfMedicineForBridgeTher');
+        $('#invitToAct_1').text('Выберите препарат по коммерческому названию:');
+        $('#dialog_1').show();        
+        aPairs = Object.keys(oDrugsList[oPat.pkBridgeTherMedGroup].drugs).map(function (name) {
+            return [oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameCyr, oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameLat];
+        });
+        aPairs.forEach(item => oBridgeTherDrugsList[item[1]] = item[0]);
+        $.each(oBridgeTherDrugsList, function (key, value) {
+            $('#select_1').append('<option value="' + key + '">' + value + '</option>');
+        });
+        $('#btnOne').on('click', defineNameOfMedicineForBridgeTher);
+    };
+
+    function defineNameOfMedicineForBridgeTher() {
+        clearValues();
+        executeFuncsLine();
+    }
+
+
+function askAlgorithmBridgeTher() {
+    console.log('askAlgorithmBridgeTher');
+    $('#invitToAct_1').text('Предлагаемая схема мост-терапии:');
+    $('#dialog_0').show(); 
+    $('</textarea>').prop({
+        id: 'textarea_0',
+
+    }).appendTo('#dialog_0');
+
+    let vAlgorithmBridgeTher = 
+    `Начинается ${''} в дозе ${''} в/в болюсно, затем поддерживающая доза ${'18'} МЕ/кг/ч в/в, прекращается за 6 ч до операции, возобновляется ${''}, отмена, когда МНО достигает целевых значений.`
+
+//     МЕ/кг внутривенно болюсно, высчитанной с учетом массы тела (80 МЕ/кг внутривенно болюсно, затем поддерживающая доза 18 МЕ/кг/ч внутривенно, под контролем АЧТВ).
+// 3. Введение должно быть возобновлено не менее чем через 12 ч после (в случае проведения больших вмешательств типа эндопротезирования суставов – на 2–3 день) операции,в ранее рассчитанной поддерживающей дозе, при условии адекватного гемостаза в области операционного шва.
+// 4. Введение прекращается, когда МНО в результате насыщения варфарином достигает целевых значений (2,0 и более);
+
+$('#textarea').val(vAlgorithmBridgeTher);
+           
+    aPairs = Object.keys(oDrugsList[oPat.pkBridgeTherMedGroup].drugs).map(function (name) {
+        return [oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameCyr, oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameLat];
+    });
+    aPairs.forEach(item => oBridgeTherDrugsList[item[1]] = item[0]);
+    $.each(oBridgeTherDrugsList, function (key, value) {
+        $('#select_1').append('<option value="' + key + '">' + value + '</option>');
+    });
+    $('#btnOne').on('click', defineAlgorithmBridgeTher);
+};
+
+function defineAlgorithmBridgeTher() {
+    clearValues();
+    executeFuncsLine();
+}
+
 
 });

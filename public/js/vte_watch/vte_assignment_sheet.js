@@ -29,7 +29,6 @@ $(document).ready(function () {
         vSuns = [vDS + 1, vDS + 8];
     console.log(vSats, vSuns);
 
-    let vIsVKI = false;
     $(oChoosedMedicines).each((ind, el) => {
         vIsVKI = el.titleGroupRu === 'Варфарин' ? true : false;
     });
@@ -39,8 +38,6 @@ $(document).ready(function () {
             interactOfXaInhibAndVKA();
     };
 
-    testLine.length > 0 ? lineOfFuncs.push(askOfPrevLabExams) : '';
-    oPat.pkIsOrNoSurg && $(oChoosedMedicines).length !== 0 ? lineOfFuncs.push(askOfSpinalAnestUsage) : '';
 
     function defineAllTestsPlan(choosDrug) {
 
@@ -188,50 +185,4 @@ $(document).ready(function () {
         executeParamsOfVTEProphyl();
     }
     console.log(testLine);
-
-
-
-
-
-    function appointBridgeTherapy(choosDrug_1, choosDrug_2, bTHer, ) {
-        //  алгоритм вписать в справку позднее;
-        let med_1 = [],
-            med_2 = [],
-            vINR_5 = [];
-        if (oPat.pkIsOrNoOper, choosDrug_1 === 'Варфарин' && bTher) {
-            med_1[0] = -5;
-            med_1[1] = 1;
-            vINR_5[0] = -1;
-            vINR_5[1] = 0;
-            vINR_5[2] = 1;
-
-            if (choosDrug_2 === 'Гепарин натрия') {
-                med_2[0] = -2;
-                med_2[1] = -6;
-                med_2[3] = 3;
-                oPat.IsSmallOper ? med_2[2] = 12 : med_2[2] = 48;
-            };
-            if (choosDrug_2 === 'Эноксапарин натрия' || choosDrug_2 === 'Надропарин кальция') {
-                med_2[0] = -2;
-                med_2[1] = -24;
-                med_2[3] = 3;
-                oPat.IsSmallOper ? med_2[2] = 24 : med_2[2] = 48;
-            };
-
-        }
-    }
-
-    function askOfBridgeTherUsage() {
-        $('#dialog_1, #dialog_2').show();
-        $('#inpDate, #btnOne, #br_1').hide();
-        $('#inviteToAct').html('Планируется периоперационная мост-терапия НМГ или НФГ?');
-        $('input[name = chkRadio_1]').on('click', defineBridgeTherUsage);
-    }
-
-    function defineBridgeTherUsage() {
-        $('input[name = chkRadio_1]:checked').val() === 0 ? oPat.pkBridgeTher = true : oPat.pkBridgeTher = false;
-        clearValues();
-        executeParamsOfVTEProphyl();
-    }
-
 });

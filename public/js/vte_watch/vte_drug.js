@@ -5,7 +5,8 @@ $(document).ready(function () {
         oDrugsPairs = {},
         aChoosedMedicines = [],
         aLineOfFuncs = [],
-        aTitles = [];
+        aTitles = []
+        adrugLanesContainer = [];
 
     localStorage.removeItem('Patient');
 
@@ -80,6 +81,30 @@ $(document).ready(function () {
     console.log(oPat.pkStartDateOfVTEProphyl);
 
     oPat.pkRiskVTE === 1 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : oPat.pkRiskVTE === 2 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
+
+    const emptyOChoosDrug = () => {
+        oChoosDrug = {
+            titleGroupCyr: '',
+            titleGroupLat: '',
+            titleDrugLat: '',
+            titleDrugCyr: '',
+            officDose: 0,
+            singleDoseOfAspirin: 0,
+            sheduleAspirinTakingDaily: '',
+            singleProphDose: '',
+            tempCont: '',
+            signature: '',
+            realSingleDose: 0,
+            numberOfOfficDose: 1,
+            frequencyOfDrugTaking: 'сут.',
+            oOfficDose: {},
+            startDateOfVTEProphyl: '', 
+            endDateOfVTEProphyl: '',
+            minTreatPeriod: 0,
+            aLine: []
+        };
+    }
+    
 
     prepareToStart();
 
@@ -167,6 +192,7 @@ $(document).ready(function () {
         aLineOfFuncs.push(askGroupOfMedicine, askNameOfMedicine, askOfficDoseOfMedicine);
         vTakesVTEProph ? aLineOfFuncs.push(askHadTakenSingleDoseOfMedicine) : '';
         aLineOfFuncs.push(askStartDateMedicineTaking, askEndDateMedicineTaking, askAnotherDrug);
+        emptyOChoosDrug();
         clearValues();
         executeFuncsLine();
     }
@@ -575,9 +601,9 @@ $(document).ready(function () {
             sheduleSplitPeriod();
         };
     }
-
+    let relDayOfManipul = 0;
     function sheduleSplitPeriod() {
-        let relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
+        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
         aSplitPeriod = [relDayOfManipul, relDayOfManipul];
         console.log(oPat.pkDateOfOper, aStartDates[0], aSplitPeriod);
         vXaInhibitors(oChoosDrug.titleGroupCyr) ? aSplitPeriod[0] = relDayOfManipul - defineXaInhibitorsPeriopTactics(oChoosDrug.titleGroupCyr, oPat.pkRiskBleed, oPat.pkCC, oPat.pkGradeOfOper) : '';
@@ -754,7 +780,9 @@ let oBridgeTherDrugsList = {
 
 
     function defineBridgeTherUsage() {
+        console.log('defineBridgeTherUsage');
         oPat.pkBridgeTherMedGroup = $('#select_1 :selected').val();
+        console.log(oPat.pkBridgeTherMedGroup);
         sheduleMedicineTaking();
         oBridgeTherDrugsList = {};
         $('#select_1 option').remove();
@@ -778,40 +806,74 @@ let oBridgeTherDrugsList = {
     };
 
     function defineNameOfMedicineForBridgeTher() {
+        oPat.pkNameOfMedicineForBridgeTherLat = $('#select_1 :selected').val();
+        oPat.pkNameOfMedicineForBridgeTherCyr = $('#select_1 :selected').text();
+        aLineOfFuncs.unshift(askAlgorithmBridgeTher);
         clearValues();
         executeFuncsLine();
     }
 
+    function getRound10(val) {
+        return Math.round(val / 10) * 10;
+      }
+    function getRound100(val) {
+        return Math.round(val / 100) * 100;
+      }
+    
 
 function askAlgorithmBridgeTher() {
     console.log('askAlgorithmBridgeTher');
     $('#invitToAct_1').text('Предлагаемая схема мост-терапии:');
-    $('#dialog_0').show(); 
-    $('</textarea>').prop({
-        id: 'textarea_0',
+$('#dialog_0').show();
+$('<textarea/>').prop({
+        id: 'textarea_0'
 
     }).appendTo('#dialog_0');
 
-    let vAlgorithmBridgeTher = 
-    `Начинается ${''} в дозе ${''} в/в болюсно, затем поддерживающая доза ${'18'} МЕ/кг/ч в/в, прекращается за 6 ч до операции, возобновляется ${''}, отмена, когда МНО достигает целевых значений.`
+let aMedicinesForBridgeTher = [];
+
 
 //     МЕ/кг внутривенно болюсно, высчитанной с учетом массы тела (80 МЕ/кг внутривенно болюсно, затем поддерживающая доза 18 МЕ/кг/ч внутривенно, под контролем АЧТВ).
 // 3. Введение должно быть возобновлено не менее чем через 12 ч после (в случае проведения больших вмешательств типа эндопротезирования суставов – на 2–3 день) операции,в ранее рассчитанной поддерживающей дозе, при условии адекватного гемостаза в области операционного шва.
 // 4. Введение прекращается, когда МНО в результате насыщения варфарином достигает целевых значений (2,0 и более);
+  oPat.pkBridgeTherMedGroup === 'Heparin sodium' ? (aMedicinesForBridgeTher[0] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 80)} МЕ, в/в, болюсно.`, aMedicinesForBridgeTher[1] = `${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 18)} МЕ/ч, в/в, прекратить за 6 ч до опер.`): 
+  oPat.pkBridgeTherMedGroup === 'Enoxaparin sodium' ? (aMedicinesForBridgeTher[0] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound10(oPat.pkWeight)} мг, п/к, 2 раза/сут.`, aMedicinesForBridgeTher[1] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound10(oPat.pkWeight)} мг, п/к, 1 раз/сут. утро`) : 
+  oPat.pkBridgeTherMedGroup === 'Nadroparin calcium' ? (aMedicinesForBridgeTher[0] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 100)} МЕ, п/к, 2 раза/сут.`, aMedicinesForBridgeTher[1] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 100)} МЕ, п/к, 1 раз/сут. утро`) : 
+  oPat.pkBridgeTherMedGroup === 'Bemiparinum natrium' ? (aMedicinesForBridgeTher[1] = aMedicinesForBridgeTher[0] =`Цибор 3500 (Zibor 3500), 3500 МЕ, п/к, 1 раз/сут. утро`): '';
+  let aTDC_1 = [aMedicinesForBridgeTher[0],[]], aTDC_2 = [aMedicinesForBridgeTher[1],[]];
+  console.log(aMedicinesForBridgeTher);
+  let vRDM = relDayOfManipul;
+  let vAddD = oPat.pkGradeOfOper > 0 ? 1 : 0 ;
+   vAddD = (oPat.pkArtroplasty || oPat.pkHipFractureSurgery) ? 2 : vAddD;
+  console.log(oPat.pkGradeOfOper);
+  if(oPat.pkBridgeTherMedGroup === 'Heparin sodium'){
+    aTDC_1[1].push(vRDM - 2);
+    aTDC_2[1].push(vRDM - 2, vRDM - 1, vRDM, vRDM + 1 + vAddD, vRDM + 2 + vAddD);  
+    adrugLanesContainer.push(aTDC_1, aTDC_2);
+    console.log(adrugLanesContainer);
+  }
 
-$('#textarea').val(vAlgorithmBridgeTher);
-           
-    aPairs = Object.keys(oDrugsList[oPat.pkBridgeTherMedGroup].drugs).map(function (name) {
-        return [oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameCyr, oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameLat];
-    });
-    aPairs.forEach(item => oBridgeTherDrugsList[item[1]] = item[0]);
-    $.each(oBridgeTherDrugsList, function (key, value) {
-        $('#select_1').append('<option value="' + key + '">' + value + '</option>');
-    });
+
+// $('#textarea_0').val(`${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 18)} МЕ/ч, в/в`);
+
+// 1.	Введение начинается как минимум за 2 дня до операции в терапевтической дозе (эноксапарин 1 мг/кг два раза в сутки, далтепарин 100 МЕ/кг два раза в сутки, бемипарин 3500 МЕ в сутки однократно).
+// 2. Прекратить введение как минимум за 24 ч до операции (но ввести утреннюю дозу препарата накануне операции).
+// 3. Возобновить введение НМГ в терапевтической дозе после операции по достижении должного гемостаза: в течение 24 ч после малых хирургических вмешательств; в течение 48–72 ч после больших хирургических вмешательств.
+// 4. Введение прекращается, когда МНО в результате насыщения варфарином достигает целевых значений (2,0 и более).
+// 5. НМГ целесообразно использовать в случае выполнения спинальной анестезии.
+
+
+
+// $('#textarea_0').val(`${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}) ${correctDate(addDays(oPat.pkDateOfOper, -3))} в дозе ${getRound100(oPat.pkWeight * 80)} МЕ/кг в/в болюсно, затем поддерживающая доза ${getRound100(oPat.pkWeight * 18)} МЕ/кг/ч в/в, прекращается за 6 ч до операции, возобновляется ${correctDate(addDays(oPat.pkDateOfOper, 1))}, отмена, когда МНО достигает целевых значений.`);
+
+
+
     $('#btnOne').on('click', defineAlgorithmBridgeTher);
 };
 
 function defineAlgorithmBridgeTher() {
+    console.log('defineAlgorithmBridgeTher');
+    alert('Hi!');
     clearValues();
     executeFuncsLine();
 }

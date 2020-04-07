@@ -13,6 +13,7 @@ objPatient.pkChronicDialysis = false;
 objPatient.pkArtificialHeartValve = false;
 objPatient.pkUncontrolledSystemicHypertension = false;
 objPatient.pkRace = 0;
+objPatient.pkHipFractureSurgery = false;
 
 $('#divAllRF div').hide();
 $('.divMiddleLvlRF').hide();
@@ -442,7 +443,7 @@ objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate
 
     (objSelectedOper.pkArthroscopicSurgery) ? $('#chkArthroscopicSurgery').prop('checked', true): '';
     (objSelectedOper.pkShinFractureSurgery) ? $('#chkShinFractureSurgery').prop('checked', true): '';
-    (objSelectedOper.pkHipFractureSurgery) ? $('#chkHipFractureSurgery').prop('checked', true): '';
+    (objSelectedOper.pkHipFractureSurgery) ? ($('#chkHipFractureSurgery').prop('checked', true), objPatient.pkHipFractureSurgery = true): objPatient.pkHipFractureSurgery = false;
 
     (objSelectedOper.pkLiverResection) ? $('#chkLiverResection').prop('checked', true): '';
     (objSelectedOper.pkPancreatoDuodResection) ? $('#chkPancreatoDuodResection').prop('checked', true): '';

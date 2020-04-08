@@ -5,8 +5,25 @@ $(document).ready(function () {
         oDrugsPairs = {},
         aChoosedMedicines = [],
         aLineOfFuncs = [],
-        aTitles = []
-        adrugLanesContainer = [];
+        aTitles = [],
+        adrugLanesContainer = [],
+        tCtr = [0, 0, 0, 0],
+        vPath_2 = '',
+        vPath_3 = '',
+        aStartDates = [],
+        aStartDatesNative = [],
+        aSplitPeriod = [0, 0],
+        relDayOfManipul = 0,
+        oBridgeTherDrugsList = {
+            'Enoxaparin sodium': 'Эноксапарин натрия',
+            'Nadroparin calcium': 'Надропарин кальция',
+            'Bemiparinum natrium': 'Бемипарин натрия',
+            'Heparin sodium': 'Гепарин натрия'
+        };
+
+    oPat.pkBridgeTherMedGroup = '';
+
+    const vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
 
     localStorage.removeItem('Patient');
 
@@ -82,6 +99,16 @@ $(document).ready(function () {
 
     oPat.pkRiskVTE === 1 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : oPat.pkRiskVTE === 2 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
 
+    oPat.pkRiskVTE === 1 ? oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] = {
+        nameCyr: 'Цибор 2500',
+        nameLat: 'Zibor 2500',
+        officDose: [2500]
+    } : oPat.pkRiskVTE === 2 ? oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] = {
+        nameCyr: 'Цибор 3500',
+        nameLat: 'Zibor 3500',
+        officDose: [3500]
+    } : '';
+
     const emptyOChoosDrug = () => {
         oChoosDrug = {
             titleGroupCyr: '',
@@ -98,13 +125,12 @@ $(document).ready(function () {
             numberOfOfficDose: 1,
             frequencyOfDrugTaking: 'сут.',
             oOfficDose: {},
-            startDateOfVTEProphyl: '', 
+            startDateOfVTEProphyl: '',
             endDateOfVTEProphyl: '',
             minTreatPeriod: 0,
             aLine: []
         };
     }
-    
 
     prepareToStart();
 
@@ -173,7 +199,7 @@ $(document).ready(function () {
             }
         };
         return oP;
-    };
+    }
 
     function clearValues() {
         $('.invits').html('');
@@ -219,8 +245,6 @@ $(document).ready(function () {
         executeFuncsLine();
     }
 
-    let tCtr = [0, 0, 0, 0];
-
     function tryChooseDrugGroup() {
         let vDec = false;
         console.log('tryChooseDrugGroup');
@@ -240,7 +264,7 @@ $(document).ready(function () {
             vDec = confirm('Ривароксабан противопоказан при врожденном дефиците лактозы. Отказаться от данного препарата?');
             vDec ? ($('#select_1 :selected').remove(), $('#select_1').val('')) : tCtr[3] = 1;
         };
-    };
+    }
 
     function askNameOfMedicine() {
         console.log('askNameOfMedicine');
@@ -259,7 +283,7 @@ $(document).ready(function () {
             $('#select_1').append('<option value="' + value + '">' + value + '</option>');
         });
         $('#btnOne').on('click', defineNameOfMedicine);
-    };
+    }
 
     function defineNameOfMedicine() {
         $.each(oDrugsPairs, function (index, value) {
@@ -269,9 +293,6 @@ $(document).ready(function () {
         clearValues();
         executeFuncsLine();
     }
-
-    let vPath_2 = '',
-        vPath_3 = '';
 
     function askOfficDoseOfMedicine() {
         console.log('askOfficDoseOfMedicine');
@@ -301,7 +322,7 @@ $(document).ready(function () {
             $('#select_2').on('input', askAspirineTakingShedule);
         };
         $('#btnOne').on('click', defineOfficDoseOfMedicine);
-    };
+    }
 
     function defineOfficDoseOfMedicine() {
         console.log('defineOfficDoseOfMedicine');
@@ -503,8 +524,6 @@ $(document).ready(function () {
         $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
         $('#btnOne').on('click', defineStartDateMedicineTaking);
     }
-    let aStartDates = []
-    aStartDatesNative = [];
 
     function defineStartDateMedicineTaking() {
         oChoosDrug.startDateOfVTEProphyl = $('#inpDate_4').val();
@@ -544,8 +563,6 @@ $(document).ready(function () {
         }
         return vLn
     }
-
-    vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
 
     function askOfINRAndVKI() {
         $('<div/>').prop({
@@ -594,14 +611,12 @@ $(document).ready(function () {
         executeFuncsLine();
     }
 
-    let aSplitPeriod = [0, 0];
-
     function sheduleMedicineTaking() {
         if (oPat.pkIsOrNoSurg) {
             sheduleSplitPeriod();
         };
     }
-    let relDayOfManipul = 0;
+
     function sheduleSplitPeriod() {
         relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
         aSplitPeriod = [relDayOfManipul, relDayOfManipul];
@@ -760,24 +775,22 @@ $(document).ready(function () {
         $(location).prop('href', '/vte_assignment_sheet');
     }
 
-    oPat.pkBridgeTherMedGroup = '';
-let oBridgeTherDrugsList = {
-    'Enoxaparin sodium': 'Эноксапарин натрия',
-    'Nadroparin calcium': 'Надропарин кальция',
-    'Bemiparinum natrium': 'Бемипарин натрия',
-    'Heparin sodium': 'Гепарин натрия'
-};
     function askOfBridgeTherUsage() {
         vBridge = confirm('Планируется периоперационная мост-терапия?');
         !vBridge ? (clearValues(), executeFuncsLine()) : (
             $('#invitToAct_1').html('Выберите группу препарата для мост-терапии:'),
             $('#dialog_1').show(),
+            oDrugsList['Bemiparinum natrium'].drugs.hasOwnProperty('Zibor 2500') ? (delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'],
+                oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] = {
+                    nameCyr: 'Цибор 3500',
+                    nameLat: 'Zibor 3500',
+                    officDose: [3500]
+                }) : '',
             $.each(oBridgeTherDrugsList, function (key, value) {
                 $('#select_1').append('<option value="' + key + '">' + value + '</option>');
             }),
             $('#btnOne').on('click', defineBridgeTherUsage));
     }
-
 
     function defineBridgeTherUsage() {
         console.log('defineBridgeTherUsage');
@@ -794,7 +807,7 @@ let oBridgeTherDrugsList = {
     function askNameOfMedicineForBridgeTher() {
         console.log('askNameOfMedicineForBridgeTher');
         $('#invitToAct_1').text('Выберите препарат по коммерческому названию:');
-        $('#dialog_1').show();        
+        $('#dialog_1').show();
         aPairs = Object.keys(oDrugsList[oPat.pkBridgeTherMedGroup].drugs).map(function (name) {
             return [oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameCyr, oDrugsList[oPat.pkBridgeTherMedGroup].drugs[name].nameLat];
         });
@@ -808,75 +821,62 @@ let oBridgeTherDrugsList = {
     function defineNameOfMedicineForBridgeTher() {
         oPat.pkNameOfMedicineForBridgeTherLat = $('#select_1 :selected').val();
         oPat.pkNameOfMedicineForBridgeTherCyr = $('#select_1 :selected').text();
-        aLineOfFuncs.unshift(askAlgorithmBridgeTher);
+        makeAlgorithmBridgeTher();
         clearValues();
         executeFuncsLine();
     }
 
     function getRound10(val) {
         return Math.round(val / 10) * 10;
-      }
+    }
+
     function getRound100(val) {
         return Math.round(val / 100) * 100;
-      }
-    
+    }
 
-function askAlgorithmBridgeTher() {
-    console.log('askAlgorithmBridgeTher');
-    $('#invitToAct_1').text('Предлагаемая схема мост-терапии:');
-$('#dialog_0').show();
-$('<textarea/>').prop({
-        id: 'textarea_0'
+    function makeAlgorithmBridgeTher() {
+        console.log('makeAlgorithmBridgeTher');
+        let aTDC_1 = ['', []],
+            aTDC_2 = ['', []],
+            vBTM = oPat.pkBridgeTherMedGroup,
+            vNMC = oPat.pkNameOfMedicineForBridgeTherCyr,
+            vNML = oPat.pkNameOfMedicineForBridgeTherLat,
+            vRDM = relDayOfManipul,
+            vAddD = oPat.pkGradeOfOper > 0 ? 1 : 0;
+        vAddD = (oPat.pkArtroplasty || oPat.pkHipFractureSurgery) ? 2 : vAddD;
 
-    }).appendTo('#dialog_0');
+        switch (vBTM) {
+            case 'Heparin sodium':
+                aTDC_1[0] = `${vNMC} (${vNML}), ${getRound100(oPat.pkWeight * 80)} МЕ, в/в, болюсно.`;
+                aTDC_2[0] = `${vNMC} (${vNML}), ${getRound100(oPat.pkWeight * 18)} МЕ/ч, в/в, прекратить ${oPat.pkDateOfOper} за 6 ч до опер.`;
+                aTDC_1[1].push(vRDM - 2);
+                aTDC_2[1].push(vRDM - 2, vRDM - 1, vRDM, vRDM + 1 + vAddD, vRDM + 2 + vAddD);
+                break;
 
-let aMedicinesForBridgeTher = [];
+            case 'Enoxaparin sodium':
+                aTDC_1[0] = `${vNMC} (${vNML}), ${getRound10(oPat.pkWeight)} мг, п/к, 2 раза/сут.`;
+                aTDC_2[0] = `${vNMC} (${vNML}), ${getRound10(oPat.pkWeight)} мг, п/к, 1 раз/сут. утро`;
+                aTDC_1[1].push(vRDM - 2, vRDM + 1 + vAddD, vRDM + 2 + vAddD);
+                aTDC_2[1].push(vRDM - 1, vRDM);
+                break;
+            case 'Nadroparin calcium':
+                aTDC_1[0] = `${vNMC} (${vNML}), ${getRound100(oPat.pkWeight * 100)} МЕ, п/к, 2 раза/сут.`;
+                aTDC_2[0] = `${vNMC} (${vNML}), ${getRound100(oPat.pkWeight * 100)} МЕ, п/к, 1 раз/сут. утро`;
+                aTDC_1[1].push(vRDM - 2, vRDM + 1 + vAddD, vRDM + 2 + vAddD);
+                aTDC_2[1].push(vRDM - 1, vRDM);
+                break;
+            case 'Bemiparinum natrium':
+                aTDC_1[0] = aTDC_1[0] = `Цибор 3500 (Zibor 3500), 3500 МЕ, п/к, 1 раз/сут. ${oPat.pkDateOfOper} утро`;
+                aTDC_1[1].push(vRDM - 2, vRDM - 1, vRDM, vRDM + 1 + vAddD, vRDM + 2 + vAddD);
+                break;
+        }
 
+        adrugLanesContainer.push(aTDC_1);
+        aTDC_2[0] !== '' ? adrugLanesContainer.push(aTDC_2) : '';
+        console.log(aTDC_1, aTDC_2);
+        console.log(adrugLanesContainer);
 
-//     МЕ/кг внутривенно болюсно, высчитанной с учетом массы тела (80 МЕ/кг внутривенно болюсно, затем поддерживающая доза 18 МЕ/кг/ч внутривенно, под контролем АЧТВ).
-// 3. Введение должно быть возобновлено не менее чем через 12 ч после (в случае проведения больших вмешательств типа эндопротезирования суставов – на 2–3 день) операции,в ранее рассчитанной поддерживающей дозе, при условии адекватного гемостаза в области операционного шва.
-// 4. Введение прекращается, когда МНО в результате насыщения варфарином достигает целевых значений (2,0 и более);
-  oPat.pkBridgeTherMedGroup === 'Heparin sodium' ? (aMedicinesForBridgeTher[0] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 80)} МЕ, в/в, болюсно.`, aMedicinesForBridgeTher[1] = `${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 18)} МЕ/ч, в/в, прекратить за 6 ч до опер.`): 
-  oPat.pkBridgeTherMedGroup === 'Enoxaparin sodium' ? (aMedicinesForBridgeTher[0] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound10(oPat.pkWeight)} мг, п/к, 2 раза/сут.`, aMedicinesForBridgeTher[1] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound10(oPat.pkWeight)} мг, п/к, 1 раз/сут. утро`) : 
-  oPat.pkBridgeTherMedGroup === 'Nadroparin calcium' ? (aMedicinesForBridgeTher[0] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 100)} МЕ, п/к, 2 раза/сут.`, aMedicinesForBridgeTher[1] = `${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 100)} МЕ, п/к, 1 раз/сут. утро`) : 
-  oPat.pkBridgeTherMedGroup === 'Bemiparinum natrium' ? (aMedicinesForBridgeTher[1] = aMedicinesForBridgeTher[0] =`Цибор 3500 (Zibor 3500), 3500 МЕ, п/к, 1 раз/сут. утро`): '';
-  let aTDC_1 = [aMedicinesForBridgeTher[0],[]], aTDC_2 = [aMedicinesForBridgeTher[1],[]];
-  console.log(aMedicinesForBridgeTher);
-  let vRDM = relDayOfManipul;
-  let vAddD = oPat.pkGradeOfOper > 0 ? 1 : 0 ;
-   vAddD = (oPat.pkArtroplasty || oPat.pkHipFractureSurgery) ? 2 : vAddD;
-  console.log(oPat.pkGradeOfOper);
-  if(oPat.pkBridgeTherMedGroup === 'Heparin sodium'){
-    aTDC_1[1].push(vRDM - 2);
-    aTDC_2[1].push(vRDM - 2, vRDM - 1, vRDM, vRDM + 1 + vAddD, vRDM + 2 + vAddD);  
-    adrugLanesContainer.push(aTDC_1, aTDC_2);
-    console.log(adrugLanesContainer);
-  }
-
-
-// $('#textarea_0').val(`${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}), ${getRound100(oPat.pkWeight * 18)} МЕ/ч, в/в`);
-
-// 1.	Введение начинается как минимум за 2 дня до операции в терапевтической дозе (эноксапарин 1 мг/кг два раза в сутки, далтепарин 100 МЕ/кг два раза в сутки, бемипарин 3500 МЕ в сутки однократно).
-// 2. Прекратить введение как минимум за 24 ч до операции (но ввести утреннюю дозу препарата накануне операции).
-// 3. Возобновить введение НМГ в терапевтической дозе после операции по достижении должного гемостаза: в течение 24 ч после малых хирургических вмешательств; в течение 48–72 ч после больших хирургических вмешательств.
-// 4. Введение прекращается, когда МНО в результате насыщения варфарином достигает целевых значений (2,0 и более).
-// 5. НМГ целесообразно использовать в случае выполнения спинальной анестезии.
-
-
-
-// $('#textarea_0').val(`${oPat.pkNameOfMedicineForBridgeTherCyr} (${oPat.pkNameOfMedicineForBridgeTherLat}) ${correctDate(addDays(oPat.pkDateOfOper, -3))} в дозе ${getRound100(oPat.pkWeight * 80)} МЕ/кг в/в болюсно, затем поддерживающая доза ${getRound100(oPat.pkWeight * 18)} МЕ/кг/ч в/в, прекращается за 6 ч до операции, возобновляется ${correctDate(addDays(oPat.pkDateOfOper, 1))}, отмена, когда МНО достигает целевых значений.`);
-
-
-
-    $('#btnOne').on('click', defineAlgorithmBridgeTher);
-};
-
-function defineAlgorithmBridgeTher() {
-    console.log('defineAlgorithmBridgeTher');
-    alert('Hi!');
-    clearValues();
-    executeFuncsLine();
-}
-
+        // !!!!!!!!!!!!!!! дополнить график анализов МНО согласно Протоколу моcт-терапии.
+    };
 
 });

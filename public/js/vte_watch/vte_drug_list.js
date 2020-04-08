@@ -81,17 +81,7 @@ $(document).ready(function () {
                 container: 'шприц',
                 timesADay: 1,
                 potentTimeADay: [1],
-                drugs: {
-                    'Zibor 2500': {
-                        nameCyr: 'Цибор 2500',
-                        nameLat: 'Zibor 2500',
-                        officDose: [2500],
-                    },
-                    'Zibor 3500': {
-                        nameCyr: 'Цибор 3500',
-                        nameLat: 'Zibor 3500',
-                        officDose: [3500],
-                    }
+                drugs: {                    
                 }
             },
             'Heparin sodium': {

@@ -16,6 +16,8 @@ function addDays(date, days) {
     return result;
 }
 
+
+
 function correctDate(vD){
     return `${vD.getFullYear()}-${('0' + (vD.getMonth() + 1)).slice(-2)}-${('0' + vD.getDate()).slice(-2)}`;
 }

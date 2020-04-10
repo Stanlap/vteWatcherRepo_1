@@ -6,7 +6,7 @@ $(document).ready(function () {
         aChoosedMedicines = [],
         aLineOfFuncs = [],
         aTitles = [],
-        adrugLanesContainer = [],
+        aOrdersContainer = [],
         tCtr = [0, 0, 0, 0],
         vPath_2 = '',
         vPath_3 = '',
@@ -521,7 +521,13 @@ $(document).ready(function () {
         console.log('askStartDateMedicineTaking');
         $('#invitToAct_1').html('Укажите дату начала профилактики ВТЭО:');
         $('#dialog_4').show();
-        $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
+        if (aStartDates.length === 0) {
+            $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
+        } else {
+            let vPD = addDays(new Date(oPat.pkStartDateOfVTEProphyl), 1);
+            $('#inpDate_4').val(`${vPD.getFullYear()}-${('0' + (vPD.getMonth() + 1)).slice(-2)}-${('0' + vPD.getDate()).slice(-2)}`);
+        }
+        $('#inpDateOfOper').hide();;
         $('#btnOne').on('click', defineStartDateMedicineTaking);
     }
 
@@ -540,7 +546,7 @@ $(document).ready(function () {
         oChoosDrug.minTreatPeriod = defineMinTreatmentPeriod(oPat.pkMedProfile, oChoosDrug.titleGroupCyr, mTP = 10);
         $('#invitToAct_1').html(`Укажите дату окончания профилактики ВТЭО (мин. рекомендуемый период ${oChoosDrug.minTreatPeriod} сут.):`);
         $('#dialog_4').show();
-        $('#inpDate_4').val(correctDate(addDays($('#inpDate_4').val(), oChoosDrug.minTreatPeriod)));
+        $('#inpDate_4').val(correctDate(addDays($('#inpDate_4').val(), oChoosDrug.minTreatPeriod - 1)));
         $('#btnOne').on('click', defineEndDateMedicineTaking);
     }
 
@@ -656,7 +662,7 @@ $(document).ready(function () {
             aLine: oChoosDrug.aLine
         };
         aChoosedMedicines.push(oChoosDrug_2);
-        interactOfXaInhibAndVKA();
+        // interactOfXaInhibAndVKA();
         console.log(aChoosedMedicines);
 
     }
@@ -698,8 +704,8 @@ $(document).ready(function () {
 
     function interactOfXaInhibAndVKA() {
 
-        // При переходе с НОАК на АВК надо в план исследований добавить иследование МНО в последний день приема НОАК и на следующие сутки после отмены НОАК.
-        // При переходе с АВК на НОАК надо в план исследований добавить иследование МНО в последний день приема НОАК и на следующие сутки после отмены НОАК. Очередь назначений aLine - оставить пустой массив. 
+        // При переходе с НОАК на АВК и наоборот надо в план исследований добавить иследование МНО в последний день приема НОАК и на следующие сутки после отмены НОАК.
+        // При переходе с АВК на НОАК Очередь назначений aLine - оставить пустой массив. 
         let findIndXaInhibitors = (vArr, vInd = -1) => {
             $(vArr).each((ind, el) => {
                 vXaInhibitors(el) ? vInd = ind : '';
@@ -708,6 +714,10 @@ $(document).ready(function () {
         }
 
         if (aTitles.length > 1 && (findIndXaInhibitors(aTitles, vInd = -1) !== -1 && aTitles.indexOf('Варфарин') !== -1)) {
+            oPat.pkINRDates = [];
+            oPat.pkINRDates[0] = diffDates(new Date(aChoosedMedicines[Math.max(findIndXaInhibitors(aTitles, vInd = -1), aTitles.indexOf('Варфарин'))].startDateOfVTEProphyl), new Date(aStartDates[0]));
+            oPat.pkINRDates[1] = oPat.pkINRDates[0] + 1;
+            console.log(oPat.pkINRDates);
             if (diffDates(new Date(aStartDatesNative[findIndXaInhibitors(aTitles, vInd = -1)]), new Date(aStartDatesNative[aTitles.indexOf('Варфарин')])) < 0) {
                 alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.')
             } else {
@@ -717,9 +727,6 @@ $(document).ready(function () {
                 });
             };
         };
-
-
-
     }
 
     function askAnotherDrug() {
@@ -871,10 +878,10 @@ $(document).ready(function () {
                 break;
         }
 
-        adrugLanesContainer.push(aTDC_1);
-        aTDC_2[0] !== '' ? adrugLanesContainer.push(aTDC_2) : '';
+        aOrdersContainer.push(aTDC_1);
+        aTDC_2[0] !== '' ? aOrdersContainer.push(aTDC_2) : '';
         console.log(aTDC_1, aTDC_2);
-        console.log(adrugLanesContainer);
+        console.log(aOrdersContainer);
 
         // !!!!!!!!!!!!!!! дополнить график анализов МНО согласно Протоколу моcт-терапии.
     };

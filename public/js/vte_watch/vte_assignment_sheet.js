@@ -1,188 +1,214 @@
 $(document).ready(function () {
 
-
-    let testLine = [
-            ['исследование тромбоцитов в крови', [],
-                []
-            ],
-            ['исследование уровня мочевины и креатинина в крови', [],
-                []
-            ],
-            ['электролиты крови', [],
-                []
-            ],
-            ['коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТ)', [],
-                []
-            ],
-            ['коагулограмма (МНО)', [],
-                []
-            ],
-            ['ОАМ', [],
-                []
-            ]
-        ],
-        lineOfFuncs = [];
+    let oPat = JSON.parse(localStorage.getItem('Patient')),
+        aChMeds = JSON.parse(localStorage.getItem('ChoosedMedicines'));
+    localStorage.removeItem('Patient');
+    localStorage.removeItem('ChoosedMedicines');
+    console.log(oPat, aChMeds);
 
 
-    let vDS = 7 - (new Date()).getDay(),
-        vSats = [vDS, vDS + 7],
-        vSuns = [vDS + 1, vDS + 8];
-    console.log(vSats, vSuns);
+    let aTLine = [];
 
-    $(oChoosedMedicines).each((ind, el) => {
-        vIsVKI = el.titleGroupRu === 'Варфарин' ? true : false;
-    });
-    if ($(oChoosedMedicines).length > 1) {
-        const bridgeTher = secDrug => 'Гепарин натрия' || secDrug === 'Эноксапарин натрия' || secDrug === 'Надропарин кальция' || secDrug === 'Бемипарин натрия' ? true : false;
-        bridgeTher(oChoosedMedicines[1].titleGroupRu) ? lineOfFuncs.push(askOfBridgeTherUsage) : '';
-            interactOfXaInhibAndVKA();
-    };
 
+
+    const definePltTestPlan = el => {
+        let aTCpl = el.titleGroupCyr !== 'Гепарин натрия' ? [2 + el.aLine[0], 3]: [el.aLine[0], 3];
+        return buildLine(aTCpl, el.minTreatPeriod);
+    }
+    const defineRenalTestPlanOrGenUrineTest = el => {
+        let aTCpl = el.titleGroupCyr === 'Надропарин кальция' ? [el.aLine[0] + 1, 10]: [el.aLine[0], 5];
+        return buildLine(aTCpl, el.minTreatPeriod);
+    }
+    const defineElectrolytesTestPlan = el => buildLine([el.aLine[0], 10], el.minTreatPeriod);
+    const defineINRPlan = el => buildLine(2 + [el.aLine[0], 5], el.minTreatPeriod);
+    const defineCoagulogramPlan = el => buildLine([el.aLine[0], 10], el.minTreatPeriod);
+
+
+    function buildLine(aT2, tP) {
+        let vLine = [],
+            vV = aT2[0] + 1;
+        vLine.push(aT2[0] + 1);
+        while (vV + aT2[1] <= tP) {
+            vV = vV + aT2[1];
+            vLine.push(vV);
+        }
+        // console.log(vLine);
+        return vLine;
+    }
+
+    defineAllTestsPlan(aChMeds);
 
     function defineAllTestsPlan(choosDrug) {
 
         $(choosDrug).each(function (ind, el) {
-            el.titleGroupRu === 'Эноксапарин натрия' || el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Гепарин натрия' ? testLine[0][2].push(definePltTestPlan(el)) : '';
-            el.titleGroupRu === 'Надропарин кальция' ? testLine[2][2].push(defineElectrolytesTestPlan(el)) : '';
-            el.titleGroupRu === 'Гепарин натрия' ? testLine[3][2].push(defineCoagulogramPlan(el)) : '';
-            el.titleGroupRu === 'Варфарин' ? testLine[4][2].push(defineINRPlan(el)) : '';
-            el.titleGroupRu === 'Надропарин кальция' || el.titleGroupRu === 'Дабигатрана этексилат' ? (testLine[5][2].push(defineGenUrineTest(el)), testLine[1][2].push(defineRenalTestPlan(el))) : '';
+            el.titleGroupCyr === 'Эноксапарин натрия' || el.titleGroupCyr === 'Надропарин кальция' || el.titleGroupCyr === 'Гепарин натрия' ? aTLine.push(['исследование тромбоцитов в крови','', definePltTestPlan(el)]): '';
+            el.titleGroupCyr === 'Надропарин кальция' ? aTLine.push(['электролиты крови','', defineElectrolytesTestPlan(el)]): '';
+            el.titleGroupCyr === 'Гепарин натрия' ? aTLine.push(['коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТ)','',defineCoagulogramPlan(el)]) : '';
+            el.titleGroupCyr === 'Варфарин' ? aTLine.push(['коагулограмма (МНО)','', defineINRPlan(el)]) : '';
+            el.titleGroupCyr === 'Надропарин кальция' || el.titleGroupCyr === 'Дабигатрана этексилат' ? 
+            aTLine .push(['ОАМ','', defineRenalTestPlanOrGenUrineTest(el)], ['исследование уровня мочевины и креатинина в крови','', defineRenalTestPlanOrGenUrineTest(el)]) : '';
         });
-        testLine = testLine.filter(el => el[2].length != 0);
-        $(testLine).each(function (ind, el) {
-            el[2].length === 1 ? el[1] = el[2][0][2].slice() : '';
-            if (el[2].length === 2) {
-                $.merge(el[1], el[2][0][2]);
-                $(el[2][1][2]).each(function (ind, item) {
-                    el[1].push(item + el[2][0][1][2]);
-                });
-            }
+        console.log(aTLine);
+    }
+
+
+
+    let aTAr2 = [];
+    let aTAr3 = [];
+        $(aTLine).each((ind,el) =>{
+            aTAr2.push(el[0]);
         });
 
-        let elTemp = [];
-        $(testLine).each(function (ind, el) {
-            $(el[1]).each(function (ind, item) {
-                item += oPat.pkDaysToStartVTEProph;
-                elTemp.push(item);
-            });
-            el[1] = elTemp;
-            elTemp = [];
+
+        $(aTAr2).each((ind,el) =>{
+            console.log(el);
+            console.log(find(el, aTAr2));
         });
-        console.log(testLine);
-    }
 
-    function definePltTestPlan(el) {
-        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
-        let tL_1 = [],
-            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('исследование тромбоцитов в крови', vP_1);
-        el.titleGroupRu === 'Эноксапарин натрия' || el.titleGroupRu === 'Надропарин кальция' ? tL_1.push(buildLine([3, 3], el.treatPeriod)) : el.titleGroupRu === 'Гепарин натрия' ? tL_1.push(buildLine([1, 3], el.treatPeriod)) : '';
-        return tL_1;
-    }
+    console.log(aTAr2);
+    console.log(aTAr3);
 
-    function defineRenalTestPlan(el) {
-        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
-        let tL_1 = [],
-            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('исследование уровня мочевины и креатинина в крови', vP_1);
-        el.titleGroupRu === 'Надропарин кальция' ? tL_1.push(buildLine([1, 10], el.treatPeriod)) : el.titleGroupRu === 'Дабигатрана этексилат' ? tL_1.push(buildLine([1, 5], el.treatPeriod)) : '';
-        return tL_1;
-    }
-
-    function defineGenUrineTest(el) {
-        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
-        let tL_1 = [],
-            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('ОАМ', vP_1);
-        el.titleGroupRu === 'Надропарин кальция' ? tL_1.push(buildLine([1, 10], el.treatPeriod)) : el.titleGroupRu === 'Дабигатрана этексилат' ? tL_1.push(buildLine([1, 5], el.treatPeriod)) : '';
-        return tL_1;
-    }
-    // Коагулограмма № 3 (ПТИ, МНО, фибриноген, АТ3, АЧТВ)
-    function defineINRPlan(el) {
-        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
-        let tL_1 = [],
-            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('коагулограмма (МНО)', vP_1, buildLine([3, 5], el.treatPeriod));
-        return tL_1;
-    };
-
-    function defineCoagulogramPlan(el) {
-        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
-        let tL_1 = [],
-            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТВ)', vP_1, buildLine([1, 10], el.treatPeriod));
-        return tL_1;
-    };
-
-    function defineElectrolytesTestPlan(el) {
-        // [0,1] - [0] первое исследование после начала профилактики ВТЭО, [1] - интервал между исследованиями (сутки).
-        let tL_1 = [],
-            vP_1 = [el.startDateOfVTEProphyl, (new Date(el.startDateOfVTEProphyl)).getDay(), el.treatPeriod];
-        tL_1.push('электролиты крови', vP_1, buildLine([1, 10], el.treatPeriod));
-        return tL_1;
-    }
-
-    function askOfPrevLabExams() {
-        // defineAllTestsPlan(oChoosedMedicines);
-        $('#dialog_1, #btnOne, #br_1, #inpDate').show();
-        $('#inpDate').val(formatDate());
-        $('#dialog_2').hide();
-        $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить и установите дату:');
-        $('<br>').appendTo('#dialog_1');
-        $('<br>').appendTo('#list_1');
-        $(testLine).each(function (ind, el) {
-            $('<label/>').attr({
-                for: `chkTest_${ind}`
-            }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${el[0]}'></input> ${el[0]}`).appendTo('#list_1');
-            $('<br>').appendTo('#list_1');
-        });
-        $('<br>').appendTo('#list_1');
-        $('<label/>').attr({
-            for: 'chkWeekend'
-        }).html('<input type = "checkbox" id = "chkWeekend" checked></input> Не назначать лабораторные исследования в субботу и воскресенье').appendTo('#list_1');
-        $('<br>').appendTo('#list_1');
-        $('#btnOne').on('click', definePrevLabExams);
-    }
-
-    function definePrevLabExams() {
-        // Функция учитывает выходные дни.
-        if ($('#chkWeekend').is(':checked')) {
-            $(vSats).each((ind, el) => {
-                $(testLine).each((ind, item) => {
-                    item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]-- : '';
-                })
-            });
-            $(vSuns).each((ind, el) => {
-                $(testLine).each((ind, item) => {
-                    item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]++ : '';
-                })
-            });
-            // alert('Анализы в выходные назначаться не будут.');
+    function find(needle, haystack) {
+        var results = [];
+        var idx = haystack.indexOf(needle);
+        while (idx != -1) {
+            results.push(idx);
+            idx = haystack.indexOf(needle, idx + 1);
         }
-        // Функция создает tL_2 - массив исследований, которые надо выполнить до начала проф. ВТЭО.
-        let tL_1 = [],
-            tL_2 = [],
-            tL_3 = [];
-        $('#list_1 input:checked').each((ind, el) => tL_1.push(el.value));
-        $(tL_1).each((ind, el) => {
-            $(testLine).each((ind, item) => item[0] === el ? (tL_2.push(item), tL_3.push(ind)) : '');
-        });
-        let vFstInv = 1 + Math.round(diffDates(new Date(correctDate(new Date($('#inpDate').val()))), new Date(correctDate(new Date()))));
-        console.log(vFstInv);
-        $(tL_3).each((ind, el) => delete testLine[el]);
-        testLine = testLine.filter(item => item);
-        $(tL_2).each((ind, el) => el[1].unshift(vFstInv));
-        console.log(tL_2);
-
-        $.merge(testLine, tL_2);
-        $(testLine).each((ind, el) => {
-            el[1] = [...new Set(el[1])];
-        })
-        console.log(testLine);
-
-        $('#list_1').hide();
-        clearValues();
-        executeParamsOfVTEProphyl();
+        return results;
     }
-    console.log(testLine);
+let srrr =["исследование тромбоцитов в крови", "исследование тромбоцитов в крови", "электролиты крови", "ОАМ", "исследование уровня мочевины и креатинина в крови"];
+let vrrr = []; 
+srrr.forEach(function(item, index, array) {
+    vrrr.push(find(item,array));
+    });
+vrrr = vrrr.filter(el => el.length > 1);
+console.log(vrrr);
+console.log(vrrr[0][0] === vrrr[1][0]);
+
+//  let vrrr2 = vrrr.filter((item, ind) => vrrr.indexOf(item) === ind);
+console.log([...new Set(vrrr)]);
+vrrr[0].concat(vrrr[1]);
+console.log(vrrr[0]);
+
+    let vDS = 7 - (new Date()).getDay(),
+    vSats = [vDS, vDS + 7],
+    vSuns = [vDS + 1, vDS + 8];
+console.log(vSats, vSuns);
+
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // function askOfPrevLabExams() {
+    //     // defineAllTestsPlan(aChMeds);
+    //     $('#dialog_1, #btnOne, #br_1, #inpDate').show();
+    //     $('#inpDate').val(formatDate());
+    //     $('#dialog_2').hide();
+    //     $('#inviteToAct').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, отметьте какие исследования требуется выполнить и установите дату:');
+    //     $('<br>').appendTo('#dialog_1');
+    //     $('<br>').appendTo('#list_1');
+    //     $(aTLine).each(function (ind, el) {
+    //         $('<label/>').attr({
+    //             for: `chkTest_${ind}`
+    //         }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${el[0]}'></input> ${el[0]}`).appendTo('#list_1');
+    //         $('<br>').appendTo('#list_1');
+    //     });
+    //     $('<br>').appendTo('#list_1');
+    //     $('<label/>').attr({
+    //         for: 'chkWeekend'
+    //     }).html('<input type = "checkbox" id = "chkWeekend" checked></input> Не назначать лабораторные исследования в субботу и воскресенье').appendTo('#list_1');
+    //     $('<br>').appendTo('#list_1');
+    //     $('#btnOne').on('click', definePrevLabExams);
+    // }
+
+    // function definePrevLabExams() {
+    //     // Функция учитывает выходные дни.
+    //     if ($('#chkWeekend').is(':checked')) {
+    //         $(vSats).each((ind, el) => {
+    //             $(aTLine).each((ind, item) => {
+    //                 item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]-- : '';
+    //             })
+    //         });
+    //         $(vSuns).each((ind, el) => {
+    //             $(aTLine).each((ind, item) => {
+    //                 item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]++ : '';
+    //             })
+    //         });
+    //         // alert('Анализы в выходные назначаться не будут.');
+    //     }
+    //     // Функция создает tL_2 - массив исследований, которые надо выполнить до начала проф. ВТЭО.
+    //     let tL_1 = [],
+    //         tL_2 = [],
+    //         tL_3 = [];
+    //     $('#list_1 input:checked').each((ind, el) => tL_1.push(el.value));
+    //     $(tL_1).each((ind, el) => {
+    //         $(aTLine).each((ind, item) => item[0] === el ? (tL_2.push(item), tL_3.push(ind)) : '');
+    //     });
+    //     let vFstInv = 1 + Math.round(diffDates(new Date(correctDate(new Date($('#inpDate').val()))), new Date(correctDate(new Date()))));
+    //     console.log(vFstInv);
+    //     $(tL_3).each((ind, el) => delete aTLine[el]);
+    //     aTLine = aTLine.filter(item => item);
+    //     $(tL_2).each((ind, el) => el[1].unshift(vFstInv));
+    //     console.log(tL_2);
+
+    //     $.merge(aTLine, tL_2);
+    //     $(aTLine).each((ind, el) => {
+    //         el[1] = [...new Set(el[1])];
+    //     })
+    //     console.log(aTLine);
+
+    //     $('#list_1').hide();
+    //     clearValues();
+    //     executeParamsOfVTEProphyl();
+    // }

@@ -3,10 +3,9 @@ $(document).ready(function () {
         vTakesVTEProph = confirm('Если пациент уже получает антикоагулянтную терапию, нажмите "OK"'),
         aPairs = [],
         oDrugsPairs = {},
-        aChoosedMedicines = [],
+        aChMeds = [],
         aLineOfFuncs = [],
         aTitles = [],
-        aOrdersContainer = [],
         tCtr = [0, 0, 0, 0],
         vPath_2 = '',
         vPath_3 = '',
@@ -21,7 +20,10 @@ $(document).ready(function () {
             'Heparin sodium': 'Гепарин натрия'
         };
 
+    oPat.pkINRDates = [];
     oPat.pkBridgeTherMedGroup = '';
+    oPat.pkDaysSincePrevAnalysisToStartVTEProph = 0;
+    oPat.aOrdersContainer = [];
 
     const vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
 
@@ -62,20 +64,20 @@ $(document).ready(function () {
         })
         .appendTo('#dialog_2');
     $('<div/>').prop({
-        id: 'dialog_5',
+        id: 'dialog_3',
         class: 'dialogs'
     }).appendTo('#dialogMain');
     $('<div/>').prop({
             id: 'invitToAct_3',
             class: 'invits'
         })
-        .appendTo('#dialog_5');
+        .appendTo('#dialog_3');
     $('<select/>').prop({
             id: 'select_3',
             value: '',
             class: 'selects'
         })
-        .appendTo('#dialog_5');
+        .appendTo('#dialog_3');
     $('<div/>').prop({
         id: 'dialog_4',
         class: 'dialogs'
@@ -204,7 +206,7 @@ $(document).ready(function () {
     function clearValues() {
         $('.invits').html('');
         $('.dialogs').hide();
-        $('#inpDate').val(formatDate());
+        $('#inpDate_4').val(formatDate());
         $('.selects').off('input').empty();
         $('#btnOne, #btnTwo').off('click');
     }
@@ -340,7 +342,7 @@ $(document).ready(function () {
     function askAspirineTakingShedule() {
         console.log('askAspirineTakingShedule', $('#select_2').val());
         if (+($('#select_2').val()) === 2) {
-            $('#dialog_5').show();
+            $('#dialog_3').show();
             $('#invitToAct_3').text('Выберите частоту приема препарата:');
             $.each(['ежедневно', 'через день'], function (key, value) {
                 $('#select_3').append('<option value="' + key + '">' + value + '</option>');
@@ -546,13 +548,14 @@ $(document).ready(function () {
         oChoosDrug.minTreatPeriod = defineMinTreatmentPeriod(oPat.pkMedProfile, oChoosDrug.titleGroupCyr, mTP = 10);
         $('#invitToAct_1').html(`Укажите дату окончания профилактики ВТЭО (мин. рекомендуемый период ${oChoosDrug.minTreatPeriod} сут.):`);
         $('#dialog_4').show();
-        $('#inpDate_4').val(correctDate(addDays($('#inpDate_4').val(), oChoosDrug.minTreatPeriod - 1)));
+        $('#inpDate_4').val(correctDate(addDays(oChoosDrug.startDateOfVTEProphyl, oChoosDrug.minTreatPeriod - 1)));
         $('#btnOne').on('click', defineEndDateMedicineTaking);
     }
 
     function defineEndDateMedicineTaking() {
         oPat.pkStartDateOfVTEProphyl = oChoosDrug.endDateOfVTEProphyl = $('#inpDate_4').val();
         oChoosDrug.aLine = fillLine(aStartDates[0], oChoosDrug.startDateOfVTEProphyl, oChoosDrug.endDateOfVTEProphyl);
+        console.log(oChoosDrug.aLine);
         if (oChoosDrug.titleGroupCyr === 'Варфарин' && oPat.pkIsOrNoSurg && oChoosDrug.startDateOfVTEProphyl < oPat.pkDateOfOper && oPat.pkIsOrNoSurg && oChoosDrug.endDateOfVTEProphyl > oPat.pkDateOfOper) {
             aLineOfFuncs.unshift(askOfBridgeTherUsage);
         } else {
@@ -564,7 +567,7 @@ $(document).ready(function () {
     }
 
     let fillLine = (vDG, vDS, vDE, vLn = []) => {
-        for (let i = 1 + diffDates(new Date(vDS), new Date(vDG)); i <= diffDates(new Date(vDE), new Date(vDG)); i++) {
+        for (let i = 1 + diffDates(new Date(vDS), new Date(vDG)); i <= 1 + diffDates(new Date(vDE), new Date(vDG)); i++) {
             vLn.push(i)
         }
         return vLn
@@ -572,38 +575,33 @@ $(document).ready(function () {
 
     function askOfINRAndVKI() {
         $('<div/>').prop({
-            id: 'dialog_5'
+            id: 'dialog_3'
         }).appendTo('#dialog_0');
         $('<label/>').attr({
             for: 'chkB_1'
-        }).html('Исходное значение МНО (5 суток до вмешательства) > 4.0').appendTo('#dialog_5');
+        }).html('Исходное значение МНО (5 суток до вмешательства) > 4.0').appendTo('#dialog_3');
         $('<input/>').attr({
             type: 'checkbox',
             id: 'chkB_1'
-        }).appendTo('#dialog_5');
-        $('<br>').appendTo('#dialog_5');
+        }).appendTo('#dialog_3');
+        $('<br>').appendTo('#dialog_3');
         $('<label/>').attr({
             for: 'chkB_2'
-        }).html('Значение МНО (1 сутки до вмешательства) > 2.0').appendTo('#dialog_5');
+        }).html('Значение МНО (1 сутки до вмешательства) > 2.0').appendTo('#dialog_3');
         $('<input/>').attr({
             type: 'checkbox',
             id: 'chkB_2'
-        }).appendTo('#dialog_5');
-        $('<br>').appendTo('#dialog_5');
+        }).appendTo('#dialog_3');
+        $('<br>').appendTo('#dialog_3');
         $('<label/>').attr({
             for: 'chkB_3'
-        }).html('Суточная доза варфарина > 7,5 mg').appendTo('#dialog_5');
+        }).html('Суточная доза варфарина > 7,5 mg').appendTo('#dialog_3');
         $('<input/>').attr({
             type: 'checkbox',
             id: 'chkB_3'
-        }).appendTo('#dialog_5');
+        }).appendTo('#dialog_3');
         $('#btnOne').on('click', defineINRAndVKI);
     }
-
-    // Первое исследование МНО: 5 суток до вмешательства - ввести значение
-    // Второе исследование МНО: 1 сутки до вмешательства - ввести значение. Если МНО остается высоким процедуру следует отложить.
-    // Суточная доза варфарина > 7,5 отмена за 3-4 дня до вмешательства.
-    // Риск кровотечения 1 –варфарин отменяют.
 
     function defineINRAndVKI() {
         oPat.pkInitINRMore4 = $('#chkB_1').is(':checked') ? true : false;
@@ -612,7 +610,7 @@ $(document).ready(function () {
         oPat.pkHighINRDayBeforeSurg ? oPat.pkDateOfOper = dateToYMD(new Date(prompt('МНО выше нормы! Следует перенести операцию на другую дату. Введите дату в формате "yyyy-MM-dd"', ''))) : '';
         console.log(oPat.pkDateOfOper);
         console.log(oPat.pkInitINRMore4, oPat.pkHighINRDayBeforeSurg, oPat.pkHighDoseVKI);
-        $('#dialog_5').remove();
+        $('#dialog_3').remove();
         clearValues();
         executeFuncsLine();
     }
@@ -661,9 +659,9 @@ $(document).ready(function () {
             minTreatPeriod: oChoosDrug.minTreatPeriod,
             aLine: oChoosDrug.aLine
         };
-        aChoosedMedicines.push(oChoosDrug_2);
+        aChMeds.push(oChoosDrug_2);
         // interactOfXaInhibAndVKA();
-        console.log(aChoosedMedicines);
+        console.log(aChMeds);
 
     }
 
@@ -703,9 +701,6 @@ $(document).ready(function () {
     }
 
     function interactOfXaInhibAndVKA() {
-
-        // При переходе с НОАК на АВК и наоборот надо в план исследований добавить иследование МНО в последний день приема НОАК и на следующие сутки после отмены НОАК.
-        // При переходе с АВК на НОАК Очередь назначений aLine - оставить пустой массив. 
         let findIndXaInhibitors = (vArr, vInd = -1) => {
             $(vArr).each((ind, el) => {
                 vXaInhibitors(el) ? vInd = ind : '';
@@ -714,16 +709,15 @@ $(document).ready(function () {
         }
 
         if (aTitles.length > 1 && (findIndXaInhibitors(aTitles, vInd = -1) !== -1 && aTitles.indexOf('Варфарин') !== -1)) {
-            oPat.pkINRDates = [];
-            oPat.pkINRDates[0] = diffDates(new Date(aChoosedMedicines[Math.max(findIndXaInhibitors(aTitles, vInd = -1), aTitles.indexOf('Варфарин'))].startDateOfVTEProphyl), new Date(aStartDates[0]));
+            oPat.pkINRDates[0] = diffDates(new Date(aChMeds[Math.max(findIndXaInhibitors(aTitles, vInd = -1), aTitles.indexOf('Варфарин'))].startDateOfVTEProphyl), new Date(aStartDates[0]));
             oPat.pkINRDates[1] = oPat.pkINRDates[0] + 1;
             console.log(oPat.pkINRDates);
             if (diffDates(new Date(aStartDatesNative[findIndXaInhibitors(aTitles, vInd = -1)]), new Date(aStartDatesNative[aTitles.indexOf('Варфарин')])) < 0) {
                 alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.')
             } else {
                 alert('НОАК  после АВК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.');
-                $(aChoosedMedicines).each((ind, el) => {
-                    vXaInhibitors(el.titleGroupCyr) ? (el.aLine = [], console.log(el)) : '';
+                $(aChMeds).each((ind, el) => {
+                    vXaInhibitors(el.titleGroupCyr) ? el.aLine = [] : '';
                 });
             };
         };
@@ -738,7 +732,20 @@ $(document).ready(function () {
             })
             .appendTo('#dialogMain');
         $('#btnOne').on('click', defineAnotherDrug);
-        $('#btnTwo').on('click', goToAssignSheet);
+        $('#btnTwo').on('click', () => {
+            $(aChMeds).each((ind, el) => {
+                oPat.aOrdersContainer.push([el.signature, el.aLine]);
+            });
+            defineAllTestsPlan(aChMeds) !== [] ? (
+                    aLineOfFuncs.unshift(askOfPrevLabExams),
+                    clearValues(),
+                    executeFuncsLine(),
+                    $('#btnTwo').remove()
+                ) :
+                (console.log(oPat.aOrdersContainer),
+                    goToAssignSheet()
+                );
+        });
     }
 
     function defineAnotherDrug() {
@@ -775,16 +782,15 @@ $(document).ready(function () {
     }
 
     function goToAssignSheet() {
-        let serialObj = JSON.stringify(oPat);
-        localStorage.setItem('Patient', serialObj);
-        serialObj = JSON.stringify(aChoosedMedicines);
-        localStorage.setItem('ChoosedMedicines', serialObj);
+        let serialObj = JSON.stringify(oPat.aOrdersContainer);
+        localStorage.setItem('ordersCont', serialObj);
         $(location).prop('href', '/vte_assignment_sheet');
     }
 
     function askOfBridgeTherUsage() {
         vBridge = confirm('Планируется периоперационная мост-терапия?');
         !vBridge ? (clearValues(), executeFuncsLine()) : (
+            oPat.pkIsSpinalAnesth ? alert('При спинальной анестезии предпочтительно использовать НМГ.') : '',
             $('#invitToAct_1').html('Выберите группу препарата для мост-терапии:'),
             $('#dialog_1').show(),
             oDrugsList['Bemiparinum natrium'].drugs.hasOwnProperty('Zibor 2500') ? (delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'],
@@ -878,12 +884,130 @@ $(document).ready(function () {
                 break;
         }
 
-        aOrdersContainer.push(aTDC_1);
-        aTDC_2[0] !== '' ? aOrdersContainer.push(aTDC_2) : '';
+        oPat.aOrdersContainer.push(aTDC_1);
+        aTDC_2[0] !== '' ? oPat.aOrdersContainer.push(aTDC_2) : '';
         console.log(aTDC_1, aTDC_2);
-        console.log(aOrdersContainer);
+        console.log(oPat.aOrdersContainer);
+        oPat.pkINRDates = oPat.pkINRDates.concat([vRDM - 1, vRDM, vRDM + 1, vRDM + 3]);
+        console.log(oPat.pkINRDates);
+        // Если выполняется протокол мост-терапии: 
+        // МНО  за 1 день до операции и в день операции, через день и еще раз через день.
+        // НМГ целесообразно использовать в случае выполнения спинальной анестезии.
 
-        // !!!!!!!!!!!!!!! дополнить график анализов МНО согласно Протоколу моcт-терапии.
-    };
+    }
+
+
+    function askOfPrevLabExams() {
+        oPat.pkIncludeWeekends = confirm('Назначать лабораторные исследования в субботу и воскресенье?');
+        $('#invitToAct_1').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, установите дату и отметьте, какие исследования требуется выполнить:');
+        let vTom = addDays(new Date(), 1);
+        new Date().getHours() < 10 ? $('#inpDate_4').val(new Date()) : $('#inpDate_4').val(`${vTom.getFullYear()}-${('0' + (vTom.getMonth() + 1)).slice(-2)}-${('0' + vTom.getDate()).slice(-2)}`);
+        $('#dialog_4').show();
+        $('<div/>').prop({
+            id: 'dialog_5',
+        }).appendTo('#dialog_4');
+        $(defineAllTestsPlan(aChMeds)).each(function (ind, el) {
+            $('<br>').appendTo('#dialog_5');
+            $('<label/>').attr({
+                for: `chkTest_${ind}`
+            }).html(`<input type = 'checkbox' id = 'chkTest_${ind}' value = '${el[0]}'></input> ${el[0]}`).appendTo('#dialog_5');
+        });
+        $('<br>').appendTo('#dialog_5');
+        $('#btnOne').on('click', definePrevLabExams);
+    }
+
+    function definePrevLabExams() {
+        let aTTCyr = [];
+        $('#dialog_5 input:checked').each((ind, el) => aTTCyr.push(el.value));
+        if (aTTCyr.length > 0) {
+            oPat.pkStartDateOfPrevAnalysis = $('#inpDate_4').val();
+            oPat.pkDaysSincePrevAnalysisToStartVTEProph = Math.round(diffDates(new Date(aStartDates[0]), new Date($('#inpDate_4').val())));
+            $(aTTCyr).each((ind, el) => {
+                $(aTLine).each((ind, item) => item[0] === el ? item[1].push(1 + Math.round(diffDates(new Date($('#inpDate_4').val()), new Date(aStartDates[0])))) : '');
+            });
+        };
+        aTLine = !oPat.pkIncludeWeekends ? takeIntoConsiderationWeekend(aTLine) : '';
+        oPat.aOrdersContainer = oPat.aOrdersContainer.concat(aTLine);
+        // $('#dialog_5').remove();
+        // clearValues();
+        // executeFuncsLine();
+        console.log(oPat.aOrdersContainer);
+        goToAssignSheet();
+
+    }
+
+    // $(aChMeds).each((ind, el) =>{
+    //     oPat.aOrdersContainer.push([el.signature, el.aLine]);   
+    // })
+
+
+    const definePltTestPlan = el => {
+        let aTCpl = el.titleGroupCyr !== 'Гепарин натрия' ? [2 + el.aLine[0], 3] : [el.aLine[0], 3];
+        return buildLine(aTCpl, el.minTreatPeriod);
+    }
+    const defineRenalTestPlanOrGenUrineTest = el => {
+        let aTCpl = el.titleGroupCyr === 'Надропарин кальция' ? [el.aLine[0] + 1, 10] : [el.aLine[0], 5];
+        return buildLine(aTCpl, el.minTreatPeriod);
+    }
+    const defineElectrolytesTestPlan = el => buildLine([el.aLine[0], 10], el.minTreatPeriod);
+    const defineINRPlan = el => buildLine([2 + el.aLine[0], 5], el.minTreatPeriod);
+    const defineCoagulogramPlan = el => buildLine([el.aLine[0], 10], el.minTreatPeriod);
+
+    function buildLine(aT2, tP) {
+        let vLine = [],
+            vV = aT2[0] + 1;
+        vLine.push(aT2[0] + 1);
+        while (vV + aT2[1] <= tP) {
+            vV = vV + aT2[1];
+            vLine.push(vV);
+        }
+        return vLine;
+    }
+
+    let aTLine = [
+        ['исследование тромбоцитов в крови', []],
+        ['исследование уровня мочевины и креатинина в крови', []],
+        ['электролиты крови', []],
+        ['коагулограмма (ПТИ, МНО, фибриноген, АТ3, АЧТ)', []],
+        ['коагулограмма (МНО)', []],
+        ['ОАМ', []]
+    ];
+
+    function defineAllTestsPlan(choosDrug) {
+
+        $(choosDrug).each(function (ind, el) {
+            el.aLine === [] ? el.aLine[0] = 0 : '';
+            el.titleGroupCyr === 'Эноксапарин натрия' || el.titleGroupCyr === 'Надропарин кальция' || el.titleGroupCyr === 'Гепарин натрия' ? aTLine[0][1] = aTLine[0][1].concat(definePltTestPlan(el)) : '';
+            el.titleGroupCyr === 'Надропарин кальция' ? aTLine[2][1] = aTLine[2][1].concat(defineElectrolytesTestPlan(el)) : '';
+            el.titleGroupCyr === 'Гепарин натрия' ? aTLine[3][1] = aTLine[3][1].concat(defineCoagulogramPlan(el)) : '';
+            el.titleGroupCyr === 'Варфарин' ? aTLine[4][1] = aTLine[4][1].concat(defineINRPlan(el)) : '';
+            el.titleGroupCyr === 'Надропарин кальция' || el.titleGroupCyr === 'Дабигатрана этексилат' ?
+                (aTLine[5][1] = aTLine[5][1].concat(defineRenalTestPlanOrGenUrineTest(el)), aTLine[1][1] = aTLine[1][1].concat(defineRenalTestPlanOrGenUrineTest(el))) : '';
+        });
+
+        oPat.pkINRDates.length > 0 ? aTLine[4][1] = aTLine[4][1].concat(oPat.pkINRDates) : '';
+        console.log(aTLine.filter(item => item[1].length > 0));
+        return aTLine.filter(item => item[1].length > 0);
+    }
+
+    let vTDS = 0;
+    // Функция учитывает выходные дни.
+    function takeIntoConsiderationWeekend(item) {
+        let vSats = [vTDS, vTDS + 7],
+            vSuns = [vTDS + 1, vTDS + 8];
+        console.log(vSats, vSuns);
+
+        $(vSats).each((ind, el) => {
+            $(item).each((ind, item) => {
+                item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]-- : '';
+            })
+        });
+        $(vSuns).each((ind, el) => {
+            $(item).each((ind, item) => {
+                item[1].indexOf(el) !== -1 ? item[1][item[1].indexOf(el)]++ : '';
+            })
+        });
+        return item;
+    }
 
 });

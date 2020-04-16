@@ -1,21 +1,104 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><%=title %></title>
 </head>
+
 <body>
     <a href="/">Главная страница</a><br>
     <a href="/programs">Программы</a><br>
     <a href="/logout">Logout</a><br>
     <p><%=message %></p>
-    <br>
+    <!-- <br> -->
     <div id='dialogMain'></div>
-    <!-- <button id='btnOne' hidden>Принять</button><br><br><br> -->
-    <br><br>
+    <!-- <br><br> -->
+    <table id="tlAssignSheet">
+        <caption>Hospital, department</caption>
+        <tbody>
+            <tr>
+                <th colspan="5" contenteditable>Мед. карта:</th>
+                <th colspan="13" contenteditable>Пациент:</th>
+                <th colspan="3" contenteditable>Палата:</th>
+
+            </tr>
+            <tr>
+                <td id="tdDocTitle" colspan="21">Лист врачебных назначений профилактики ВТЭО</td>
+            </tr>
+            <tr>
+                <td id="tdSignTitle" colspan="6" rowspan="2">Назначение:</td>
+                <td colspan="1">г./м.</td>
+                <td colspan="14"></td>
+            </tr>
+            <tr>
+                <td colspan="1">день</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <button id='btnOne'>Принять</button><br><br>
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 1px solid grey;
+            width: 694px;
+            /* height: 846px; */
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid grey;
+        }
+
+        th {
+            font-size: 10pt;
+            text-align: left;
+        }
+
+        td {
+            font-size: 9pt;
+            text-align: left;
+        }
+
+        tr.trSignature {
+            height: 20px;
+        }
+
+        #tdDocTitle,
+        caption {
+            font-size: 12pt;
+            text-align: center;
+            font-weight: bolder;
+        }
+
+        #tdSignTitle {
+            font-size: 10pt;
+            text-align: center;
+            font-weight: bolder;
+        }
+    </style>
+
     <footer>&copy;SmartMedInterface</footer>
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/date_manager.js"></script>

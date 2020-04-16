@@ -1,19 +1,19 @@
-let objPatient = JSON.parse(localStorage.getItem('Patient'));
+let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
-console.log(objPatient);
+console.log(oPat);
 let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
 localStorage.removeItem('SelectedOper');
 console.log(objSelectedOper);
 
-objPatient.pkSevereHepaticFailure = false;
-objPatient.pkHeartInsuff3_4 = false;
-objPatient.pkDiabetes = false;
-objPatient.pkActiveUlcerOfStomachOrDuodenum = false;
-objPatient.pkChronicDialysis = false;
-objPatient.pkArtificialHeartValve = false;
-objPatient.pkUncontrolledSystemicHypertension = false;
-objPatient.pkRace = 0;
-objPatient.pkHipFractureSurgery = false;
+oPat.pkSevereHepaticFailure = false;
+oPat.pkHeartInsuff3_4 = false;
+oPat.pkDiabetes = false;
+oPat.pkActiveUlcerOfStomachOrDuodenum = false;
+oPat.pkChronicDialysis = false;
+oPat.pkArtificialHeartValve = false;
+oPat.pkUncontrolledSystemicHypertension = false;
+oPat.pkRace = 0;
+oPat.pkHipFractureSurgery = false;
 
 $('#divAllRF div').hide();
 $('.divMiddleLvlRF').hide();
@@ -57,42 +57,42 @@ $('.btnTogglerRF').on('click', function () {
 
 let selectedRF = [];
 
-if (objPatient.pkValuesMedPfofile.includes(1)) {
+if (oPat.pkValuesMedPfofile.includes(1)) {
     selectedRF = $.merge($(selectedRF), $('.clsTherRF'));
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsNonsurgBleedingRF')) : '';
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsNonsurgBleedingRF')) : '';
 };
 
-if (objPatient.pkValuesMedPfofile.includes(2)) {
+if (oPat.pkValuesMedPfofile.includes(2)) {
     selectedRF = $.merge($(selectedRF), $('.clsAtrFibrRF'));
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsFibrBleedingRF')) : '';
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsFibrBleedingRF')) : '';
 };
 
 
 function isMedProfilesMoreTwo() {
-    $.each(objPatient.pkValuesMedPfofile, function (index, value) {
+    $.each(oPat.pkValuesMedPfofile, function (index, value) {
         if (value > 2) return true;
     });
 };
 
 if (isMedProfilesMoreTwo()) {
     selectedRF = $.merge($(selectedRF), $('.clsSurgRF'));
-    (objPatient.pkCalculateRiskOfBleeding && objPatient.pkValuesMedPfofile.includes(4) && objPatient.pkValuesMedPfofile.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
-    (objPatient.pkCalculateRiskOfBleeding && $.inArray(4, objPatient.pkValuesMedPfofile) === -1 && $.inArray(10, objPatient.pkValuesMedPfofile) === -1) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+    (oPat.pkCalculateRiskOfBleeding && oPat.pkValuesMedPfofile.includes(4) && oPat.pkValuesMedPfofile.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+    (oPat.pkCalculateRiskOfBleeding && $.inArray(4, oPat.pkValuesMedPfofile) === -1 && $.inArray(10, oPat.pkValuesMedPfofile) === -1) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
 };
 
-if (objPatient.pkValuesMedPfofile.includes(4)) {
+if (oPat.pkValuesMedPfofile.includes(4)) {
     selectedRF = $.merge($(selectedRF), $('.clsTraumRF'));
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsTraumBleedingRF')) : '';
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsTraumBleedingRF')) : '';
 };
 
-(objPatient.pkValuesMedPfofile.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
-(objPatient.pkValuesMedPfofile.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
-(objPatient.pkValuesMedPfofile.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
+(oPat.pkValuesMedPfofile.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
+(oPat.pkValuesMedPfofile.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
+(oPat.pkValuesMedPfofile.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
 
-if (objPatient.pkValuesMedPfofile.includes(10)) {
-    objPatient.pkObstOrGynProfile === 0 ? selectedRF = $.merge($(selectedRF), $('.clsObstRF')): '';
-    objPatient.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsObstBleedingRF')) : '';
-    objPatient.pkPregnancyOrChildbirth === 1 ? selectedRF = $.merge($(selectedRF), $('.clsLabourRF')): '';
+if (oPat.pkValuesMedPfofile.includes(10)) {
+    oPat.pkObstOrGynProfile === 0 ? selectedRF = $.merge($(selectedRF), $('.clsObstRF')): '';
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsObstBleedingRF')) : '';
+    oPat.pkPregnancyOrChildbirth === 1 ? selectedRF = $.merge($(selectedRF), $('.clsLabourRF')): '';
 };
 
 selectedRF = $.distinct(selectedRF);
@@ -101,7 +101,7 @@ $(selectedRF).show();
 $('.divTogglerRF').show();
 
 $('#divProfileOfPatient').hide();
-if (objPatient.pkGender === 1) {
+if (oPat.pkGender === 1) {
     $('#chkFemale').prop('checked', false);
     $('#chkMaleDouble').prop('checked', true);
     $('.divFemaleLvl').hide();
@@ -111,7 +111,7 @@ if (objPatient.pkGender === 1) {
     $('.divFemaleLvl').show();
 }
 
-objPatient.pkPregnancyOrChildbirth < 2 ? $('#chkPostpartum').prop('checked', true): '';
+oPat.pkPregnancyOrChildbirth < 2 ? $('#chkPostpartum').prop('checked', true): '';
 
 
 
@@ -268,7 +268,7 @@ $.each(objCreatinineUnits, function(key, value) {
     .text(key));
     });
 
-// console.log(`CC and GFR: ${calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)}`);
+// console.log(`CC and GFR: ${calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)}`);
 
 // let vRace = 1,
 //     vCreatinineValueEntered = '',
@@ -311,30 +311,30 @@ $.each(objCreatinineUnits, function(key, value) {
 //             break;
 //     }
 //     // взрослые
-//     if (vCreatinineValue > 0 && objPatient.pkGender >= 0 && objPatient.pkAge > 0) {
+//     if (vCreatinineValue > 0 && oPat.pkGender >= 0 && oPat.pkAge > 0) {
 //         // CKD-EPI
-//         if (objPatient.pkGender == 0) {
+//         if (oPat.pkGender == 0) {
 //             if (vCreatinineValue <= 0.7) {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -0.329) * Math.pow(0.993, objPatient.pkAge);
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -0.329) * Math.pow(0.993, oPat.pkAge);
 //             } else {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -1.209) * Math.pow(0.993, objPatient.pkAge);
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -1.209) * Math.pow(0.993, oPat.pkAge);
 //             }
 //         } else {
 //             if (vCreatinineValue <= 0.9) {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -0.411) * Math.pow(0.993, objPatient.pkAge);
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -0.411) * Math.pow(0.993, oPat.pkAge);
 //             } else {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -1.209) * Math.pow(0.993, objPatient.pkAge);
+//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -1.209) * Math.pow(0.993, oPat.pkAge);
 //             }
 //         }
 //         // коэффициент для расы
 //         if (vRace == 1) { // белые
-//             if (objPatient.pkGender == 0) {
+//             if (oPat.pkGender == 0) {
 //                 vSKD_EPI = vSKD_EPI * 144;
 //             } else {
 //                 vSKD_EPI = vSKD_EPI * 141;
 //             }
 //         } else { // негроидная
-//             if (objPatient.pkGender == 0) {
+//             if (oPat.pkGender == 0) {
 //                 vSKD_EPI = vSKD_EPI * 166;
 //             } else {
 //                 vSKD_EPI = vSKD_EPI * 163;
@@ -345,30 +345,30 @@ $.each(objCreatinineUnits, function(key, value) {
 //             vRace = 1.212;
 //         }
 //         // 186 - для нестандартизованных наборов креатинина, 175 - для стандартизованных
-//         if (objPatient.pkGender == 0) {
-//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * 0.742));
-//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * 0.742));
+//         if (oPat.pkGender == 0) {
+//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * 0.742));
+//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * 0.742));
 //         } else {
-//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * objPatient.pkGender));
-//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(objPatient.pkAge, -0.203)) * vRace * objPatient.pkGender));
+//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * oPat.pkGender));
+//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * oPat.pkGender));
 //         }
 //         //         кокрофт
-//         if (objPatient.pkWeight > 0) {
-//             gfr_cg = ((140 - objPatient.pkAge) * objPatient.pkWeight / 72) / vCreatinineValue;
-//             if (objPatient.pkGender == 0) {
+//         if (oPat.pkWeight > 0) {
+//             gfr_cg = ((140 - oPat.pkAge) * oPat.pkWeight / 72) / vCreatinineValue;
+//             if (oPat.pkGender == 0) {
 //                 gfr_cg = gfr_cg * 0.85;
 //             }
-//             if (objPatient.pkHeight > 0) {
-//                 bsa = (objPatient.pkHeight * objPatient.pkWeight / 3600);
+//             if (oPat.pkHeight > 0) {
+//                 bsa = (oPat.pkHeight * oPat.pkWeight / 3600);
 //                 bsa = Math.sqrt(bsa);
 //                 gfr_cg_bsa = gfr_cg * 1.73 / bsa;
 //             }
 //         }
 //     }
-//     objPatient.pkGFR = Math.min(vSKD_EPI, vMDRD, vMDRD_Standartized);
-//     objPatient.pkCC = Math.round(gfr_cg_bsa);
-//     console.log(objPatient.pkGFR, objPatient.pkCC);
-//     console.log(vCreatinineValue, vCreatinineUnits, objPatient.pkGender, objPatient.pkAge, vRace, objPatient.pkWeight, objPatient.pkHeight);
+//     oPat.pkGFR = Math.min(vSKD_EPI, vMDRD, vMDRD_Standartized);
+//     oPat.pkCC = Math.round(gfr_cg_bsa);
+//     console.log(oPat.pkGFR, oPat.pkCC);
+//     console.log(vCreatinineValue, vCreatinineUnits, oPat.pkGender, oPat.pkAge, vRace, oPat.pkWeight, oPat.pkHeight);
 // }
 
 
@@ -378,14 +378,14 @@ $.each(objCreatinineUnits, function(key, value) {
 function countRF() {
     ($('#inpCreatinineVal').val() == '') ? creatinVal = 90 : creatinVal = $('#inpCreatinineVal').val();
     creatinUnits = $('#slctCrUnitsGroup').val();
-    ($('#chkRaceB').is(':checked')) ? objPatient.pkRace = 1 : '';
+    ($('#chkRaceB').is(':checked')) ? oPat.pkRace = 1 : '';
 
-console.log(`GFR: ${calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)}`);
+console.log(`GFR: ${calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)}`);
 
-objPatient.pkCC = calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)[0];
-objPatient.pkGFR = calcCCAndGFR(objPatient.pkGender, objPatient.pkAge, objPatient.pkWeight, objPatient.pkRace, creatinVal, creatinUnits)[1];
+oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[0];
+oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[1];
 
-objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (objPatient.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
+oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
 
     ($('.clsSystemicHypertension2thAndMoreStage').is(':checked')) ? $('#chkSystemicHypertension2thAndMoreStage').prop('checked', true): '';
     ($('.chkSumTherRF_1').is(':checked')) ? $('#chkAcuteIschemicStrokeOrMiocardInfarction').prop('checked', true): '';
@@ -402,14 +402,14 @@ objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate
     ($('#chkIsTraum, #chkLargeOperIn30Days').is(':checked')) ? $('#chkTraumOrOperIn30Days').prop('checked', true): '';
     ($('#chkIsPulmonInsuff').is(':checked') || $('#chkIsHeartInsuff').is(':checked')) ? $('#chkPulmonOrHeartInsuff').prop('checked', true): '';
     ($('.chkSevereRenalInsuff_1').is(':checked')) ? $('#chkSevereRenalInsuff').prop('checked', true): '';
-    ($('.chkSevereRenalInsuff_2').is(':checked') || objPatient.pkGFR < 30) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
-    $('#chkIsLiverFailure').is(':checked') ? objPatient.pkSevereHepaticFailure = true : '';
-    $('#chkHeartInsuff3_4').is(':checked') ? objPatient.pkHeartInsuff3_4 = true : '';
-    $('#chkIsDiabetes').is(':checked') ? objPatient.pkDiabetes = true : '';
-    $('#chkActiveUlcerOfStomachOrDuodenum').is(':checked') ? objPatient.pkActiveUlcerOfStomachOrDuodenum = true : '';
-    $('#chkChronicDialysis').is(':checked') ? objPatient.pkChronicDialysis = true : '';
-    $('#chkArtificialHeartValve').is(':checked') ? objPatient.pkArtificialHeartValve = true : '';
-    $('#chkUncontrolledSystemicHypertension').is(':checked') ? objPatient.pkUncontrolledSystemicHypertension = true : '';
+    ($('.chkSevereRenalInsuff_2').is(':checked') || oPat.pkGFR < 30) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
+    $('#chkIsLiverFailure').is(':checked') ? oPat.pkSevereHepaticFailure = true : '';
+    $('#chkHeartInsuff3_4').is(':checked') ? oPat.pkHeartInsuff3_4 = true : '';
+    $('#chkIsDiabetes').is(':checked') ? oPat.pkDiabetes = true : '';
+    $('#chkActiveUlcerOfStomachOrDuodenum').is(':checked') ? oPat.pkActiveUlcerOfStomachOrDuodenum = true : '';
+    $('#chkChronicDialysis').is(':checked') ? oPat.pkChronicDialysis = true : '';
+    $('#chkArtificialHeartValve').is(':checked') ? oPat.pkArtificialHeartValve = true : '';
+    $('#chkUncontrolledSystemicHypertension').is(':checked') ? oPat.pkUncontrolledSystemicHypertension = true : '';
 
     ($('#chkSevereRenalInsuff, #chkIsLiverFailure').is(':checked')) ? $('#chkSevereRenalOrLiverFailure').prop('checked', true): $('#chkSevereRenalOrLiverFailure').prop('checked', false);
 
@@ -439,11 +439,11 @@ objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate
 
 
 
-    (objPatient.pkArtroplasty) ? ($('#chkArtroplasty').prop('checked', true)) : '';
+    (oPat.pkArtroplasty) ? ($('#chkArtroplasty').prop('checked', true)) : '';
 
     (objSelectedOper.pkArthroscopicSurgery) ? $('#chkArthroscopicSurgery').prop('checked', true): '';
     (objSelectedOper.pkShinFractureSurgery) ? $('#chkShinFractureSurgery').prop('checked', true): '';
-    (objSelectedOper.pkHipFractureSurgery) ? ($('#chkHipFractureSurgery').prop('checked', true), objPatient.pkHipFractureSurgery = true): objPatient.pkHipFractureSurgery = false;
+    (objSelectedOper.pkHipFractureSurgery) ? ($('#chkHipFractureSurgery').prop('checked', true), oPat.pkHipFractureSurgery = true): oPat.pkHipFractureSurgery = false;
 
     (objSelectedOper.pkLiverResection) ? $('#chkLiverResection').prop('checked', true): '';
     (objSelectedOper.pkPancreatoDuodResection) ? $('#chkPancreatoDuodResection').prop('checked', true): '';
@@ -457,31 +457,31 @@ objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate
     (objSelectedOper.pkElectiveCSection) ? $('#chkElectiveCSection').prop('checked', true): '';
     (objSelectedOper.pkCSectionInLabour) ? $('#chkCSectionInLabour').prop('checked', true): '';
 
-    (objPatient.pkAge > 35) ?
+    (oPat.pkAge > 35) ?
     $('#chkAgeMore35').prop('checked', true): '';
-    (objPatient.pkAge > 40) ?
+    (oPat.pkAge > 40) ?
     $('#chkAgeMore40').prop('checked', true): '';
-    (objPatient.pkAge > 40 && objPatient.pkAge < 61) ?
+    (oPat.pkAge > 40 && oPat.pkAge < 61) ?
     $('#chkAge_41_60').prop('checked', true): '';
-    (objPatient.pkAge > 60 && objPatient.pkAge < 76) ?
+    (oPat.pkAge > 60 && oPat.pkAge < 76) ?
     $('#chkAge_61_75').prop('checked', true): '';
-    (objPatient.pkAge > 64 && objPatient.pkAge < 75) ?
+    (oPat.pkAge > 64 && oPat.pkAge < 75) ?
     $('#chkAge_65_74').prop('checked', true): '';
-    (objPatient.pkAge >= 40 && objPatient.pkAge < 85) ?
+    (oPat.pkAge >= 40 && oPat.pkAge < 85) ?
     $('#chkAge_40_84').prop('checked', true): '';
-    (objPatient.pkAge > 65) ? $('#chkAgeMore65').prop('checked', true): '';
-    (objPatient.pkAge > 70) ? $('#chkAgeMore70').prop('checked', true): '';
-    (objPatient.pkAge >= 75) ? $('#chkAgeMore75').prop('checked', true): '';
-    (objPatient.pkAge >= 85) ? $('#chkAgeMore85').prop('checked', true): '';
+    (oPat.pkAge > 65) ? $('#chkAgeMore65').prop('checked', true): '';
+    (oPat.pkAge > 70) ? $('#chkAgeMore70').prop('checked', true): '';
+    (oPat.pkAge >= 75) ? $('#chkAgeMore75').prop('checked', true): '';
+    (oPat.pkAge >= 85) ? $('#chkAgeMore85').prop('checked', true): '';
 
-    (objPatient.pkBMI > 25) ? $('#chkBMIMore25').prop('checked', true): '';
-    (objPatient.pkBMI > 30) ? $('#chkBMIMore30').prop('checked', true): '';
-    (objPatient.pkBMI > 30 && objPatient.pkBMI < 40) ? $('#chkBMI_30_39').prop('checked', true): '';
-    (objPatient.pkBMI > 35) ? $('#chkBMIMore35').prop('checked', true): '';
-    (objPatient.pkBMI > 40) ? $('#chkBMIMore40').prop('checked', true): '';
+    (oPat.pkBMI > 25) ? $('#chkBMIMore25').prop('checked', true): '';
+    (oPat.pkBMI > 30) ? $('#chkBMIMore30').prop('checked', true): '';
+    (oPat.pkBMI > 30 && oPat.pkBMI < 40) ? $('#chkBMI_30_39').prop('checked', true): '';
+    (oPat.pkBMI > 35) ? $('#chkBMIMore35').prop('checked', true): '';
+    (oPat.pkBMI > 40) ? $('#chkBMIMore40').prop('checked', true): '';
 
-    if (objPatient.pkIsOrNoSurg) {
-        (objPatient.pkGradeOfOper > 0) ? ($('#chkLargeSurgery').prop('checked', true)) : $('#chkSmallSurgery').prop('checked', true);
+    if (oPat.pkIsOrNoSurg) {
+        (oPat.pkGradeOfOper > 0) ? ($('#chkLargeSurgery').prop('checked', true)) : $('#chkSmallSurgery').prop('checked', true);
     }
     let pkRfArr = [], pkRFText = [];
     ($('#divAllRF input:checkbox:checked')).each(function () {
@@ -507,21 +507,21 @@ objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate
         return b;
     }
 
-    objPatient.pkGeneralListOfRF = getStringOfRF($('#divAllRF input:checked').parent());
-    // console.log(objPatient);
+    oPat.pkGeneralListOfRF = getStringOfRF($('#divAllRF input:checked').parent()) !== '' ? getStringOfRF($('#divAllRF input:checked').parent()): 'отсутствуют';
+    // console.log(oPat);
 
-    let serialObj = JSON.stringify(objPatient);
+    let serialObj = JSON.stringify(oPat);
     localStorage.setItem('Patient', serialObj);
-    let objPatientForCounter = {
-        age: objPatient.pkAge,
-        isOrNoSurg: objPatient.pkIsOrNoSurg,
-        operTimeMore60: objPatient.pkOperTimeMore60,
-        gradeOfOper: objPatient.pkGradeOfOper
+    let oPatForCounter = {
+        age: oPat.pkAge,
+        isOrNoSurg: oPat.pkIsOrNoSurg,
+        operTimeMore60: oPat.pkOperTimeMore60,
+        gradeOfOper: oPat.pkGradeOfOper
 
     };
     $.post('/count', {
             'rfArr': pkRfArr.join(),
-            'objPatientForCounter': JSON.stringify(objPatientForCounter),
+            'oPatForCounter': JSON.stringify(oPatForCounter),
         },
         function (data) {
             localStorage.setItem('objScalesVTE', data);
@@ -535,7 +535,7 @@ objPatient.pkGFR > 29 && objPatient.pkGFR < 60 ? $('#chkGlomerularFiltrationRate
             // console.log(objBallsRiskVTE);
     
         });
-        serialObj = JSON.stringify(objPatient);
+        serialObj = JSON.stringify(oPat);
         localStorage.setItem('Patient', serialObj);
         
 

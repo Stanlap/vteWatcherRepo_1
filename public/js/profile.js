@@ -14,16 +14,19 @@ $('#btn1').on('click', function () {
     localStorage.removeItem('User');
     localStorage.setItem('User', serialObj);
     alert(`User ${objUser.surnameAndInitials} has creared!`);
+    this.form.reset();
 });
 
 $('#btn3').on('click', function () {
-    objUser = JSON.parse(localStorage.getItem('User'));
-    $('#name').val(objUser.name);
-    $('#patronymic').val(objUser.patronymic);
-    $('#surname').val(objUser.surname);
-    $('#chief').val(objUser.chief);
-    $('#org').val(objUser.org);
-    $('#depart').val(objUser.depart);
+    localStorage.getItem('User') ? (
+        objUser = JSON.parse(localStorage.getItem('User')),
+        $('#name').val(objUser.name),
+        $('#patronymic').val(objUser.patronymic),
+        $('#surname').val(objUser.surname),
+        $('#chief').val(objUser.chief),
+        $('#org').val(objUser.org),
+        $('#depart').val(objUser.depart)
+    ) : '';
 });
 
 $('#btn4').on('click', function () {

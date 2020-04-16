@@ -903,7 +903,7 @@ $(document).ready(function () {
         oPat.pkIncludeWeekends = confirm('Назначать лабораторные исследования в субботу и воскресенье?');
         $('#invitToAct_1').html('До начала профилактивки ВТЭО необходимо наличие перечисленных ниже исследований. Если обследование неполное, установите дату и отметьте, какие исследования требуется выполнить:');
         let vTom = addDays(new Date(), 1);
-        new Date().getHours() < 10 ? $('#inpDate_4').val(new Date()) : $('#inpDate_4').val(`${vTom.getFullYear()}-${('0' + (vTom.getMonth() + 1)).slice(-2)}-${('0' + vTom.getDate()).slice(-2)}`);
+        new Date().getHours() < 10 ? $('#inpDate_4').val(formatDate()) : $('#inpDate_4').val(`${vTom.getFullYear()}-${('0' + (vTom.getMonth() + 1)).slice(-2)}-${('0' + vTom.getDate()).slice(-2)}`);
         $('#dialog_4').show();
         $('<div/>').prop({
             id: 'dialog_5',

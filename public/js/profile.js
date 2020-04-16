@@ -13,8 +13,7 @@ $('#btn1').on('click', function () {
     let serialObj = JSON.stringify(objUser);
     localStorage.removeItem('User');
     localStorage.setItem('User', serialObj);
-
-    alert(`User ${objUser.surnameAndInitials} has creared!`)
+    alert(`User ${objUser.surnameAndInitials} has creared!`);
 });
 
 $('#btn3').on('click', function () {
@@ -28,5 +27,6 @@ $('#btn3').on('click', function () {
 });
 
 $('#btn4').on('click', function () {
+    alert(`User ${objUser.surnameAndInitials} deleted!`);
     localStorage.removeItem('User');
 });

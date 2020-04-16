@@ -554,6 +554,7 @@ $(document).ready(function () {
 
     function defineEndDateMedicineTaking() {
         oPat.pkStartDateOfVTEProphyl = oChoosDrug.endDateOfVTEProphyl = $('#inpDate_4').val();
+        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
         oChoosDrug.aLine = fillLine(aStartDates[0], oChoosDrug.startDateOfVTEProphyl, oChoosDrug.endDateOfVTEProphyl);
         console.log(oChoosDrug.aLine);
         if (oChoosDrug.titleGroupCyr === 'Варфарин' && oPat.pkIsOrNoSurg && oChoosDrug.startDateOfVTEProphyl < oPat.pkDateOfOper && oPat.pkIsOrNoSurg && oChoosDrug.endDateOfVTEProphyl > oPat.pkDateOfOper) {
@@ -622,7 +623,6 @@ $(document).ready(function () {
     }
 
     function sheduleSplitPeriod() {
-        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
         aSplitPeriod = [relDayOfManipul, relDayOfManipul];
         console.log(oPat.pkDateOfOper, aStartDates[0], aSplitPeriod);
         vXaInhibitors(oChoosDrug.titleGroupCyr) ? aSplitPeriod[0] = relDayOfManipul - defineXaInhibitorsPeriopTactics(oChoosDrug.titleGroupCyr, oPat.pkRiskBleed, oPat.pkCC, oPat.pkGradeOfOper) : '';
@@ -736,13 +736,14 @@ $(document).ready(function () {
             $(aChMeds).each((ind, el) => {
                 oPat.aOrdersContainer.push([el.signature, el.aLine]);
             });
-            defineAllTestsPlan(aChMeds) !== [] ? (
+            aTLine = defineAllTestsPlan(aChMeds);
+            aTLine !== [] ? (
                     aLineOfFuncs.unshift(askOfPrevLabExams),
                     clearValues(),
                     executeFuncsLine(),
                     $('#btnTwo').remove()
                 ) :
-                (console.log(oPat.aOrdersContainer),
+                (
                     goToAssignSheet()
                 );
         });
@@ -782,8 +783,9 @@ $(document).ready(function () {
     }
 
     function goToAssignSheet() {
-        let serialObj = JSON.stringify(oPat.aOrdersContainer);
-        localStorage.setItem('ordersCont', serialObj);
+        oPat.pkStartDateOfVTEProphyl = aStartDates[0];
+        let serialObj = JSON.stringify(oPat);
+        localStorage.setItem('Patient', serialObj);
         $(location).prop('href', '/vte_assignment_sheet');
     }
 
@@ -906,7 +908,7 @@ $(document).ready(function () {
         $('<div/>').prop({
             id: 'dialog_5',
         }).appendTo('#dialog_4');
-        $(defineAllTestsPlan(aChMeds)).each(function (ind, el) {
+        $(aTLine).each(function (ind, el) {
             $('<br>').appendTo('#dialog_5');
             $('<label/>').attr({
                 for: `chkTest_${ind}`
@@ -922,8 +924,10 @@ $(document).ready(function () {
         if (aTTCyr.length > 0) {
             oPat.pkStartDateOfPrevAnalysis = $('#inpDate_4').val();
             oPat.pkDaysSincePrevAnalysisToStartVTEProph = Math.round(diffDates(new Date(aStartDates[0]), new Date($('#inpDate_4').val())));
+            console.log(aTLine);
             $(aTTCyr).each((ind, el) => {
-                $(aTLine).each((ind, item) => item[0] === el ? item[1].push(1 + Math.round(diffDates(new Date($('#inpDate_4').val()), new Date(aStartDates[0])))) : '');
+                $(aTLine).each((ind, item) => item[0] === el ? (item[1].push(1 + Math.round(diffDates(new Date(oPat.pkStartDateOfPrevAnalysis), new Date(aStartDates[0])))), console.log(item[1])) : '');
+                console.log(el);
             });
         };
         aTLine = !oPat.pkIncludeWeekends ? takeIntoConsiderationWeekend(aTLine) : '';
@@ -931,7 +935,8 @@ $(document).ready(function () {
         // $('#dialog_5').remove();
         // clearValues();
         // executeFuncsLine();
-        console.log(oPat.aOrdersContainer);
+        // console.log(aTLine);
+        // console.log(oPat.aOrdersContainer);
         goToAssignSheet();
 
     }

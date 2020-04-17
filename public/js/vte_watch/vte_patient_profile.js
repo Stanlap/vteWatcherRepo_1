@@ -54,7 +54,7 @@ $('#slctMedicalProfileOfPatient').on('click', function () {
 });
 $('#slctMedicalProfileOfPatient').on('change', function () {
     $('#chkMale').prop('disabled', true);
-    $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth, #divDateOfOper').hide();
+    $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth, #divDateOfOper,#divAnesthesia').hide();
     $('#chkIsOrNoSurg, #chkCreateKindOfOper, #divPregnancyOrChildbirth input:checked, #divObstOrGynProfile input:checked, #divSmallOrLargeOper input:checked').prop('checked', false);
     $('#taNonTrivialOperTitle').val('');
     $('.btnAccordChooseOper').prop('value', 1).next().hide();
@@ -96,7 +96,6 @@ $('#chkIsOrNoSurg').on('click', function () {
 
 $('#selKindOfAnesth').on('input', () => {
             if (+$('#selKindOfAnesth option:selected').val() === 3) {
-                objPatient.pkIsSpinalAnesth = true;
                 $('<div/>').prop({
                         id: 'dialog_0',
                     })
@@ -274,7 +273,6 @@ $('#selKindOfAnesth').on('input', () => {
             ($('#chkMale').is(':checked')) ? objPatient.pkGender = 1: '';
             objPatient.pkWeight = Number($('#weight').val());
             objPatient.pkHeight = Number($('#height').val());
-            objPatient.pkIsSpinalAnesth ? (objPatient.pkStandDateITCath = $('#inpDate_0').val(), objPatient.pkRemoveDateITCath = $('#inpDate_1').val()) : '';
             function searchBMI(w, h) {
                 return (Math.ceil(w / (Math.pow((h / 100), 2))));
             }
@@ -295,8 +293,15 @@ $('#selKindOfAnesth').on('input', () => {
 
             $('#chkIsOrNoSurg').is(':checked') ? objPatient.pkIsOrNoSurg = true : '';
 
+
             if (objPatient.pkIsOrNoSurg) {
                 ($('.divGenSurgOper select').prop('selectedIndex') == 4 || $('.divTraumOrthOper select').prop('selectedIndex') == 9 || $('.divNeurosurgOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 1) ? objPatient.pkPullOfSurg = true: '';
+                if (+$('#selKindOfAnesth option:selected').val() === 3) {
+                    objPatient.pkIsSpinalAnesth = true;
+                    objPatient.pkStandDateITCath = $('#inpDate_0').val();
+                    objPatient.pkRemoveDateITCath = $('#inpDate_1').val();
+                }
+                objPatient.pkIsGenAnesth = (+$('#selKindOfAnesth option:selected').val() < 3) ? true: false;    
             }
 
             ($('.divTraumOrthOper select').prop('selectedIndex') == 6 || $('.divTraumOrthOper select').prop('selectedIndex') == 7) ? ($('#chkArtroplasty').prop('checked', true), objPatient.pkArtroplasty = true) : '';

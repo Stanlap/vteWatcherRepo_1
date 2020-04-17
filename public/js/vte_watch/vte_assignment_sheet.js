@@ -30,9 +30,19 @@ $(document).ready(function () {
 
 
     $('caption').text(`${oUsr.org}, ${oUsr.depart}`);
-    let aTCont_1 = ['<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>', '<td></td>'];  
-    let tArD = [];
-    let tArMY = [];
+    let tArD = [],
+    tArMY = [],
+    vCnt = 0, 
+    vCnt_1 = 0,
+    aTCont_1 = [],
+    aTCont_3 = [];
+
+    while (vCnt_1 < 14) {
+        aTCont_1.push('<td></td>');
+        aTCont_3.push('<td class="tdPhysitian"></td>');
+        vCnt_1++;
+    };
+
     for (let i = 0; i < 14; i++) {
         tArD.push(`<td>${(addDays('2020-04-16', i)).getDate()}</td>`);
         tArMY.push(`<td>${1 + (addDays('2020-04-16', i)).getMonth()}/${(addDays('2020-04-16', i)).getFullYear().toString().slice(2)}</td>`);
@@ -41,23 +51,26 @@ $(document).ready(function () {
 
 console.log(tArMY.join(''));
 
-    let vCnt = 0;
     $(oPat.aOrdersContainer).each((ind, el) => {
         el[1] = el[1].filter(item => item < 14);
-        let aTCont_2 = [...aTCont_1];
+        let aTCont_2 = [...aTCont_3];
 
         $(el[1]).each((ind1, el1) => {
             el1 = el1 + oPat.pkDaysSincePrevAnalysisToStartVTEProph;
-            aTCont_2[el1] = `<td>${oUsr.signature}</td>`;
+            aTCont_2[el1] = `<td class="tdPhysitian">${oUsr.signature}</td>`;
         });
-        $('#tlAssignSheet > tbody:last-child').append(`<tr class="trSignature"><td colspan="6" rowspan="2">${el[0]}</td><td colspan="1">врач</td>${aTCont_2.join('')}</tr><tr class="trSignature"></td><td colspan="1">сест.</td>${aTCont_1.join('')}</tr>`);
+        $('#tlAssignSheet > tbody:last-child').append(`<tr class="trSignature"><td colspan="6" rowspan="2" contenteditable>${el[0]}</td><td colspan="1">врач</td>${aTCont_2.join('')}</tr><tr class="trSignature"></td><td colspan="1">сест.</td>${aTCont_1.join('')}</tr>`);
         vCnt++;
     });
 
     while (vCnt < 20) {
-        $('#tlAssignSheet > tbody:last-child').append(`<tr class="trSignature"><td colspan="6" rowspan="2"></td><td colspan="1">врач</td>${aTCont_1.join()}</tr><tr class="trSignature"></td><td colspan="1">сест.</td>${aTCont_1.join()}</tr>`);
+        $('#tlAssignSheet > tbody:last-child').append(`<tr class="trSignature"><td colspan="6" rowspan="2" contenteditable></td><td colspan="1">врач</td>${aTCont_3.join()}</tr><tr class="trSignature"></td><td colspan="1">сест.</td>${aTCont_1.join()}</tr>`);
         vCnt++;
     }
+
+    $('.tdPhysitian').dblclick(function(){
+        $(this).html() === ''? $(this).html(oUsr.signature):  $(this).html('');
+    });
 
     prepareToStart();
 

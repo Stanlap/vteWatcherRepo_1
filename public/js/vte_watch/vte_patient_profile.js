@@ -134,6 +134,15 @@ function createDialog_1() {
         })
         .hide()
         .appendTo('#divCentrAVAccess');
+    $('<label/>').attr({
+        for: 'chkDialog_1'
+    }).html('Катетер уже установлен').appendTo('#dialog_1');
+
+    $('<input/>').prop({
+            id: 'chkDialog_1',
+            type: 'checkbox'
+        })
+        .appendTo('#dialog_1');
     $('<div/>').prop({
             id: 'invitToAct_2',
         }).html('Укажите дату установки:')
@@ -160,10 +169,13 @@ function createDialog_1() {
 
 createDialog_1();
 
+$('#chkDialog_1').on('click', function () {
+    $(this).prop('checked') ? $('#invitToAct_2, #inpDate_2').hide() : $('#invitToAct_2, #inpDate_2').show();
+});
+
 $('#chkCentrAVAccess').on('click', function () {
-    $(this).prop('checked') ? $('#dialog_1').show() : $('#dialog_1').hide();
+    $(this).prop('checked') ? $('#dialog_1').show() : ($('#dialog_1').hide(), $('#chkDialog_1').prop('checked', false), $('#invitToAct_2, #inpDate_2').show());
     objPatient.pkIsCentrAVAccess = $(this).prop('checked') ? true : false;
-    console.log(objPatient.pkIsCentrAVAccess);
     objPatient.pkDateOfOper !== '' ? $('#inpDate_2, #inpDate_3').val(objPatient.pkDateOfOper) : $('#inpDate_2, #inpDate_3').val(formatDate());
 });
 
@@ -344,10 +356,13 @@ function goToRF() {
         objPatient.pkIsGenAnesth = (+$('#selKindOfAnesth option:selected').val() < 3) ? true : false;
     }
 
-    objPatient.pkIsCentrAVAccess ? (objPatient.pkStandDateCentrAVAccess = $('#inpDate_2').val(),
-    objPatient.pkRemoveDateCentrAVAccess = $('#inpDate_3').val()): (objPatient.pkStandDateCentrAVAccess = '',
-    objPatient.pkRemoveDateCentrAVAccess = '');
-
+    if (objPatient.pkIsCentrAVAccess) {
+        $('#chkDialog_1').prop('checked') ? (objPatient.pkStandDateCentrAVAccess = '', objPatient.pkHasCentrAVAccess = true) : (objPatient.pkStandDateCentrAVAccess = $('#inpDate_2').val(), objPatient.pkHasCentrAVAccess = false);
+        objPatient.pkRemoveDateCentrAVAccess = $('#inpDate_3').val();
+    } else {
+        objPatient.pkStandDateCentrAVAccess = '';
+        objPatient.pkRemoveDateCentrAVAccess = '';
+    };
 
     ($('.divTraumOrthOper select').prop('selectedIndex') == 6 || $('.divTraumOrthOper select').prop('selectedIndex') == 7) ? ($('#chkArtroplasty').prop('checked', true), objPatient.pkArtroplasty = true) : '';
 

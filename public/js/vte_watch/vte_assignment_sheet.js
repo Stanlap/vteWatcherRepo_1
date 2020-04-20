@@ -9,10 +9,12 @@ $(document).ready(function () {
 
     oPat.pkIsOrNoSurg ? (
         relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl))),
-        oPat.aOrdersContainer.push(['Компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]),
-        oPat.aOrdersContainer.push(['Активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]])
+        oPat.aOrdersContainer.push(['компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]),
+        oPat.aOrdersContainer.push(['активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]])
     ) : '';
     console.log(oPat.aOrdersContainer);
+    let aVTEPrPlan = [];
+    $(oPat.aOrdersContainer).each((ind,el) => aVTEPrPlan.push(' ' + el[0]));
 
     $('<div/>').prop({
             id: 'invitToAct_1',
@@ -83,8 +85,6 @@ $(document).ready(function () {
         };
         $('#tlAssignSheet > tbody:last-child').append(`<tr class="trDates"><td id="tdSignTitle" colspan="6" rowspan="2">Назначения:</td><td colspan="1">м./г.</td>${tArMY.join('')}</tr><tr class="trSignature"></td><td colspan="1">День</td>${tArD.join('')}</tr>`);
 
-        console.log(tArMY.join(''));
-
         $(oPat.aOrdersContainer).each((ind, el) => {
             el[1] = el[1].filter(item => item < 14);
             let aTCont_2 = [...aTCont_3];
@@ -132,14 +132,16 @@ $(document).ready(function () {
         $('<input/>').prop({
                 id: 'inpText_1',
                 type: 'number',
-                placeholder: 'Номер палаты'
+                placeholder: 'Номер палаты',
+                autocomplete: 'off'
             })
             .appendTo('#dialog_0');
         $('<br>').prop({}).appendTo('#dialog_0');
         $('<input/>').prop({
                 id: 'inpText_2',
                 type: 'number',
-                placeholder: 'Номер мед. карты'
+                placeholder: 'Номер мед. карты',
+                autocomplete: 'off'
             })
             .appendTo('#dialog_0');
         $('#btnOne').on('click', definePersonDates);
@@ -154,13 +156,10 @@ $(document).ready(function () {
         ПРОФИЛАКТИКИ ТРОМБОЭМБОЛИИ ЛЕГОЧНОЙ АРТЕРИИ
         Я,
         ${oPat.pkName ? oPat.pkName : '________________________________________________________'}
-        (фамилия, имя, отчество)
         получил  разъяснения  по  поводу  необходимости  профилактики тромбоэмболии
         легочной  артерии,  информацию  об  особенностях,  длительности  течения  и
-        прогнозе этого осложнения в послеоперационном периоде.
-        ${oPat.pkGeneralListOfRF !== 'отсутствуют' ? 'У меня имеются риск-факторы развития ВТЭО: ' + oPat.pkGeneralListOfRF + '.': ''}
-        ${oPat.pkAllChoosedOperations.length > 0 ? 'Мне предстоит оперативное вмешательство: ' + oPat.pkAllChoosedOperations + '.': ''} ${oPat.pkIsCentrAVAccess ? 'Мне планируется установка центрального венозного (артериального) катетера.': ''} ${oPat.pkIsSpinalAnesth ? 'Оперативное вмешательство будет выполнено под с/м анестезией.': ''}
-        ${oPat.pkStartDateOfVTEProphyl ? 'Начало профилактики ВТЭО: ' + convertDateToRuFormat(new Date(oPat.pkStartDateOfVTEProphyl)) + ' г.': ''}
+        прогнозе этого осложнения в послеоперационном периоде. ${oPat.pkGeneralListOfRF !== 'отсутствуют' ? 'У меня имеются риск-факторы развития ВТЭО: ' + oPat.pkGeneralListOfRF + '.': ''} ${oPat.pkAllChoosedOperations.length > 0 ? 'Мне предстоит оперативное вмешательство: ' + oPat.pkAllChoosedOperations + '.': ''} ${oPat.pkIsCentrAVAccess && !oPat.pkHasCentrAVAccess ? 'Мне планируется установка центрального венозного (артериального) катетера.': ''} ${oPat.pkIsSpinalAnesth ? 'Оперативное вмешательство будет выполнено под с/м анестезией.': ''} ${aVTEPrPlan.length > 0 ? `Краткий план назначенной мне профилактики ВТЭО: ${aVTEPrPlan}.`: ''}
+        ${oPat.pkStartDateOfVTEProphyl ? 'Начало профилактики ВТЭО: ' + convertDateToRuFormat(new Date(oPat.pkStartDateOfVTEProphyl)) + ' г.': ''} 
         Мне даны полные разъяснения о ее целях и продолжительности, возможных неблагоприятных эффектах лекарственных средств, а также о том, что предстоит мне делать в случае их возникновения.
         Я извещен о необходимости соблюдать режим в ходе профилактики, немедленно сообщать врачу о любом ухудшении самочувствия.
         Я извещен, что несоблюдение рекомендаций врача может осложнить лечение и отрицательно сказаться на состоянии здоровья.
@@ -174,40 +173,6 @@ $(document).ready(function () {
         clearValues();
         executeFuncsLine();
     }
-
-    // const convertDateToRuFormat = (date) =>{
-    //     let vD = new Date(date);
-    //     function getZero(num){
-    //         if (num > 0 && num < 10) { 
-    //             return '0' + num;
-    //         } else {
-    //             return num;
-    //         }
-    //     }
-    //     return getZero(vD.getDate()) + '.' + getZero(vD.getMonth() + 1) + '.' + vD.getFullYear()
-    // }
-
-    
-
-
-    // console.log((new Date()).getMonth(),
-    // (new Date()).getFullYear(),
-    // (new Date()).getDate());
-
-    // const convertDateToRuFormat = (date) =>{
-    //     let vD = new Date(date);
-    //     function getZero(num){
-    //         if (num > 0 && num < 10) { 
-    //             return '0' + num;
-    //         } else {
-    //             return num;
-    //         }
-    //     }
-    //     return getZero(vD.getDate()) + '.' + getZero(vD.getMonth() + 1) + '.' + vD.getFullYear()
-    // }
-
-    // console.log(vAgreement);
-
 
       if(window.webkitRequestFileSystem){
         console.log("fileSystem api  поддерживается!");

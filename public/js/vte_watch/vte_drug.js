@@ -641,9 +641,11 @@ $(document).ready(function () {
             };
         };
         if (oPat.pkIsCentrAVAccess) {
-            relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkIsCentrAVAccess), new Date(aStartDates[0])));
-            oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
-            if (oPat.pkIsCentrAVAccess !== oPat.pkRemoveDateCentrAVAccess) {
+            if(!oPat.pkHasCentrAVAccess){
+                relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkStandDateCentrAVAccess), new Date(aStartDates[0])));
+                oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));    
+            }
+            if (oPat.pkStandDateCentrAVAccess !== oPat.pkRemoveDateCentrAVAccess) {
                 relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkRemoveDateCentrAVAccess), new Date(aStartDates[0])));
                 oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
             };
@@ -745,7 +747,7 @@ $(document).ready(function () {
                 oPat.aOrdersContainer.push([el.signature, el.aLine]);
             });
             aTLine = defineAllTestsPlan(aChMeds);
-            aTLine !== [] ? (
+            aTLine.length > 0 ? (
                     aLineOfFuncs.unshift(askOfPrevLabExams),
                     clearValues(),
                     executeFuncsLine(),

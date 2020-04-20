@@ -113,7 +113,7 @@ if (oPat.pkGender === 1) {
 
 oPat.pkPregnancyOrChildbirth < 2 ? $('#chkPostpartum').prop('checked', true): '';
 oPat.pkIsGenAnesth ? $('#chkGeneralAnesthesia').prop('checked', true): '';
-
+oPat.pkHasCentrAVAccess ? $('#chkCentralVeinCatheter').prop('checked', true): '';
 
 
 

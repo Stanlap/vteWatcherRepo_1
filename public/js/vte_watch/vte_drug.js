@@ -640,6 +640,14 @@ $(document).ready(function () {
                 oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
             };
         };
+        if (oPat.pkIsCentrAVAccess) {
+            relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkIsCentrAVAccess), new Date(aStartDates[0])));
+            oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
+            if (oPat.pkIsCentrAVAccess !== oPat.pkRemoveDateCentrAVAccess) {
+                relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkRemoveDateCentrAVAccess), new Date(aStartDates[0])));
+                oChoosDrug.aLine = oChoosDrug.aLine.filter(el => el < relDayOfManipul).concat(oChoosDrug.aLine.filter(el => el > relDayOfManipul));
+            };
+        };
         console.log(oChoosDrug.aLine);
         oChoosDrug_2 = {
             titleGroupCyr: oChoosDrug.titleGroupCyr,

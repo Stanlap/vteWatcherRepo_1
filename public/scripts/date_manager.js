@@ -16,9 +16,7 @@ function addDays(date, days) {
     return result;
 }
 
-
-
-function correctDate(vD){
+function correctDate(vD) {
     return `${vD.getFullYear()}-${('0' + (vD.getMonth() + 1)).slice(-2)}-${('0' + vD.getDate()).slice(-2)}`;
 }
 
@@ -28,39 +26,29 @@ function correctDate(vD){
 //     return searchedDate;
 // }
 
-// let day_1 = new Date(2019, 08, 20),
-//     day_2 = new Date(2019, 10, 07);
+// let dayOne = new Date(2019, 08, 20),
+//     dayTwo = new Date(2019, 10, 07);
 
 function diffDates(dateOne, dateTwo) {
     return (dateOne - dateTwo) / (60 * 60 * 24 * 1000);
 };
-// diffDates(day_2, day_1);
 
-// let nextday = plusOrMinusDays(new Date("2020-02-19"), 7);
-// console.log(nextday);
-// let date1 = '02/19/2020';
-// let date2 = nextday.toLocaleDateString("en-US");
-// //   vplan_2 date1 = '01/12/2018';
-// // vplan_2 date2 = '12/12/2018';
-// date1 = new Date(date1);
-// date2 = new Date(date2);
-// date1 > date2; //false
-// date1 < date2; //true
-// date1 >= date2; //false
-// date1 <= date2; //true
-// console.log(date1 <= date2);
+function dateToYMD(date) {
+    var d = date.getDate();
+    var m = date.getMonth() + 1; //Month from 0 to 11
+    var y = date.getFullYear();
+    return '' + y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+}
 
+const convertDateToRuFormat = (date) => {
+    let vD = new Date(date);
 
-        // привести к формату даты браузера;
-        // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$3-$2-$1') 
-        // привести к фоормату даты 'en-us';
-        // objPatient.pkstartDateOfVTEProphyl = $('#inpDate').val().replace(/(\d*)-(\d*)-(\d*)/, '$2/$3/$1');
-
-        function dateToYMD(date) {
-            var d = date.getDate();
-            var m = date.getMonth() + 1; //Month from 0 to 11
-            var y = date.getFullYear();
-            return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+    function getZero(num) {
+        if (num > 0 && num < 10) {
+            return '0' + num;
+        } else {
+            return num;
         }
-        
-    
+    }
+    return getZero(vD.getDate()) + '.' + getZero(vD.getMonth() + 1) + '.' + vD.getFullYear()
+}

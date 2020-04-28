@@ -7,7 +7,7 @@ let Datastore = require('nedb'),
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
-module.exports.addUser = (email, password, response) => {
+module.exports.addUser = (email, password, res) => {
     db.findOne({
         email: email
     }, {
@@ -19,11 +19,10 @@ module.exports.addUser = (email, password, response) => {
                 password: bcrypt.hashSync(password, salt)
             };
             db.insert(doc_1, function (err, newDoc) {
-                response.send(`User has created - ${newDoc.email}`);
+                res.send(`User has created - ${newDoc.email}`);
             });
         } else {
-            console.log('User exists!');
-            response.send(`User exists - ID ${doc._id}`);
+            res.render('mainAuth',{title: 'Main Page Authenticated'});
         };
     });
 }

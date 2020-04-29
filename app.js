@@ -106,6 +106,11 @@ app.get('/profile', auth, (req, res) => {
         message: 'Profile Page'
     });
 });
+app.get('/profile_user', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_profile_user', {
+        title: 'User Profile Page',
+    });
+});
 app.get('/progList', auth, (req, res) => {
     res.render('progList', {
         title: 'Programs List'

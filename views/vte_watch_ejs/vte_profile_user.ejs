@@ -52,12 +52,17 @@
                         <input type="button" class="btn btn-secondary" id='btn2' value="Редактировать"></input>
                         <input type="reset" class="btn btn-secondary" id='btn3' value="Очистить форму"></input>
                         <input type="button" class="btn btn-dark" id='btn4' value="Удалить профиль"></input>
+                        <div class="alert alert-success alert-dismissible" style="display:none" id="success-alert" role="alert">
+                            <strong></strong>
+                          </div>
+                    
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <%- include('../partials/footer') %>
+      
+      <%- include('../partials/footer') %>
     <%- include('../partials/scripts') %>
     <script src="/js/vte_watch/profile_user.js" defer></script>
 </body>

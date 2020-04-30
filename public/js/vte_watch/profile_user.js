@@ -22,7 +22,9 @@ $('#btn1').on('click', function () {
     let serialObj = JSON.stringify(oUser);
     localStorage.removeItem('User');
     localStorage.setItem('User', serialObj);
-    alert(`User ${oUser.surnameAndInitials} has creared!`);
+    $("#success-alert").show().html(`Пользователь ${oUser.surnameAndInitials} создан.`);
+
+    // alert(`User ${oUser.surnameAndInitials} has creared!`);
     this.form.reset();
 });
 
@@ -36,9 +38,16 @@ $('#btn2').on('click', function () {
         $('#org').val(oUser.org),
         $('#depart').val(oUser.depart)
     ) : '';
+    $("#success-alert").hide().html('');
+
+});
+$('#btn3').on('click', function () {
+    $("#success-alert").hide().html('');
 });
 
 $('#btn4').on('click', function () {
-    alert(`User ${oUser.surnameAndInitials} deleted!`);
+    $("#success-alert").show().html(`Пользователь ${oUser.surnameAndInitials} удален.`);
     localStorage.removeItem('User');
 });
+$("#btnAlert").click(function() {
+  });

@@ -94,7 +94,5 @@ function goToRF() {
 
     let serialObj = JSON.stringify(oPat);
     localStorage.setItem('Patient', serialObj);
-    $(location).attr('href', '/vte_patient_list_rf');
-
-    console.log(oPat);
+    oPat.pkIsOrNoSurg ? $(location).attr('href', '/vte_oper_profile'): $(location).attr('href', '/vte_patient_list_rf');
 }

@@ -3,20 +3,26 @@ let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(oPat);
 let vIsShow = false;
-$('#inpDateOfOper').prop({
-    value: new Date()
-});
 
-$(`<input class="form-control" type="date" value= "${formatDate()}" id="inpDateOfOper_2">`).appendTo('#divForDate');
+const addDatePicker = (vDate, ind)=> `<input class="form-control" type="date" value= "${vDate}" id="inpDate_${ind}">`;
+
+const createCard = (title, ind, content) => {
+    $('#accListOp').append(`<div class="card"><div class="card-header" id="divCHeader_${ind}"><h5 class="mb-0"><button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapse_${ind}" aria-controls="collapse_${ind}">${title}</button></h5></div>
+    <div id="collapse_${ind}" class="collapse ${vIsShow ? '': 'show'}" aria-labelledby="divCHeader_${ind}" data-parent="#accListOp"><div class="card-body"><ul class="list-group list-group-flush">${content}</ul></div></div></div>`);
+    vIsShow = true;
+}
+
+$(`${addDatePicker(formatDate(), 1)}`).appendTo('#divForDate_1');
 
 $('#lblTimeOfSurg').hide();
+$('span.comments').hide();
+
 $('#rdoSmallOper').on('click', function () {
     $(this).prop('checked') ? $('#lblTimeOfSurg').show() : '';
 });
 $('#rdoLargeOper').on('click', function () {
     $(this).prop('checked') ? ($('#lblTimeOfSurg').hide(), $('#chkTimeOfSurg').prop('checked', false)) : '';
 });
-
 
 $(oPat.pkMedProfiles).each((ind, el) => {
     let vContent = '';
@@ -35,12 +41,7 @@ $(oPat.pkMedProfiles).each((ind, el) => {
     el === 10 ? (vContent = '<li class="list-group-item" value="0"> аборт</li><li class="list-group-item" value="1"> кесарево сечение плановое </li><li class="list-group-item" value="1"> кесарево сечение в родах</li><li class="list-group-item" value="1"> ампутация матки</li><li class="list-group-item" value="1"> экстирпация матки</li>', createCard('Акушерство и гинекология', el, vContent)) : '';
 });
 
-function createCard(title, ind, content) {
-    $('#accListOp').append(`<div class="card"><div class="card-header" id="divCHeader_${ind}"><h5 class="mb-0"><button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapse_${ind}" aria-controls="collapse_${ind}">${title}</button></h5></div>
-    <div id="collapse_${ind}" class="collapse ${vIsShow ? '': 'show'}" aria-labelledby="divCHeader_${ind}" data-parent="#accListOp"><div class="card-body"><ul class="list-group list-group-flush">${content}</ul></div></div></div>`);
-    vIsShow = true;
-}
-$("#accListOp li").click(function (vTB) {
+$("#accListOp li").on('click', function (vTB) {
     vTB = $(this).parents('.collapse').siblings().find('button');
     $(this).toggleClass('list-group-item-secondary');
     $(this).siblings('.list-group-item-secondary').length > 0 || $(this).hasClass('list-group-item-secondary') ? $(vTB).addClass('btn-secondary') : $(vTB).removeClass('btn-secondary');
@@ -52,6 +53,7 @@ $('#btnCreateOwnOpProf').on('click', () => {
     $('#accListOp li').removeClass('list-group-item-secondary');
     $('#accListOp button').removeClass('btn-secondary');
 });
+
 $('#btnChooseOp').on('click', () => {
     $('#accListOp').show();
     $('#divCreateOwnOpProf').hide();
@@ -61,93 +63,54 @@ $('#btnChooseOp').on('click', () => {
     $('#taNonTrivialOperTitle').val('');
 });
 $('#btnOperTomorrow').on('click', () => {
-    $('#divForDate').empty();
-    $(`<input class="form-control" type="date" value= "${correctDate(addDays(new Date(), 1))}" id="inpDateOfOper_2">`).appendTo('#divForDate');
+    $('#divForDate_1').empty();
+    $(`${addDatePicker(correctDate(addDays(new Date(), 1)), 1)}`).appendTo('#divForDate_1');
 });
 
-// $('#lblCreateKindOfOper').hide();
-
-// $('span.preComment').on('click', function () {
-//     $(this).next().show()
-//     $(this).hide()
-// })
-
-// $('span.comments').on('click', function () {
-//     $(this).prev().show()
-//     $(this).hide()
-// });
-
-// $('#dateOfBirth').on('change', function () {
-//     oPat.pkBirthDateOfPatient = new Date($('#dateOfBirth').prop('value'));
-// });
-
-// $('#chkMale').on('click', function () {
-//     ($(this).is(':checked')) ? $('#slctMedicalProfileOfPatient [value="10"]').hide(): $('#slctMedicalProfileOfPatient [value="10"]').show();
-// });
-
-// $('#slctMedicalProfileOfPatient').on('click', function () {
-//     oPat.pkMedProfiles = [];
-//     $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
-//         oPat.pkMedProfiles.push(+$(this).prop('value'));
-//         $(el).prop('value') < 3 ? $('.lblIsOrNoSurg').hide() : ($(el).prop('value') > 2 && $(el).prop('value')) < 10 ? $('.lblIsOrNoSurg').show() : $(el).prop('value') === 10 ? $('#divObstOrGynProfile').show() : $('#divObstOrGynProfile').show();
-//     });
-// });
-
-
-// $('#slctMedicalProfileOfPatient').on('change', function () {
-//     $('.lblIsOrNoSurg, #divChooseKindOfOper, #divCreateKindOfOper, #divSmallOrLargeOper, #divObstOrGynProfile, #divPregnancyOrChildbirth, #divDateOfOper,#divAnesthesia').hide();
-//     $('#chkIsOrNoSurg, #btnCreateOwnOpProf, #divPregnancyOrChildbirth input:checked, #divObstOrGynProfile input:checked, #divSmallOrLargeOper input:checked').prop('checked', false);
-//     $('#taNonTrivialOperTitle').val('');
-//     $('.btnAccordChooseOper').prop('value', 1).next().hide();
-//     $('.btnAccordChooseOper').hide();
-// });
-
-// $('input[name=rdoObstOrGynProfile]:radio').on('click', function () {
-//     oPat.pkObstOrGynProfile = $(this).val();
-//     if ($(this).val() == 0) {
-//         $('#divPregnancyOrChildbirth').show();
-//     } else {
-//         $('#divPregnancyOrChildbirth').hide();
-//         $('input[name="rdoPregnancyOrChildbirth"]:checked').prop('checked', false);
-//     }
-//     $('.lblIsOrNoSurg').show();
-// });
-$('.btnAccordChooseOper').show();
-$('.btnAccordChooseOper').prop('value', 1).next().show();
+$('span.preComments').on('click', function () {
+    $(this).hide().next().show();
+})
+$('span.comments').on('click', function () {
+    $(this).hide().prev().show();
+});
 
 $('#selKindOfAnesth').on('input', () => {
-    if (+$('#selKindOfAnesth option:selected').val() === 3) {
-        $('<div/>').prop({
-                id: 'dialog_0',
-            })
-            .appendTo('#divAnesthesia');
-        $('<br>').appendTo('#dialog_0');
-        $('<div/>').prop({
-                id: 'invitToAct_0',
-            }).html('Укажите дату установки:')
-            .appendTo('#dialog_0');
-        $('<input/>').prop({
-                id: 'inpDate_0',
-                type: 'date'
-            })
-            .appendTo('#dialog_0');
-
-        $('<div/>').prop({
-                id: 'invitToAct_1',
-            })
-            .html('Укажите дату удаления катетера:')
-            .appendTo('#dialog_0');
-        $('<input/>').prop({
-                id: 'inpDate_1',
-                type: 'date'
-            })
-            .appendTo('#dialog_0');
-        oPat.pkDateOfOper !== '' ? $('#inpDate_0, #inpDate_1').val(oPat.pkDateOfOper) : $('#inpDate_0, #inpDate_1').val(formatDate());
-
-    } else {
-        $('#dialog_0').remove();
-    };
+    +$('#selKindOfAnesth option:selected').val() === 3 ? ($(`<br><span>Дата установки катетера</span>${addDatePicker(formatDate(), 2)}`).appendTo('#divForDate_2'),$(`<span>Дата удаления катетера</span>${addDatePicker(formatDate(), 2)}`).appendTo('#divForDate_2')): $('#divForDate_2').empty();
 });
+
+// $('#selKindOfAnesth').on('input', () => {
+//     if (+$('#selKindOfAnesth option:selected').val() === 3) {
+//         $('<div/>').prop({
+//                 id: 'dialog_0',
+//             })
+//             .appendTo('#divAnesthesia');
+//         $('<br>').appendTo('#dialog_0');
+//         $('<div/>').prop({
+//                 id: 'invitToAct_0',
+//             }).html('Укажите дату установки:')
+//             .appendTo('#dialog_0');
+//         $('<input/>').prop({
+//                 id: 'inpDate_0',
+//                 type: 'date'
+//             })
+//             .appendTo('#dialog_0');
+
+//         $('<div/>').prop({
+//                 id: 'invitToAct_1',
+//             })
+//             .html('Укажите дату удаления катетера:')
+//             .appendTo('#dialog_0');
+//         $('<input/>').prop({
+//                 id: 'inpDate_1',
+//                 type: 'date'
+//             })
+//             .appendTo('#dialog_0');
+//         oPat.pkDateOfOper !== '' ? $('#inpDate_0, #inpDate_1').val(oPat.pkDateOfOper) : $('#inpDate_0, #inpDate_1').val(formatDate());
+
+//     } else {
+//         $('#dialog_0').remove();
+//     };
+// });
 
 function createDialog_1() {
     $('<div/>').prop({
@@ -200,200 +163,36 @@ $('#chkCentrAVAccess').on('click', function () {
     oPat.pkDateOfOper !== '' ? $('#inpDate_2, #inpDate_3').val(oPat.pkDateOfOper) : $('#inpDate_2, #inpDate_3').val(formatDate());
 });
 
-$('.btnAccordChooseOper').on('click', function (el) {
-    el = $(this);
-    if (el.val() === 0) {
-        el.next().hide();
-        el.val(1);
-    } else {
-        el.val(0);
-        el.next().show();
-    }
-});
 
-// function formatDate() {
-//     let d = new Date(),
-//         month = '' + (d.getMonth() + 1),
-//         day = '' + d.getDate(),
-//         year = d.getFullYear(),
-//         vDateNow = '';
-//     if (month.length < 2) month = '0' + month;
-//     if (day.length < 2) day = '0' + day;
-//     vDateNow = [year, month, day].join('-');
-//     return vDateNow;
-// }
-
-// function addDays(date, days) {
-//     let result = new Date(date);
-//     result.setDate(result.getDate() + days);
-//     return result;
-// }
-
-// function correctDate(vD) {
-//     return `${vD.getFullYear()}-${('0' + (vD.getMonth() + 1)).slice(-2)}-${('0' + vD.getDate()).slice(-2)}`;
-// }
-
-// correctDate(addDays(new Date(), 1))
-
-// $('#btnCreateOwnOpProf').on('click', function () {
-//     ($(this).is(':checked')) ? ($('#divSmallOrLargeOper').show(), $('#divChooseKindOfOper').hide(),
-//         $('.btnObsGynOper').show()) : ($('#divSmallOrLargeOper, .lblTimeOfSurg').hide(),
-//         $('.btnObsGynOper, #divChooseKindOfOper').show(), $('#taNonTrivialOperTitle').val(''), $('#divSmallOrLargeOper input:checked').prop('checked', false));
-//     // $('#divSmallOrLargeOper input:checked').prop('checked', false), $('#divChooseKindOfOper').show());
-// });
-
-
-function formatDate() {
-    let d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear(),
-        vDateNow = '';
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-    vDateNow = [year, month, day].join('-');
-    return vDateNow;
-}
-
-function getCurrentAge(date) {
-    return ((new Date().getTime() - new Date(date)) / (24 * 3600 * 365.25 * 1000)) | 0;
-}
-
-function addDays(date, days) {
-    let result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
-
-// $('#OperYesterday').on('click', function () {
-//     let vYesterday = addDays(new Date(), -1);
-//     $('#inpDateOfOper').hide();
-//     oPat.pkDateOfOper = (`${vYesterday.getFullYear()}-${("0" + (vYesterday.getMonth() + 1)).slice(-2)}-${("0" + vYesterday.getDate()).slice(-2)}`);
+// $('#inpDateOfOper').on('change', function () {
+//     oPat.pkDateOfOper = $(this).val();
 //     (oPat.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
 // });
 
-$('#rdoOperToday').on('click', function () {
-    $('#inpDateOfOper').hide();
-    oPat.pkDateOfOper = formatDate();
-    (oPat.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-});
-
-$('#rdoOperTomorrow').on('click', function () {
-    let vTomorrow = addDays(new Date(), 1);
-    $('#inpDateOfOper').hide();
-    oPat.pkDateOfOper = (`${vTomorrow.getFullYear()}-${("0" + (vTomorrow.getMonth() + 1)).slice(-2)}-${("0" + vTomorrow.getDate()).slice(-2)}`);
-    (oPat.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-});
-
-// $('#rdoOperSomeDate').on('click', function () {
-//     $('#inpDateOfOper').show().val('');
-// });
-
-$('#inpDateOfOper').on('change', function () {
-    oPat.pkDateOfOper = $(this).val();
-    (oPat.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-});
-
-
-// $('#weight').on('change', () => {
-//     ($('#weight').prop('value') < 50 || $('#weight').prop('value') > 120) ? alert(`Вес пациента действительно ${$('#weight').prop('value')} кг?`): '';
-//     (getCurrentAge(oPat.pkBirthDateOfPatient) < 18 || getCurrentAge(oPat.pkBirthDateOfPatient) > 100) ?
-//     alert(`Возраст пациента действительно ${getCurrentAge(oPat.pkBirthDateOfPatient)} лет?`): '';
-// });
-
-// $('#height').on('change', () => {
-//     ($('#height').prop('value') < 150 || $('#height').prop('value') > 190) ? alert(`Рост пациента действительно ${$('#height').prop('value')} см?`): '';
-//     (getCurrentAge(oPat.pkBirthDateOfPatient) < 18 || getCurrentAge(oPat.pkBirthDateOfPatient) > 100) ?
-//     alert(`Возраст пациента действительно ${getCurrentAge(oPat.pkBirthDateOfPatient)} лет?`): '';
-// });
-
-// function showBtnGoToRF() {
-
-//     oPat.pkAge = getCurrentAge(oPat.pkBirthDateOfPatient);
-//     oPat.pkAge !== 0 && $('#weight').val().length > 0 && $('#height').val().length > 0 && $('#slctMedicalProfileOfPatient option:selected').is(':checked') ? $('#btnOne').show() : $('#btnOne').hide();
-// }
-
-// $('#slctMedicalProfileOfPatient option').bind('click', showBtnGoToRF);
-// $('#age, #weight, #height, #dateOfBirth').bind('input', showBtnGoToRF);
-
-// $('#btnOne').bind('click', goToRF);
-
-// $('#slctMedicalProfileOfPatient').click(function () {
-//     (oPat.pkMedProfiles.includes(10) && $('input[name=rdoObstOrGynProfile]:checked').val() === undefined) ? $('#btnOne').prop('disabled', true): $('#btnOne').prop('disabled', false);
-// });
-
-// $('input[name=rdoObstOrGynProfile]').click(function () {
-//     ($(this).val() == 1) ? ($('#btnOne').prop('disabled', false), $('#inpWeekOfPregnancy').val(''), oPat.pkWeekOfPregnancy = 0) : ($('#btnOne').prop('disabled', true), $('#dioPat.pkDateOfChildbirth').hide(), $('#inpDateOfChildbirth').val(''), oPat.pkDateOfChildbirth = '');
-// });
-
-// $('input[name=rdoPregnancyOrChildbirth]').click(function () {
-//     ($(this).val() == 0) ? ($('#inpWeekOfPregnancy').show(), $('#dioPat.pkDateOfChildbirth').hide(), $('#inpDateOfChildbirth').val(''), oPat.pkDateOfChildbirth = '') : ($('#inpWeekOfPregnancy').hide(), oPat.pkWeekOfPregnancy = 0, $('#dioPat.pkDateOfChildbirth').show());
-//     ($(this).val() == 1) ? ($('#inpWeekOfPregnancy').val(''), oPat.pkWeekOfPregnancy = 0, $('#inpWeekOfPregnancy').hide(), $('#btnOne').prop('disabled', false), $('#divDateOfChildbirth').show()) : (oPat.pkDateOfChildbirth != '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-//     ($(this).val() == 0) ? ($('#inpWeekOfPregnancy').show(), $('#divDateOfChildbirth').hide()) : (oPat.pkWeekOfPregnancy !== 0) ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-// });
-
-// $('#inpWeekOfPregnancy').on('input', function () {
-//     oPat.pkWeekOfPregnancy = Number($(this).val());
-//     (oPat.pkWeekOfPregnancy !== 0) ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-// });
-
-// $('#btnChildbirthYesterday').on('click', function () {
-//     let vYesterday = addDays(new Date(), -1);
-//     $('#inpDateOfChildbirth').hide();
-//     oPat.pkDateOfChildbirth = (`${vYesterday.getFullYear()}-${("0" + (vYesterday.getMonth() + 1)).slice(-2)}-${("0" + vYesterday.getDate()).slice(-2)}`);
-//     (oPat.pkDateOfChildbirth !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-// });
-
-// $('#btnChildbirthToday').on('click', function () {
-//     $('#inpDateOfChildbirth').hide();
-//     oPat.pkDateOfChildbirth = formatDate();
-//     (oPat.pkDateOfChildbirth !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-// });
-
-// $('#btnChildbirthSomeDate').on('click', function () {
-//     $('#inpDateOfChildbirth').show().val('');
-// });
-
-// $('#inpDateOfChildbirth').on('change', function () {
-//     oPat.pkDateOfChildbirth = $(this).val();
-//     (oPat.pkDateOfChildbirth !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-// });
 
 function goToRF() {
-    // ($('#chkMale').is(':checked')) ? oPat.pkGender = 1: '';
-    // oPat.pkWeight = Number($('#weight').val());
-    // oPat.pkHeight = Number($('#height').val());
-
-    // function searchBMI(w, h) {
-    //     return (Math.ceil(w / (Math.pow((h / 100), 2))));
-    // }
-    // oPat.pkBMI = searchBMI($('#weight').val(), $('#height').val());
-    // oPat.pkMedProfiles = [];
-    // $('#slctMedicalProfileOfPatient option:selected').each(function (i, el) {
-    //     oPat.pkMedProfiles.push(+$(this).prop('value'));
-    // });
     let isElem = false;
-
     function isSurgProfiles() {
         $.each(oPat.pkMedProfiles, function (index, value) {
             if (value > 2 && value < 10) isElem = true;
         });
         return isElem;
     }
-    oPat.pkAllSurgProfiles = isSurgProfiles();
 
-    // $('#chkIsOrNoSurg').is(':checked') ? oPat.pkIsOrNoSurg = true : '';
-
-
-    if (oPat.pkIsOrNoSurg) {
-        ($('.divGenSurgOper select').prop('selectedIndex') == 4 || $('.divTraumOrthOper select').prop('selectedIndex') == 9 || $('.divNeurosurgOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 1) ? oPat.pkPullOfSurg = true: '';
-        if (+$('#selKindOfAnesth option:selected').val() === 3) {
-            oPat.pkIsSpinalAnesth = true;
-            oPat.pkStandDateITCath = $('#inpDate_0').val();
-            oPat.pkRemoveDateITCath = $('#inpDate_1').val();
-        }
-        oPat.pkIsGenAnesth = (+$('#selKindOfAnesth option:selected').val() < 3) ? true : false;
+    if (+$('#selKindOfAnesth option:selected').val() === 3) {
+        oPat.pkIsSpinalAnesth = true;
+        oPat.pkStandDateITCath = $('#inpDate_0').val();
+        oPat.pkRemoveDateITCath = $('#inpDate_1').val();
     }
+    oPat.pkIsGenAnesth = (+$('#selKindOfAnesth option:selected').val() < 3) ? true : false;
+// }
+
+    // oPat.pkAllSurgProfiles = isSurgProfiles();
+    // if (oPat.pkIsOrNoSurg) {
+    //     ($('.divGenSurgOper select').prop('selectedIndex') == 4 || $('.divTraumOrthOper select').prop('selectedIndex') == 9 || $('.divNeurosurgOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 1) ? oPat.pkPullOfSurg = true: '';
+
+
+
 
     if (oPat.pkIsCentrAVAccess) {
         $('#chkDialog_1').prop('checked') ? (oPat.pkStandDateCentrAVAccess = '', oPat.pkHasCentrAVAccess = true) : (oPat.pkStandDateCentrAVAccess = $('#inpDate_2').val(), oPat.pkHasCentrAVAccess = false);

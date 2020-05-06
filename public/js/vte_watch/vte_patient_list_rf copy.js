@@ -1,9 +1,9 @@
 let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(oPat);
-// let oPat.oSelOp = JSON.parse(localStorage.getItem('SelectedOper'));
-// localStorage.removeItem('SelectedOper');
-// console.log(oPat.oSelOp);
+let objSelectedOper = JSON.parse(localStorage.getItem('SelectedOper'));
+localStorage.removeItem('SelectedOper');
+console.log(objSelectedOper);
 
 oPat.pkSevereHepaticFailure = false;
 oPat.pkHeartInsuff3_4 = false;
@@ -57,39 +57,39 @@ $('.btnTogglerRF').on('click', function () {
 
 let selectedRF = [];
 
-if (oPat.pkMedProfiles.includes(1)) {
+if (oPat.pkValuesMedPfofile.includes(1)) {
     selectedRF = $.merge($(selectedRF), $('.clsTherRF'));
     oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsNonsurgBleedingRF')) : '';
 };
 
-if (oPat.pkMedProfiles.includes(2)) {
+if (oPat.pkValuesMedPfofile.includes(2)) {
     selectedRF = $.merge($(selectedRF), $('.clsAtrFibrRF'));
     oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsFibrBleedingRF')) : '';
 };
 
 
 function isMedProfilesMoreTwo() {
-    $.each(oPat.pkMedProfiles, function (index, value) {
+    $.each(oPat.pkValuesMedPfofile, function (index, value) {
         if (value > 2) return true;
     });
 };
 
 if (isMedProfilesMoreTwo()) {
     selectedRF = $.merge($(selectedRF), $('.clsSurgRF'));
-    (oPat.pkCalculateRiskOfBleeding && oPat.pkMedProfiles.includes(4) && oPat.pkMedProfiles.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
-    (oPat.pkCalculateRiskOfBleeding && $.inArray(4, oPat.pkMedProfiles) === -1 && $.inArray(10, oPat.pkMedProfiles) === -1) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+    (oPat.pkCalculateRiskOfBleeding && oPat.pkValuesMedPfofile.includes(4) && oPat.pkValuesMedPfofile.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+    (oPat.pkCalculateRiskOfBleeding && $.inArray(4, oPat.pkValuesMedPfofile) === -1 && $.inArray(10, oPat.pkValuesMedPfofile) === -1) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
 };
 
-if (oPat.pkMedProfiles.includes(4)) {
+if (oPat.pkValuesMedPfofile.includes(4)) {
     selectedRF = $.merge($(selectedRF), $('.clsTraumRF'));
     oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsTraumBleedingRF')) : '';
 };
 
-(oPat.pkMedProfiles.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
-(oPat.pkMedProfiles.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
-(oPat.pkMedProfiles.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
+(oPat.pkValuesMedPfofile.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
+(oPat.pkValuesMedPfofile.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
+(oPat.pkValuesMedPfofile.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
 
-if (oPat.pkMedProfiles.includes(10)) {
+if (oPat.pkValuesMedPfofile.includes(10)) {
     oPat.pkObstOrGynProfile === 0 ? selectedRF = $.merge($(selectedRF), $('.clsObstRF')): '';
     oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsObstBleedingRF')) : '';
     oPat.pkPregnancyOrChildbirth === 1 ? selectedRF = $.merge($(selectedRF), $('.clsLabourRF')): '';
@@ -441,23 +441,22 @@ oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop
 
 
     (oPat.pkArtroplasty) ? ($('#chkArtroplasty').prop('checked', true)) : '';
-if(oPat.pkIsOrNoSurg){
-    oPat.oSelOp.pkArthroscopicSurgery ? $('#chkArthroscopicSurgery').prop('checked', true): '';
-    (oPat.oSelOp.pkShinFractureSurgery) ? $('#chkShinFractureSurgery').prop('checked', true): '';
-    (oPat.oSelOp.pkHipFractureSurgery) ? ($('#chkHipFractureSurgery').prop('checked', true), oPat.pkHipFractureSurgery = true): oPat.pkHipFractureSurgery = false;
 
-    (oPat.oSelOp.pkLiverResection) ? $('#chkLiverResection').prop('checked', true): '';
-    (oPat.oSelOp.pkPancreatoDuodResection) ? $('#chkPancreatoDuodResection').prop('checked', true): '';
-    (oPat.oSelOp.pkPulmonectomy) ? $('#chkPulmonectomy').prop('checked', true): '';
-    (oPat.oSelOp.pkLaparoscopicIntervention) ? $('#chklaparoscopicIntervention').prop('checked', true): '';
+    (objSelectedOper.pkArthroscopicSurgery) ? $('#chkArthroscopicSurgery').prop('checked', true): '';
+    (objSelectedOper.pkShinFractureSurgery) ? $('#chkShinFractureSurgery').prop('checked', true): '';
+    (objSelectedOper.pkHipFractureSurgery) ? ($('#chkHipFractureSurgery').prop('checked', true), oPat.pkHipFractureSurgery = true): oPat.pkHipFractureSurgery = false;
 
-    (oPat.oSelOp.pkHeartSurgery) ? $('#chkHeartSurgery').prop('checked', true): '';
+    (objSelectedOper.pkLiverResection) ? $('#chkLiverResection').prop('checked', true): '';
+    (objSelectedOper.pkPancreatoDuodResection) ? $('#chkPancreatoDuodResection').prop('checked', true): '';
+    (objSelectedOper.pkPulmonectomy) ? $('#chkPulmonectomy').prop('checked', true): '';
+    (objSelectedOper.pkLaparoscopicIntervention) ? $('#chklaparoscopicIntervention').prop('checked', true): '';
 
-    (oPat.oSelOp.pkBrainOrSpinalCordSurg) ? $('#chkBrainOrSpinalCordSurg').prop('checked', true): '';
+    (objSelectedOper.pkHeartSurgery) ? $('#chkHeartSurgery').prop('checked', true): '';
 
-    (oPat.oSelOp.pkElectiveCSection) ? $('#chkElectiveCSection').prop('checked', true): '';
-    (oPat.oSelOp.pkCSectionInLabour) ? $('#chkCSectionInLabour').prop('checked', true): '';
-}
+    (objSelectedOper.pkBrainOrSpinalCordSurg) ? $('#chkBrainOrSpinalCordSurg').prop('checked', true): '';
+
+    (objSelectedOper.pkElectiveCSection) ? $('#chkElectiveCSection').prop('checked', true): '';
+    (objSelectedOper.pkCSectionInLabour) ? $('#chkCSectionInLabour').prop('checked', true): '';
 
     (oPat.pkAge > 35) ?
     $('#chkAgeMore35').prop('checked', true): '';

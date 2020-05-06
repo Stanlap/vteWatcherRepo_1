@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+
+<body> <%- include('../partials/header_2') %>
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+      <div class="col bg-secondary">
+      </div>
+      <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+        <%- include('../partials/header_prog') %>
+        <h5>Причина курации пациентки:</h5>
+        <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnPregnancy">Беременность</button>
+        <input type="number" class="form-control" placeholder="Срок в неделях" id="inpWeekOfPregnancy"max="42">
+        <div id="fg_1"></div>
+        <button type="button" class="btn btn-secondary btn-lg btn-block" id= "btnChildbirth">Роды и ранний
+          послеродовый период</button>
+        <input type="date" class="form-control" id="inpDateOfChildbirth" title="Укажите дату родов">
+        <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnGynPathol">Гинекологическая патология</button>
+        <div class="custom-control custom-checkbox">
+
+          <br>
+          <input type="checkbox" class="custom-control-input" id="chkIsOrNoOper">
+          <label class="custom-control-label" for="chkIsOrNoOper" id='lblIsOrNoOper'> Оперативное лечение</label>
+      </div><br>
+
+        <!-- <label for='chkIsOrNoOper' id='lblIsOrNoOper'><br><input type='checkbox' id='chkIsOrNoOper'>  Оперативное лечение:<br></label>
+        <br> -->
+        
+
+        <button class="btn btn-primary" type="button" id="btnOne">Принять</button>  
+
+        <!-- <div id='divObstOrGynProfile'>
+          <p>Профиль пациента в рамках специальности:</p>
+          <label for='rdoObstProfile' class='clsObstRFOrGynProfile'> <input type='radio' name='rdoObstOrGynProfile'
+              id='rdoObstProfile' value='0'> Акушерский <br></label>
+          <label for='rdoGynProfile' class='clsObstRFOrGynProfile'> <input type='radio' name='rdoObstOrGynProfile'
+              id='rdoGynProfile' value='1'> Гинекологический <br></label>
+        </div> -->
+        <!-- <div id='divPregnancyOrChildbirth'>
+          <label for='rdoPregnancyPeriod' class='lblPregnancyOrChildbirth'> <input type='radio'
+              name='rdoPregnancyOrChildbirth' id='rdoPregnancyPeriod' value='0'> беременность </label>
+               -->
+
+        <!-- <label for='rdoChildbirthPeriod' class='lblPregnancyOrChildbirth'>
+            <input type='radio' name='rdoPregnancyOrChildbirth' id='rdoChildbirthPeriod' value='1'> роды и ранний
+            послеродовый период<br><br></label>
+          <div id='divDateOfChildbirth'>
+            Дата родов:
+            <button id='btnChildbirthYesterday'>Вчера</button>
+            <button id='btnChildbirthToday'>Сегодня</button>
+            <button id='btnChildbirthSomeDate'>Другая дата:</button> -->
+        <!-- <input type='date' id='inpDateOfChildbirth'>
+          </div>
+        </div><br> -->
+
+
+
+        <!-- <div id='divChooseKindOfOper'>
+          <p>Выбрать операцию:</p>
+          <button class='btnAccordChooseOper btnObsGynOper'>Акушерство и гинекология</button>
+          <div class='divObsGynOper'>
+            <select size='5' multiple>
+              <option value='0'> аборт</option>
+              <option value='1'> кесарево сечение плановое </option>
+              <option value='1'> кесарево сечение в родах</option>
+              <option value='1'> ампутация матки</option>
+              <option value='1'> экстирпация матки</option>
+            </select>
+          </div>
+        </div><br>
+
+      </div> -->
+
+
+      </div>
+      <div class="col bg-secondary">
+      </div>
+    </div>
+  </div>
+  <%- include('../partials/footer') %>
+  <%- include('../partials/scripts') %>
+  <script src="/scripts/date_manager.js"></script>
+  <script src="/js/vte_watch/vte_obst_profile.js" defer></script>
+</body>
+<html>
+
+
+
+
+
+
+
+<!-- <div class="container">
+    <div class="d-flex justify-content-center">
+
+      <div class="row">
+        <div class="col-12">
+          <div class="page-header">
+            <%- include('../partials/header_prog') %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="row">
+        <div class="col-12">
+          <div id="divOper">
+          <button type="button" class="btn btn-primary btn-lg btn-block" id="btnChooseOp">Выбрать операцию из
+            списка</button>
+          <div id="accListOp">
+          </div>
+          <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnCreateOwnOpProf">Создать профиль
+            операции самостоятельно</button>
+          <div id='divCreateOwnOpProf'>
+            <label for="taNonTrivialOperTitle"></label>
+            <textarea class="form-control" id="taNonTrivialOperTitle" rows="3"
+              placeholder="Название операции"></textarea>
+            <br>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-primary" data-toggle="tooltip"
+                title="Может быть проведена без госпитализации больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной травмы.">
+                <input type="radio" name="rdoSmallOrLargeOper" id="rdoSmallOper" value="0"> Малая<span
+                  class='preComments'>&hellip;</span><span class='comments'> Может быть проведена без госпитализации
+                  больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной
+                  травмы.</span>
+              </label>
+              <label class="btn btn-secondary" data-toggle="tooltip"
+                title="Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут">
+                <input type="radio" name="rdoSmallOrLargeOper" id="rdoLargeOper" value="1"> Большая<span
+                  class='preComments'>&hellip;</span><span class='comments'> , выполняется в стационаре. Опасная,
+                  травматичная. Длительность &gt; 60
+                  минут</span>
+              </label>
+            </div>
+            <br>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="chkTimeOfSurg" value='1000000000000000'>
+              <label class="custom-control-label" id="lblTimeOfSurg" for="chkTimeOfSurg">
+                длительность операции &gt; 60 минут</label>
+            </div>
+          </div><br>
+
+          <h5>Дата операции:</h5>
+          <div class="row">
+            <div class="col-7" id="divForDate_1">
+            </div>
+            <div class="col-5">
+              <button type="button" class="btn btn-secondary" id="btnOperTomorrow">Завтра</button>
+            </div>
+          </div>
+          <br>
+          <h5>Анестезиологическое пособие:</h5>
+          <label for="selKindOfAnesth"></label>
+          <select class="custom-select" id="selKindOfAnesth">
+            <option value='1' selected>Эндотрахеальный наркоз</option>
+            <option value='2'>Внутривенный наркоз</option>
+            <option value='3'>Спинномозговая анестезия</option>
+            <option value='4'>Местная анестезия</option>
+          </select>
+          <br>            
+          <div class="col-7" id="divForDate_2">
+          </div><br>
+        </div>
+          <input type="text" class="form-control" placeholder="Инвазивная манипуляция (название)" list="lstInvasions" id="txtInvasions">
+          <datalist id="lstInvasions">
+            <option value="Центральный венозный доступ"></option>
+            <option value="Пункция паренхиматозного органа"></option>
+            <option value="Артериальный катетер"></option>
+          </datalist>
+          <br>
+          <div id="divForDate_3">
+          </div>
+          <br>
+          <button type="button" class="btn btn-primary" id="btnOne">Принять</button>
+        </div>
+      </div>
+    </div>
+  </div> -->

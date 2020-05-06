@@ -135,6 +135,11 @@ app.get('/vte_oper_profile', auth, (req, res) => {
         title: 'Surgery Profile'
     });
 });
+app.get('/vte_obst_profile', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_obst_profile', {
+        title: 'Obst Gyn Profile'
+    });
+});
 
 app.get('/vte_patient_list_rf', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_patient_list_rf', {

@@ -3,21 +3,13 @@
 <%- include('../partials/head') %>
 
 <body> <%- include('../partials/header_2') %>
-  <div class="container">
-    <div class="d-flex justify-content-center">
-
-      <div class="row">
-        <div class="col-12">
-          <div class="page-header">
-            <%- include('../partials/header_prog') %>
-          </div>
-        </div>
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+      <div class="col bg-secondary">
       </div>
-    </div>
-
-    <div class="d-flex justify-content-center">
-      <div class="row">
-        <div class="col-12">
+      <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+        <%- include('../partials/header_prog') %>
+        <div id="divOper">
           <button type="button" class="btn btn-primary btn-lg btn-block" id="btnChooseOp">Выбрать операцию из
             списка</button>
           <div id="accListOp">
@@ -25,24 +17,22 @@
           <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnCreateOwnOpProf">Создать профиль
             операции самостоятельно</button>
           <div id='divCreateOwnOpProf'>
-            <label for="taNonTrivialOperTitle"></label>
-            <textarea class="form-control" id="taNonTrivialOperTitle" rows="3"
-              placeholder="Название операции"></textarea>
+            <label for="taNonTrivialOperTitle"></label><textarea class="form-control" id="taNonTrivialOperTitle"
+              rows="3" placeholder="Название операции"></textarea>
             <br>
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-primary" data-toggle="tooltip"
                 title="Может быть проведена без госпитализации больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной травмы.">
-                <input type="radio" name="rdoSmallOrLargeOper" id="rdoSmallOper"> Малая<span
+                <input type="radio" name="rdoSmallOrLargeOper" id="rdoSmallOper" value="0"> Малая<span
                   class='preComments'>&hellip;</span><span class='comments'> Может быть проведена без госпитализации
                   больного. Также термин отражает продолжительность операции (чаще до 60 минут) и тяжесть операционной
                   травмы.</span>
               </label>
               <label class="btn btn-secondary" data-toggle="tooltip"
-                title="Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут">
-                <input type="radio" name="rdoSmallOrLargeOper" id="rdoLargeOper"> Большая<span
+                title="Выполняется в стационаре. Опасная, травматичная. Длительность &gt; 60 минут"><input type="radio"
+                  name="rdoSmallOrLargeOper" id="rdoLargeOper" value="1"> Большая<span
                   class='preComments'>&hellip;</span><span class='comments'> , выполняется в стационаре. Опасная,
-                  травматичная. Длительность &gt; 60
-                  минут</span>
+                  травматичная. Длительность &gt; 60 минут</span>
               </label>
             </div>
             <br>
@@ -70,22 +60,26 @@
             <option value='3'>Спинномозговая анестезия</option>
             <option value='4'>Местная анестезия</option>
           </select>
-          <br>            
+          <br>
           <div class="col-7" id="divForDate_2">
           </div><br>
-
-          <input type="text" class="form-control" placeholder="Инвазивная манипуляция (название)" list="lstInvasions">
-          <datalist id="lstInvasions">
-            <option value="Центральный венозный доступ"></option>
-            <option value="Пункция паренхиматозного органа"></option>
-            <option value="Артериальный катетер"></option>
-          </datalist>
-
-          <br>
-          <button type="button" class="btn btn-primary" id="btnOne">Принять</button>
         </div>
+        <input type="text" class="form-control" placeholder="Инвазивная манипуляция (название)" list="lstInvasions" id="txtInvasions">
+        <datalist id="lstInvasions">
+          <option value="Центральный венозный доступ"></option>
+          <option value="Пункция паренхиматозного органа"></option>
+          <option value="Артериальный катетер"></option>
+        </datalist>
+        <br>
+        <div id="divForDate_3">
+        </div>
+        <br>
+        <button type="button" class="btn btn-primary" id="btnOne">Принять</button>
+      </div>
+      <div class="col bg-secondary">
       </div>
     </div>
+  </div>
   </div>
   <%- include('../partials/footer') %>
   <%- include('../partials/scripts') %>

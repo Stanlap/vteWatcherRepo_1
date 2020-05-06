@@ -64,20 +64,14 @@ function showBtnGoToRF() {
 
 $('#slctMedicalProfileOfPatient option').on('click', showBtnGoToRF);
 $('#inpWeight, #inpHeight, #inpDateOfBirth').on('input', showBtnGoToRF);
-$('#btnOne').on('click', goToRF);
+$('#btnOne').on('click', goNext);
 
-// function getSurgProfiles(item, isElem = false) {
-//     $.each(item, function (ind, el) {
-//         if (el > 2 && el < 10) isElem = true;
-//     });
-//     return isElem;
-// }
 
 function searchBMI(w, h) {
     return (Math.ceil(w / (Math.pow((h / 100), 2))));
 }
 
-function goToRF() {
+function goNext() {
     oPat.pkGender = $('#chkMale').prop('checked') ? 1 : 0;
     oPat.pkWeight = Number($('#inpWeight').val());
     oPat.pkHeight = Number($('#inpHeight').val());
@@ -85,8 +79,14 @@ function goToRF() {
     $('#slctMedicalProfileOfPatient option:selected').each(function (ind, el) {
         oPat.pkMedProfiles.push(+$(el).prop('value'));
     });
+    const getSurgProfiles = (item, isEl)=> {
+        $.each(item, function (ind, val) {
+            isEl = val > 2 && val < 10 ? true : false;
+        });
+        return isEl;
+    }
 
-    // oPat.pkMedProfiles = getSurgProfiles(aValuesOfMedPfofile);
+    oPat.pkSurgProfiles = getSurgProfiles(aValuesOfMedPfofile);
 
     oPat.pkIsOrNoSurg = $('#chkIsOrNoSurg').prop('checked') ? true : false;
     oPat.pkCalculateRiskOfBleeding = $('#chkCalculateRiskOfBleeding').prop('checked') ? true : false;
@@ -94,5 +94,8 @@ function goToRF() {
 
     let serialObj = JSON.stringify(oPat);
     localStorage.setItem('Patient', serialObj);
-    oPat.pkIsOrNoSurg ? $(location).attr('href', '/vte_oper_profile'): $(location).attr('href', '/vte_patient_list_rf');
+    oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): $(location).attr('href', '/vte_patient_list_rf');
+
+    // oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): $(location).attr('href', '/vte_patient_list_rf');
+
 }

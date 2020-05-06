@@ -52,3 +52,5 @@ const convertDateToRuFormat = (date) => {
     }
     return getZero(vD.getDate()) + '.' + getZero(vD.getMonth() + 1) + '.' + vD.getFullYear()
 }
+
+const addDatePicker = (vDate, ind) => `<input class="form-control" type="date" value= "${vDate}" id="inpDate_${ind}">`;

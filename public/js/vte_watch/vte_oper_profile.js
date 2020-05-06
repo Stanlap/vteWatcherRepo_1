@@ -2,9 +2,13 @@
 let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(oPat);
+$('#divCreateOwnOpProf').hide();
+!oPat.pkIsOrNoSurg || !oPat.pkSurgProfiles ? $('#divOper').hide() : '';
+oPat.pkInvasions ? $('#txtInvasions').focus() : $('#txtInvasions').hide();
+
 let vIsShow = false;
 
-const addDatePicker = (vDate, ind)=> `<input class="form-control" type="date" value= "${vDate}" id="inpDate_${ind}">`;
+// const addDatePicker = (vDate, ind) => `<input class="form-control" type="date" value= "${vDate}" id="inpDate_${ind}">`;
 
 const createCard = (title, ind, content) => {
     $('#accListOp').append(`<div class="card"><div class="card-header" id="divCHeader_${ind}"><h5 class="mb-0"><button class="btn btn-block" type="button" data-toggle="collapse" data-target="#collapse_${ind}" aria-controls="collapse_${ind}">${title}</button></h5></div>
@@ -75,199 +79,71 @@ $('span.comments').on('click', function () {
 });
 
 $('#selKindOfAnesth').on('input', () => {
-    +$('#selKindOfAnesth option:selected').val() === 3 ? ($(`<br><span>Дата установки катетера</span>${addDatePicker(formatDate(), 2)}`).appendTo('#divForDate_2'),$(`<span>Дата удаления катетера</span>${addDatePicker(formatDate(), 2)}`).appendTo('#divForDate_2')): $('#divForDate_2').empty();
+    +$('#selKindOfAnesth option:selected').val() === 3 ? ($(`<br><span>Дата установки катетера</span>${addDatePicker($('#inpDate_1').val(), 2)}`).appendTo('#divForDate_2'), $(`<span>Дата удаления катетера</span>${addDatePicker($('#inpDate_1').val(), 3)}<br>`).appendTo('#divForDate_2')) : $('#divForDate_2').empty();
 });
 
-// $('#selKindOfAnesth').on('input', () => {
-//     if (+$('#selKindOfAnesth option:selected').val() === 3) {
-//         $('<div/>').prop({
-//                 id: 'dialog_0',
-//             })
-//             .appendTo('#divAnesthesia');
-//         $('<br>').appendTo('#dialog_0');
-//         $('<div/>').prop({
-//                 id: 'invitToAct_0',
-//             }).html('Укажите дату установки:')
-//             .appendTo('#dialog_0');
-//         $('<input/>').prop({
-//                 id: 'inpDate_0',
-//                 type: 'date'
-//             })
-//             .appendTo('#dialog_0');
-
-//         $('<div/>').prop({
-//                 id: 'invitToAct_1',
-//             })
-//             .html('Укажите дату удаления катетера:')
-//             .appendTo('#dialog_0');
-//         $('<input/>').prop({
-//                 id: 'inpDate_1',
-//                 type: 'date'
-//             })
-//             .appendTo('#dialog_0');
-//         oPat.pkDateOfOper !== '' ? $('#inpDate_0, #inpDate_1').val(oPat.pkDateOfOper) : $('#inpDate_0, #inpDate_1').val(formatDate());
-
-//     } else {
-//         $('#dialog_0').remove();
-//     };
-// });
-
-function createDialog_1() {
-    $('<div/>').prop({
-            id: 'dialog_1',
-        })
-        .hide()
-        .appendTo('#divCentrAVAccess');
-    $('<label/>').attr({
-        for: 'chkDialog_1'
-    }).html('Катетер уже установлен').appendTo('#dialog_1');
-
-    $('<input/>').prop({
-            id: 'chkDialog_1',
-            type: 'checkbox'
-        })
-        .appendTo('#dialog_1');
-    $('<div/>').prop({
-            id: 'invitToAct_2',
-        }).html('Укажите дату установки:')
-        .appendTo('#dialog_1');
-    $('<input/>').prop({
-            id: 'inpDate_2',
-            type: 'date',
-            value: formatDate()
-        })
-        .appendTo('#dialog_1');
-
-    $('<div/>').prop({
-            id: 'invitToAct_3',
-        })
-        .html('Укажите дату удаления катетера:')
-        .appendTo('#dialog_1');
-    $('<input/>').prop({
-            id: 'inpDate_3',
-            type: 'date',
-            value: formatDate()
-        })
-        .appendTo('#dialog_1');
-}
-
-createDialog_1();
-
-$('#chkDialog_1').on('click', function () {
-    $(this).prop('checked') ? $('#invitToAct_2, #inpDate_2').hide() : $('#invitToAct_2, #inpDate_2').show();
+$('#txtInvasions').on('input', function () {
+    let vTD = oPat.pkIsOrNoSurg ? $('#inpDate_1').val() : formatDate();
+    $(this).prop('value') ? ($(`<span>Дата установки катетера или начала процедуры</span>${addDatePicker(vTD, 4)}`).appendTo('#divForDate_3'),
+        $(`<span>Дата удаления катетера или окончания процедуры</span>${addDatePicker(vTD, 5)}`).appendTo('#divForDate_3')) : $('#divForDate_3').empty();
 });
-
-$('#chkCentrAVAccess').on('click', function () {
-    $(this).prop('checked') ? $('#dialog_1').show() : ($('#dialog_1').hide(), $('#chkDialog_1').prop('checked', false), $('#invitToAct_2, #inpDate_2').show());
-    oPat.pkIsCentrAVAccess = $(this).prop('checked') ? true : false;
-    oPat.pkDateOfOper !== '' ? $('#inpDate_2, #inpDate_3').val(oPat.pkDateOfOper) : $('#inpDate_2, #inpDate_3').val(formatDate());
-});
-
-
-// $('#inpDateOfOper').on('change', function () {
-//     oPat.pkDateOfOper = $(this).val();
-//     (oPat.pkDateOfOper !== '') ? $('#btnOne').prop('disabled', false): $('#btnOne').prop('disabled', true);
-// });
-
 
 function goToRF() {
-    let isElem = false;
-    function isSurgProfiles() {
-        $.each(oPat.pkMedProfiles, function (index, value) {
-            if (value > 2 && value < 10) isElem = true;
-        });
-        return isElem;
-    }
 
     if (+$('#selKindOfAnesth option:selected').val() === 3) {
         oPat.pkIsSpinalAnesth = true;
-        oPat.pkStandDateITCath = $('#inpDate_0').val();
-        oPat.pkRemoveDateITCath = $('#inpDate_1').val();
+        oPat.pkStandDateITCath = $('#inpDate_2').val();
+        oPat.pkRemoveDateITCath = $('#inpDate_3').val();
     }
     oPat.pkIsGenAnesth = (+$('#selKindOfAnesth option:selected').val() < 3) ? true : false;
-// }
 
-    // oPat.pkAllSurgProfiles = isSurgProfiles();
-    // if (oPat.pkIsOrNoSurg) {
-    //     ($('.divGenSurgOper select').prop('selectedIndex') == 4 || $('.divTraumOrthOper select').prop('selectedIndex') == 9 || $('.divNeurosurgOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 0 || $('.divUrolOper select').prop('selectedIndex') == 1) ? oPat.pkPullOfSurg = true: '';
+    oPat.pkInvasions && $('#txtInvasions').prop('value') ? (
+        oPat.pkTitleInvasion = $('#txtInvasions').val(),
+        oPat.pkStartDateOfInvasion = $('#inpDate_4').val(),
+        oPat.pkEndDateOfInvasion = $('#inpDate_5').val()
+    ) : '';
+console.log( $('#accListOp li.list-group-item-secondary'));
+let aOperDifficultyGrades = [];
+oPat.pkAllChoosedOperations = [];
+$('#accListOp li.list-group-item-secondary').each((ind, el)=> {
+    aOperDifficultyGrades.push($(el).val());
+    oPat.pkAllChoosedOperations.push($(el).text());
 
+});
+console.log(aOperDifficultyGrades, oPat.pkAllChoosedOperations);
+oPat.oSelOp = {
+pkArtroplastyHipJoint: oPat.pkAllChoosedOperations.includes(' эндопротезирование тазобедренного сустава')? true: false,
+pkArtroplastyKneeJoint: oPat.pkAllChoosedOperations.includes(' эндопротезирование коленного сустава')? true: false,
+pkArthroscopicSurgery: oPat.pkAllChoosedOperations.includes(' эндоскопические операции на суставах нижней конечности')? true: false,
+pkShinFractureSurgery: oPat.pkAllChoosedOperations.includes(' остеотомии и остеосинтез голени')? true: false,
+pkHipFractureSurgery: oPat.pkAllChoosedOperations.includes(' операции при переломах бедра')? true: false,
+pkLiverResection: oPat.pkAllChoosedOperations.includes(' резекция печени')? true: false,
+pkPancreatoDuodResection: oPat.pkAllChoosedOperations.includes(' панкреатодуоденальная резекция')? true: false,
+pkPulmonectomy: oPat.pkAllChoosedOperations.includes(' пульмонэктомия или расширенная резекция легкого')? true: false,
+pkLaparoscopicIntervention: oPat.pkAllChoosedOperations.includes(' лапароскопическое вмешательство (длительностью > 45 мин.)')? true: false,
 
+pkBrainOrSpinalCordSurg: oPat.pkAllChoosedOperations.includes(' операции на головном и спинном мозге')? true: false
+};
 
-
-    if (oPat.pkIsCentrAVAccess) {
-        $('#chkDialog_1').prop('checked') ? (oPat.pkStandDateCentrAVAccess = '', oPat.pkHasCentrAVAccess = true) : (oPat.pkStandDateCentrAVAccess = $('#inpDate_2').val(), oPat.pkHasCentrAVAccess = false);
-        oPat.pkRemoveDateCentrAVAccess = $('#inpDate_3').val();
-    } else {
-        oPat.pkStandDateCentrAVAccess = '';
-        oPat.pkRemoveDateCentrAVAccess = '';
-    };
-
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 6 || $('.divTraumOrthOper select').prop('selectedIndex') == 7) ? ($('#chkArtroplasty').prop('checked', true), oPat.pkArtroplasty = true) : '';
-
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 6) ? ($('#chkArtroplasty').prop('checked', true), oPat.pkArtroplastyHipJoint = true) : '';
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 7) ? ($('#chkArtroplasty').prop('checked', true), oPat.pkArtroplastyKneeJoint = true) : '';
-
-    let objSelectedOper = {
-        pkLiverResection: false,
-        pkPancreatoDuodResection: false,
-        pkPulmonectomy: false,
-        pkLaparoscopicIntervention: false,
-        pkHeartSurgery: false,
-        pkBrainOrSpinalCordSurg: false,
-        pkElectiveCSection: false,
-        pkSectionInLabour: false,
-        pkArthroscopicSurgery: false,
-        pkShinFractureSurgery: false,
-        pkHipFractureSurgery: false
-    };
-
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 2) ? objSelectedOper.pkArthroscopicSurgery = true: '';
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 5) ? objSelectedOper.pkShinFractureSurgery = true: '';
-    ($('.divTraumOrthOper select').prop('selectedIndex') == 8) ? objSelectedOper.pkHipFractureSurgery = true: '';
-
-    ($('.divGenSurgOper select').prop('selectedIndex') == 4) ? objSelectedOper.pkLiverResection = true: '';
-    ($('.divGenSurgOper select').prop('selectedIndex') == 5) ? objSelectedOper.pkPancreatoDuodResection = true: '';
-    ($('.divGenSurgOper select').prop('selectedIndex') == 11) ? objSelectedOper.pkPulmonectomy = true: '';
-    ($('.divGenSurgOper select').prop('selectedIndex') == 14) ? objSelectedOper.pkLaparoscopicIntervention = true: '';
-
-    ($('.divCardiovascOper select').prop('selectedIndex') == 4 || $('.divCardiovascOper select').prop('selectedIndex') == 5) ? objSelectedOper.pkHeartSurgery = true: '';
-
-    ($('.divNeurosurgOper select').prop('selectedIndex') == 0) ?
-    objSelectedOper.pkBrainOrSpinalCordSurg = true: '';
-
-    ($('.divObsGynOper select').prop('selectedIndex') == 1) ?
-    objSelectedOper.pkElectiveCSection = true: '';
-    ($('.divObsGynOper select').prop('selectedIndex') == 2) ?
-    objSelectedOper.pkCSectionInLabour = true: '';
-
-    let pkOperDifficultyGrades = [0];
-
-    $.each($('#divChooseKindOfOper option:selected'), function (el) {
-        pkOperDifficultyGrades.push($('#divChooseKindOfOper option:selected')[el].value);
-        oPat.pkAllChoosedOperations.push($('#divChooseKindOfOper option:selected')[el].innerText);
-    });
-
-    $('#taNonTrivialOperTitle').val() ? oPat.pkAllChoosedOperations.push(` ${$('#taNonTrivialOperTitle').val()}`) : '';
+oPat.oSelOp.pkArtroplasty = oPat.oSelOp.pkArtroplastyHipJoint || oPat.oSelOp.pkArtroplastyKneeJoint ? true: false;
+oPat.oSelOp.pkHeartSurgery = oPat.pkAllChoosedOperations.includes(' аорто-коронарное шунтирование') || oPat.pkAllChoosedOperations.includes(' операция на открытом сердце') ? true: false;
 
 
-    function getMaxOfArray(numArray) {
-        return Math.max.apply(null, numArray);
-    }
+console.log(oPat.oSelOp);
 
-    $('input[name=rdoSmallOrLargeOper]:checked').val() !== undefined ? pkOperDifficultyGrades.push(Number($('input[name=rdoSmallOrLargeOper]:checked').val())) : '';
+$('#taNonTrivialOperTitle').val() ? oPat.pkAllChoosedOperations.push(` ${$('#taNonTrivialOperTitle').val()}`) : '';
 
-    oPat.pkGradeOfOper = getMaxOfArray(pkOperDifficultyGrades.map(Number));
+$('input[name=rdoSmallOrLargeOper]:checked').val() ? aOperDifficultyGrades.push(+$('input[name=rdoSmallOrLargeOper]:checked').val()) : '';
 
-    // $('#chkCalculateRiskOfBleeding').is(':checked') ? oPat.pkCalculateRiskOfBleeding = true : '';
-    // $('input[name=rdoPregnancyOrChildbirth]:checked').val() != undefined ? oPat.pkPregnancyOrChildbirth = $('input[name=rdoPregnancyOrChildbirth]:checked').val() : '';
+const getMaxOfArray = numArray => Math.max.apply(null, numArray);
+oPat.pkGradeOfOper = getMaxOfArray(aOperDifficultyGrades.map(Number));
 
-    ($('#chkTimeOfSurg').is(':checked')) ? oPat.pkOperTimeMore60 = true: '';
+($('#chkTimeOfSurg').is(':checked')) ? oPat.pkOperTimeMore60 = true: '';
 
-    let serialObj = JSON.stringify(oPat);
-    localStorage.setItem('Patient', serialObj);
-    serialObj = JSON.stringify(objSelectedOper);
-    localStorage.setItem('SelectedOper', serialObj);
-    // let returnObj = JSON.parse(localStorage.getItem('Patient'))
-    // console.log(returnObj);
-    $(location).attr('href', '/vte_patient_list_rf');
+console.log(oPat);
+let serialObj = JSON.stringify(oPat);
+localStorage.setItem('Patient', serialObj);
+$(location).attr('href', '/vte_patient_list_rf');
 }
+
+$('#btnOne').on('click', goToRF);

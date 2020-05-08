@@ -1,9 +1,260 @@
 let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(oPat);
-// let oPat.oSelOp = JSON.parse(localStorage.getItem('SelectedOper'));
-// localStorage.removeItem('SelectedOper');
-// console.log(oPat.oSelOp);
+
+let vIsShow= false,
+vCardCounter= 0,
+aLi =[];
+
+const createCard = (cls, val, title, ind, content, id) => {
+    vCardCounter ++;
+    $('#accListRF').append(`<div class="card"><div class="card-header" id="divCHeader_${ind}"><h5 class="mb-0"><button type="button"  class="btn btn-block ${cls}" id="${id}" value="${val}" data-toggle="collapse" data-target="#collapse_${ind}" aria-controls="collapse_${ind}">${title}</button></h5></div>
+    <div id="collapse_${ind}" class="collapse ${vIsShow ? '': 'show'}" aria-labelledby="divCHeader_${ind}" data-parent="#accListRF"><div class="card-body"><ul class="list-group list-group-flush">${content}</ul></div></div></div>`);
+    vIsShow = true;
+}
+const creatReference= cmt=> cmt ? `<span class="preReference"> &hellip;</span><span class="reference"> ${cmt}</span>`: '';   
+const creatTitle= (ttl, cmt)=> `${ttl}${creatReference(cmt)}`;
+
+const createLi = (cls, id, vle, ttl, cmt)=> ($(`<li class="list-group-item ${cls}" id="${id}" value="${vle}">${creatTitle(ttl, cmt)}</li>`).prop('outerHTML'));
+
+// High Blood Pressure
+aLi.push(createLi('cls2RF', 'liSystHypert1th', '1000000000000000', ' артериальная гипертензия 1 степени', ', CАД 140-159 или ДАД 90-99 мм рт. ст.'));
+
+aLi.push(createLi('cls2BRF clsSystHypert2thAndMoreStg', 'liSystHypert2th', '1000000000000000',' артериальная гипертензия 2 степени', ', САД 160-179 или ДАД 100-109 мм рт. ст.'));
+
+aLi.push(createLi('cls2BRF clsSystHypert2thAndMoreStg', 'liSystHypert3th', '1000000000000000',' артериальная гипертензия 3 степени', ', САД &ge; 180 или АД &ge; 110 мм рт. ст.'));
+
+aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF cls4BRF clsSystHypert2thAndMoreStg',  'liUncontrolSystHypert', '1000000001000100',' неконтролируемая артериальная гипертензия', ', артериальное давление &ge; 200 мм рт.ст. систолическое или &ge; 120 мм рт.ст. диастолическое'));
+
+createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF cls4BRF', '1000010000000000','артериальная гипертензия', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Diabetes mellitus
+aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF cls4BRF  clsObstComorbidities', '', '1000000000000000', '<span> сахарный диабет</span> I типа с нефропатией', ''));
+
+aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF cls4BRF', '', '1000000000000000','<span> сахарный диабет</span> II типа', ''));
+
+createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF cls4BRF ul2_LvlRF', '100001000000000','сахарный диабет', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Acute Infection
+
+aLi.push(createLi('cls3RF', 'liAcuteInflamDisease', '10000000000000000',' острое воспалительное заболевание', ''));
+
+aLi.push(createLi('cls3RF', 'liSepsis', '1000000310000000',' сепсис (&lt; 1 мес.)', ''));
+
+aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF', '', '1000000000000000',' септический эндокардит', ''));
+
+aLi.push(createLi('cls1RF cls3RF liSumTherRF_2', '', '1000000000000000',' острая инфекция', ''));
+
+createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF ul2_LvlRF', '1000000000001000','острое воспалительное заболевание или инфекция', vCardCounter, aLi.join(''),'ulIsAcuteInflamDiseaseOrInf');
+aLi= [];
+
+// Therm trauma
+
+aLi.push(createLi('cls8RF chkBurnsSuperficial_1 chkBurns_1', '', '1000000000020000',' ожоги поверхностные, площадью &lt; 20% поверхности тела', ''));
+
+aLi.push(createLi('cls8RF chkBurnsSuperficial_1 chkBurns_2', '', '1000000000030000','<span><span hidden>ожоги поверхностные, площадью</span> &gt; 20% поверхности тела</span>', ''));
+
+aLi.push(createLi('cls8RF chkBurnsDeep_1 chkBurns_1', '', '1000000000020000','  ожоги глубокие, площадью &lt; 10% поверхности тела', ''));
+
+aLi.push(createLi('cls8RF chkBurnsDeep_1 chkBurns_1', '', '1000000000030000',' ожоги глубокие, площадью от 10% до 20% поверхности тела', ''));
+
+aLi.push(createLi('cls8RF hkBurnsDeep_1 chkBurns_2', '', '1000000000030000',' ожоги глубокие, площадью &gt; 20% поверхности тела', ''));
+
+aLi.push(createLi('cls3RF cls8RF chkThermalInhalationInjury_1', '', '100000020000000',' термоингаляционная травма II степени', ''));
+
+aLi.push(createLi('cls8RF chkThermalInhalationInjury_1', '', '1000000300000000',' термоингаляционная травма III степени', ''));
+
+aLi.push(createLi('cls8RF', '', '1000000000030000',' отморожение II–IV степени', ''));
+
+aLi.push(createLi('cls8RF cls3RF', '', '1000000300000000',' осложнения ожоговой болезни', ': шок, острая токсемия и септикотоксемия'));
+
+createCard('cls8RF ul2_LvlRF', '1000000000000000','термическая травма', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Onco
+
+aLi.push(createLi('cls3RF cls9RF', '', '1000000000000000',' злокачественное новообразование в анамнезе', ''));
+
+aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1', '', '1000000100000000',' активное злокачественное новообразование', ': имеются локальные или отдаленные метастазы и/или химиотерапия/радиотерапия &lt; 6 мес назад'));
+
+aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1 liNeoplasm_2', '', '1100000000000000',' гормонотерапия у онкологических пациентов', ''));
+
+aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1 liNeoplasm_2', '', '1000000000000000',' химиотерапия, рентгенотерапия у онкологических пациентов', ''));
+
+createCard('cls9RF ul2_LvlRF clsObstComorbidities', '1000000020000000','злокачественное новообразование', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Rheumo
+
+aLi.push(createLi('cls1BRF', 'liRheumDiseases', '1000000000000000','  ревматологическое заболевание', ''));
+
+aLi.push(createLi('cls1RF liSumTherRF_2 clsObstComorbidities', 'liAcuteRheumDiseases', '1000000000000000',' острое ревматологическое заболевание', ': активная системная красная волчанка, воспалительная полиартропатия'));
+
+createCard('cls9RF ul2_LvlRF clsObstComorbidities', '102.000000000000','ревматологическое заболевание', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Lung Disease
+
+aLi.push(createLi('cls3RF liBedRestMore3Days_1 liLungDiseases_1', 'liSevereLungDiseases', '1000000300000000','<span hidden> тяжелые заболевания легких</span> на ИВЛ', ': с выраженной дыхательной недостаточностью, требующие искусственной вентиляцией легких'));
+
+aLi.push(createLi('cls3RF', 'liModerateLungDiseases', '1000000200000000','<span hidden> заболевания легких</span> без ИВЛ', ', в том числе пневмония, с дыхательной недостаточностью, не требующие искусственной вентиляции'));
+
+aLi.push(createLi('cls3RF', '', '1000000010000000','<span hidden>заболевания легких длительностью</span> &lt; 1 мес.', ''));
+
+aLi.push(createLi('cls3RF', '', '1000000010000000',' ХОБЛ', ' (хроническая обструктивная болезнь легких)'));
+
+createCard('cls1RF ul2_LvlRF', '1000000100000000','заболевания легких с дыхательной недостаточностью', vCardCounter, aLi.join(''), 'ulIsPulmInsuff');
+aLi= [];
+
+// Anemia
+
+aLi.push(createLi('cls9RF', 'liHbLess_100', '1000000100000000',' Hb &lt; 100 г/л'));
+
+aLi.push(createLi('cls10RF clsObstComorbidities', '', '1000000000000000',' серповидноклеточная анемия'));
+
+createCard('cls9RF cls10RF ul2_LvlRF', '1000000000000000','анемия', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Thrombophilia
+
+aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000',' полиморфизм фактора Лейдена',' (V фактора свертывания крови)'));
+
+aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000',' полиморфизм протромбина G20210A'));
+
+aLi.push(createLi('cls3RF liHighRiskThrombophilia_1', '', '1000000030000000',' гипергомоцистеинемия'));
+
+aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000',' повышенный уровень антител к кардиолипину', ' (антифосфолипидный синдром)'));
+
+
+aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000',' наличие волчаночного антикоагулянта', ' (антифосфолипидный синдром)'));
+
+aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000',' другая врожденная или приобретенная тромбофилия', ' (дефекты антитромбина, протеина С или S и др.)'));
+
+aLi.push(createLi('cls10RF', '', '1000000000001000',' известная тромбофилия низкого риска (без ВТЭО)'));
+
+createCard('cls1RF cls3RF ul2_LvlRF', '1000000000000000', 'тромбофилия ', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Hypercoagulation
+
+aLi.push(createLi('cls9RF', '', '1000000100000000',' тромбоциты &gt; 350 × 10 <sup><small>9</small></sup>/л'));
+
+aLi.push(createLi('cls9RF', '', '1000000100000000',' фибриноген &gt; 400 мг/мл'));
+
+aLi.push(createLi('cls9RF', '', '1000000100000000',' Д-димер &gt; 0,5 мкг/мл'));
+
+createCard('cls9RF ul2_LvlRF', '1000000000000000', 'гиперкоагуляция ', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Hemorragic Syndrome
+
+aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000',' геморрагические генетические коагулопатии', ' . Наиболее часто встречаются гемофилия и болезнь Виллебранда. Более редкие генетические нарушения включают гемофилию С, гипопроконвертинемию и ряд других аномалий.'));
+
+aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000',' геморрагические аутоиммунные коагулопатии', ' обусловлены появлением антител (ингибиторов свертывания) к факторам свёртывания крови или фосфолипидам. Наиболее часто встречается коагулопатия иммунного генеза на фоне Антифосфолипидного синдрома. Дефицит факторов свертывания в результате аутоиммунных реакций иногда происходит у пациентов после частых переливаний крови.'));
+
+aLi.push(createLi('cls2BRF cls3BRF cls4BRF cls10BRF liСoagulopathy_1', '', '1000000000000000',' геморрагические приобретенные коагулопатии', ', могут быть обусловлены нарушением функции печени, применением разных антикоагулянтов, антиагрегантов или тромболитических препаратов, недостаточностью всасывания витамина «К» и повышенным потреблением компонентов системы свёртывания крови на фоне ДВС-синдрома. Поражение факторов свертываемости может быть в результате преждевременной отслойки плаценты, эмболии околоплодными водами и рака простаты. Коагулопатию вызывают некоторые виды гемотоксичных змеиных ядов, некоторые виды вирусных геморрагических лихорадок, иногда - лейкемия.'));
+
+aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000',' геморрагические вазопатии', '- заболевания, обусловленные патологией сосудов. Типичные заболевания этой группы — болезнь Рандю–Ослера, пурпура Шёнляйна–Геноха, первичные геморрагические васкулиты.'));
+
+aLi.push(createLi('cls2BRF cls10BRF liThrombocytopenia_1', 'liPlateletsLess150', '1000000000000000', ' тромбоциты в крови &lt; 150 х 10<sup><small>9</small></sup>/л', ' (тромбоцитопения)'));
+
+aLi.push(createLi('cls3BRF cls10BRF liThrombocytopenia_1', 'liPlateletsLess75', '1000000000000100',' тромбоциты в крови &lt; 75 х 10<sup><small>9</small></sup>/л'));
+
+aLi.push(createLi('cls3BRF cls10BRF liThrombocytopenia_1', 'liPlateletsLess50', '104.000000000000',' тромбоциты в крови &lt; 50 х 10<sup><small>9</small></sup>/л'));
+
+aLi.push(createLi('cls3RF liThrombocytopenia_1', '', '1000000030000000',' гепарин-индуцированная тромбоцитопения'));
+
+aLi.push(createLi('cls3BRF', '', '1000000001000000',' нелеченная коагулопатия', '. Любая из коагулопатий без эффективной медикаментозной коррекции.'));
+
+createCard('cls1BRF cls2BRF cls3RF cls3BRF cls4BRF cls10BRF ul2_LvlRF', '1000000000000000', 'геморраг. гемостазиопатии (геморраг. диатез, геморраг. с-м) ', vCardCounter, aLi.join(''), 'ulIsHemorrSyndrome');
+aLi= [];
+
+// VTE
+
+aLi.push(createLi('cls1RF cls2RF cls3RF liSumAtrFibrRF_1 liThromboemb_1', 'liWasPulmEmb', '1000000000000000',' эпизод ВТЭО в анамнезе', ' (за исключением тромбоза поверхностных вен)'));
+
+aLi.push(createLi('cls10RF liThromboemb_1 liThromboemb_2', '', '1000000000004030',' предшествующие рецидивирующие ВТЭО'));
+
+aLi.push(createLi('cls10RF liThromboemb_1 liThromboemb_2', '', '1000000000000030',' предшествующие ВТЭО, ничем не спровоцированные или связанные с приемом эстрогенов'));
+
+aLi.push(createLi('cls2RF cls3RF cls10RF liThromboemb_1 liThromboemb_2 liProvocedVTE_1', '', '1000000000004000',' предшествующие спровоцированные ВТЭО, кроме единичного эпизода, связанного с большим хирургическим вмешательством'));
+
+aLi.push(createLi('cls2RF cls3RF cls10RF liThromboemb_1 liThromboemb_2 liProvocedVTE_1', '', '1000000000003000',' предшествующие ВТЭО спровоцированные большим хирургическим вмешательством'));
+
+aLi.push(createLi('cls10RF liThromboemb_3', '', '10000000000000003',' тромбоэмболия в семейном анамнезе'));
+
+createCard('cls3RF cls10RF ul2_LvlRF', '1000000000000000', 'ВТЭО в анамнезе ', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Restricted Mobility
+
+
+aLi.push(createLi('cls3RF', '', '1000000010000000',' постельный режим'));
+
+aLi.push(createLi('cls1RF cls3RF cls10R', 'liBedRestMore3Days', '1000000120000000',' строгий постельный режим', ' (без посещения туалетной комнаты) &gt; 72 часов'));
+
+aLi.push(createLi('cls3RF', '', '1000000020000000',' гипсовая иммобилизация конечности', ' (давностью до 1 мес.)'));
+
+aLi.push(createLi('cls3RF', 'liPlegia', '1000000020000000',' паралич или глубокий парез', ' (тетра- геми- или нижний грубый монопарез/плегия)'));
+
+aLi.push(createLi('cls3RF', '', '10000001000000000',' длительное положение сидя', ' (например длительный перелет в эконом-классе или поездка на транспорте сидя)'));
+
+createCard('cls1RF cls3RF cls10RF ul2_LvlRF', '1300000000000010', 'ограниченная подвижность ', vCardCounter, aLi.join(''));
+aLi= [];
+
+// Is Trauma
+
+aLi.push(createLi('cls3RF liTraum_1', '', '1000000000030000',' перелом костей таза', ' (давностью до 1 мес.)'));
+
+aLi.push(createLi('cls3RF liTraum_1', '', '1000000000030000',' перелом бедра', ' (давностью до 1 мес.)'));
+
+aLi.push(createLi('cls3RF  cls4RF liTraum_1', '', '1000000200000000',' изолированные переломы голени', ' (давностью до 1 мес.)'));
+
+aLi.push(createLi('cls3RF  cls4RF', '', '10000002000000005',' повреждения связочного аппарата и сухожилий голени', ', требующие иммобилизации голеностопного сустава'));
+
+aLi.push(createLi('cls3RF  cls4RF cls5RF  liSpinalCordInjure_1', '', '1000000000000000',' повреждение спинного мозга'));
+
+aLi.push(createLi('cls3RF  cls4RF', '', '1000000350000000',' множественная и сочетанная травма'));
+
+createCard('cls4RF cls5RF', '1000000000000000', 'есть травма &lt; 1 месяца назад ', vCardCounter, aLi.join(''), 'ulIsTraum');
+aLi= [];
+
+
+
+
+
+
+
+
+
+$("#accListRF li").on('click', function (vTB) {
+    vTB = $(this).parents('.collapse').siblings().find('button');
+    $(this).toggleClass('list-group-item-secondary');
+    $(this).siblings().removeClass('list-group-item-secondary')
+    $(this).hasClass('list-group-item-secondary') ? $(vTB).addClass('btn-secondary') : $(vTB).removeClass('btn-secondary');
+});
+
+$('span.reference').hide();
+
+$('span.preReference').on('click', function () {
+    $(this).hide().next().show();
+})
+$('span.reference').on('click', function () {
+    $(this).hide().prev().show();
+});
+
+// $("#accListRF li").on('click', function (vTB) {
+//     vTB = $(this).parents('.collapse').siblings().find('button');
+//     $(this).toggleClass('list-group-item-secondary');
+//     $(this).siblings().removeClass('list-group-item-secondary')
+//     $(this).siblings('.list-group-item-secondary').length > 0 || $(this).hasClass('list-group-item-secondary') ? $(vTB).addClass('btn-secondary') : $(vTB).removeClass('btn-secondary');
+// });
+
+
+
+
 
 oPat.pkSevereHepaticFailure = false;
 oPat.pkHeartInsuff3_4 = false;
@@ -28,6 +279,12 @@ $.extend({
         return result;
     }
 });
+
+
+
+
+
+
 
 $('.divSingleLvlRF').on('click', function (el) {
     el = $(this).closest('.divMiddleLvlRF').prev().find('input:checkbox');
@@ -58,13 +315,13 @@ $('.btnTogglerRF').on('click', function () {
 let selectedRF = [];
 
 if (oPat.pkMedProfiles.includes(1)) {
-    selectedRF = $.merge($(selectedRF), $('.clsTherRF'));
-    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsNonsurgBleedingRF')) : '';
+    selectedRF = $.merge($(selectedRF), $('.cls1RF'));
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.cls1BRF')) : '';
 };
 
 if (oPat.pkMedProfiles.includes(2)) {
-    selectedRF = $.merge($(selectedRF), $('.clsAtrFibrRF'));
-    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsFibrBleedingRF')) : '';
+    selectedRF = $.merge($(selectedRF), $('.cls2RF'));
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.cls2BRF')) : '';
 };
 
 
@@ -75,23 +332,23 @@ function isMedProfilesMoreTwo() {
 };
 
 if (isMedProfilesMoreTwo()) {
-    selectedRF = $.merge($(selectedRF), $('.clsSurgRF'));
-    (oPat.pkCalculateRiskOfBleeding && oPat.pkMedProfiles.includes(4) && oPat.pkMedProfiles.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
-    (oPat.pkCalculateRiskOfBleeding && $.inArray(4, oPat.pkMedProfiles) === -1 && $.inArray(10, oPat.pkMedProfiles) === -1) ? selectedRF = $.merge($(selectedRF), $('.clsSurgBleedingRF')): '';
+    selectedRF = $.merge($(selectedRF), $('.cls3RF'));
+    (oPat.pkCalculateRiskOfBleeding && oPat.pkMedProfiles.includes(4) && oPat.pkMedProfiles.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.cls3BRF')): '';
+    (oPat.pkCalculateRiskOfBleeding && $.inArray(4, oPat.pkMedProfiles) === -1 && $.inArray(10, oPat.pkMedProfiles) === -1) ? selectedRF = $.merge($(selectedRF), $('.cls3BRF')): '';
 };
 
 if (oPat.pkMedProfiles.includes(4)) {
-    selectedRF = $.merge($(selectedRF), $('.clsTraumRF'));
-    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsTraumBleedingRF')) : '';
+    selectedRF = $.merge($(selectedRF), $('.cls4RF'));
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.cls4BRF')) : '';
 };
 
-(oPat.pkMedProfiles.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.clsNeurosurgRF')): '';
-(oPat.pkMedProfiles.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.clsCombustRF')): '';
-(oPat.pkMedProfiles.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.clsOncoRF')): '';
+(oPat.pkMedProfiles.includes(5)) ? selectedRF = $.merge($(selectedRF), $('.cls5RF')): '';
+(oPat.pkMedProfiles.includes(8)) ? selectedRF = $.merge($(selectedRF), $('.cls8RF')): '';
+(oPat.pkMedProfiles.includes(9)) ? selectedRF = $.merge($(selectedRF), $('.cls9RF')): '';
 
 if (oPat.pkMedProfiles.includes(10)) {
-    oPat.pkObstOrGynProfile === 0 ? selectedRF = $.merge($(selectedRF), $('.clsObstRF')): '';
-    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.clsObstBleedingRF')) : '';
+    oPat.pkObstOrGynProfile === 0 ? selectedRF = $.merge($(selectedRF), $('.cls10RF')): '';
+    oPat.pkCalculateRiskOfBleeding ? selectedRF = $.merge($(selectedRF), $('.cls10BRF')) : '';
     oPat.pkPregnancyOrChildbirth === 1 ? selectedRF = $.merge($(selectedRF), $('.clsLabourRF')): '';
 };
 
@@ -122,27 +379,27 @@ $('#btnIsRenalInsuff').on('click', function () {
     ($(this).html() === ('&gt;')) ? $('#frmGFR_CC').hide(): ($('#frmGFR_CC').show(), alert('Критически важно! Вводимые единицы измерения креатинина должны точно соответствовать его введенному значению. К сведению: если значение креатинина не введено, программа расценивает функцию почек как норму при назначении профилактики ВТЭО.'));
 });
 
-$('.chkLungDiseases_1').on('click', function () {
-    $('.chkLungDiseases_1').not(this).prop('checked', false);
+$('.liLungDiseases_1').on('click', function () {
+    $('.liLungDiseases_1').not(this).prop('checked', false);
     if ($(this).is(':checked')) {
-        ($(this).attr('id') === 'chkSevereLungDiseases') ? $('#chkIsBedRestMore3Days, #chkBedRestMore3Days').prop('checked', true): '';
-        if ($(this).attr('id') === 'chkModerateLungDiseases') {
-            if ($('.chkBedRestMore3Days_1').is(':checked')) {} else {
+        ($(this).attr('id') === 'liSevereLungDiseases') ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', true): '';
+        if ($(this).attr('id') === 'liModerateLungDiseases') {
+            if ($('.liBedRestMore3Days_1').is(':checked')) {} else {
                 $('#chkIsBedRestMore3Days').prop('checked', false);
-                if ($('#chkBedRestMore3Days').attr('data-hasMarked') == '0') {
-                    $('#chkIsBedRestMore3Days, #chkBedRestMore3Days').prop('checked', false);
+                if ($('#liBedRestMore3Days').attr('data-hasMarked') == '0') {
+                    $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', false);
                 }
             }
         }
     }
 });
 
-$('.chkBedRestMore3Days_1').on('click', function () {
-    ($(this).is(':checked')) ? $('#chkIsBedRestMore3Days, #chkBedRestMore3Days').prop('checked', true): ($('.chkBedRestMore3Days_1').is(':checked')) ? $('#chkIsBedRestMore3Days, #chkBedRestMore3Days').prop('checked', true) : ($('#chkBedRestMore3Days').attr('data-hasMarked') == '0') ? $('#chkIsBedRestMore3Days, #chkBedRestMore3Days').prop('checked', false) : '';
-    console.log($('#chkBedRestMore3Days').attr('data-hasMarked'));
+$('.liBedRestMore3Days_1').on('click', function () {
+    ($(this).is(':checked')) ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', true): ($('.liBedRestMore3Days_1').is(':checked')) ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', true) : ($('#liBedRestMore3Days').attr('data-hasMarked') == '0') ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', false) : '';
+    console.log($('#liBedRestMore3Days').attr('data-hasMarked'));
 });
 
-$('#chkBedRestMore3Days').on('click', function () {
+$('#liBedRestMore3Days').on('click', function () {
     let a = $(this).attr('data-hasMarked');
     console.log(a);
     ($(this).is(':checked')) ? $(this).attr('data-hasMarked', '1'): $(this).attr('data-hasMarked', '0');
@@ -174,12 +431,12 @@ $('.chkThermalInhalationInjury_1').on('click', function () {
     $('.chkThermalInhalationInjury_1').not(this).prop('checked', false);
 });
 
-$('.chkSpinalCordInjure_1').on('click', function () {
-    $('.chkSpinalCordInjure_1').not(this).prop('checked', false);
+$('.liSpinalCordInjure_1').on('click', function () {
+    $('.liSpinalCordInjure_1').not(this).prop('checked', false);
 });
 
-$('#chkSepsis').on('click', function () {
-    ($(this).is(':checked')) ? $('#chkAcuteInflammatoryDisease').prop('checked', true): '';
+$('#liSepsis').on('click', function () {
+    ($(this).is(':checked')) ? $('#liAcuteInflamDisease').prop('checked', true): '';
 });
 $('#chkHeartInsuff3_4').on('click', function () {
     ($(this).is(':checked') && $('#lblSomeHeartInsuff').is(':visible')) ? $('#chkSomeHeartInsuff').prop('checked', true): '';
@@ -189,42 +446,42 @@ $('#chkHeartInsuffLess1Month').on('click', () => ($(this).is(':checked') && $('#
 $('#chkCongestHeartFailOrSystLVDysfunctEFLess40Percent').on('click', function () {
     ($(this).is(':checked') && $('#lblSomeHeartInsuff').is(':visible')) ? $('#chkSomeHeartInsuff').prop('checked', true): '';
 });
-$('.chkNeoplasm_2').on('click', function () {
+$('.liNeoplasm_2').on('click', function () {
     ($(this).is(':checked')) ? $('#chkActiveNeoplasm').prop('checked', true).closest('.divSingleLvlRF').hide():
         ($('#chkActiveNeoplasm').attr('data-hasMarked') == '0') ? $('#chkActiveNeoplasm').prop('checked', false).closest('.divSingleLvlRF').show() : '';
 });
 $('#chkActiveNeoplasm').on('change', function () {
     ($(this).is(':checked')) ? $(this).attr('data-hasMarked', '1'): $(this).attr('data-hasMarked', '0');
 });
-$('#chkAcuteRheumaticDiseases').on('click', function () {
-    ($(this).is(':checked')) ? $('#chkRheumaticDiseases').prop('checked', true).closest('.divSingleLvlRF').hide():
-        ($('#chkRheumaticDiseases').attr('data-hasMarked') == '0') ? $('#chkRheumaticDiseases').prop('checked', false).closest('.divSingleLvlRF').show() : '';
+$('#liAcuteRheumDiseases').on('click', function () {
+    ($(this).is(':checked')) ? $('#liRheumDiseases').prop('checked', true).closest('.divSingleLvlRF').hide():
+        ($('#liRheumDiseases').attr('data-hasMarked') == '0') ? $('#liRheumDiseases').prop('checked', false).closest('.divSingleLvlRF').show() : '';
 });
 
-$('#chkPlateletsLess150').on('click', function () {
+$('#liPlateletsLess150').on('click', function () {
     if ($(this).is(':checked')) {
         $(this).attr('data-hasMarked', '1');
     } else {
         $(this).attr('data-hasMarked', '0');
-        $('#chkPlateletsLess50, #chkPlateletsLess75').prop('checked', false);
+        $('#liPlateletsLess50, #liPlateletsLess75').prop('checked', false);
     }
 });
-$('#chkPlateletsLess75').on('click', function () {
+$('#liPlateletsLess75').on('click', function () {
     if ($(this).is(':checked')) {
-        $('#chkPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').hide();
+        $('#liPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').hide();
         $(this).attr('data-hasMarked', '1');
 
     } else {
-        $('#chkPlateletsLess50').prop('checked', false).closest('.divSingleLvlRF').show();
-        $('#chkPlateletsLess150').attr('data-hasMarked') == '0' ? $('#chkPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : $('#chkPlateletsLess150').closest('.divSingleLvlRF').show();
+        $('#liPlateletsLess50').prop('checked', false).closest('.divSingleLvlRF').show();
+        $('#liPlateletsLess150').attr('data-hasMarked') == '0' ? $('#liPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : $('#liPlateletsLess150').closest('.divSingleLvlRF').show();
         $(this).attr('data-hasMarked', '0');
     }
 });
-$('#chkPlateletsLess50').on('click', function () {
-    ($(this).is(':checked')) ? $('#chkPlateletsLess150, #chkPlateletsLess75').prop('checked', true).closest('.divSingleLvlRF').hide():
-        ($('#chkPlateletsLess150').attr('data-hasMarked') == '1' && $('#chkPlateletsLess75').attr('data-hasMarked') == '0') ? ($('#chkPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show(), $('#chkPlateletsLess75').prop('checked', false).closest('.divSingleLvlRF').show()) : ($('#chkPlateletsLess75').attr('data-hasMarked') == '1') ?
-        $('#chkPlateletsLess75, #chkPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show() :
-        ($('#chkPlateletsLess75, #chkPlateletsLess150').attr('data-hasMarked') == '0') ? $('#chkPlateletsLess75, #chkPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : '';
+$('#liPlateletsLess50').on('click', function () {
+    ($(this).is(':checked')) ? $('#liPlateletsLess150, #liPlateletsLess75').prop('checked', true).closest('.divSingleLvlRF').hide():
+        ($('#liPlateletsLess150').attr('data-hasMarked') == '1' && $('#liPlateletsLess75').attr('data-hasMarked') == '0') ? ($('#liPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show(), $('#liPlateletsLess75').prop('checked', false).closest('.divSingleLvlRF').show()) : ($('#liPlateletsLess75').attr('data-hasMarked') == '1') ?
+        $('#liPlateletsLess75, #liPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show() :
+        ($('#liPlateletsLess75, #liPlateletsLess150').attr('data-hasMarked') == '0') ? $('#liPlateletsLess75, #liPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : '';
 });
 
 
@@ -388,20 +645,20 @@ oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace,
 
 oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
 
-    ($('.clsSystemicHypertension2thAndMoreStage').is(':checked')) ? $('#chkSystemicHypertension2thAndMoreStage').prop('checked', true): '';
+    ($('.clsSystHypert2thAndMoreStg').is(':checked')) ? $('#chkSystHypert2thAndMoreStg').prop('checked', true): '';
     ($('.chkSumTherRF_1').is(':checked')) ? $('#chkAcuteIschemicStrokeOrMiocardInfarction').prop('checked', true): '';
-    ($('.chkSumTherRF_2').is(':checked')) ? $('#chkRheumaticDiseasesOrInfection').prop('checked', true): '';
-    ($('.chkThromboemb_1').is(':checked')) ? $('#chkVascularAnamnesis, #chkWasSomeVeinThromb').prop('checked', true): '';
-    ($('.chkThromboemb_2').is(':checked')) ? $('#chkWasPulmEmb').prop('checked', true): '';
-    ($('.chkThromboemb_3').is(':checked')) ? $('#chkFamilyVeinThromb').prop('checked', true): '';
-    ($('.chkProvocedVTE_1').is(':checked')) ? $('#chkWasProvocedVTE').prop('checked', true): '';
-    ($('.chkTraum_1').is(':checked')) ? $('#chkFracturePpelvisFemurTibiaLess1Month').prop('checked', true): '';
-    ($('.chkHighRiskThrombophilia_1').is(':checked')) ? $('#chkIsKnownHighRiskThrombophilia').prop('checked', true): '';
-    ($('.chkNeoplasm_1').is(':checked')) ? $('#chkIsActiveNeoplasmOrTherapyOfNeoplasm').prop('checked', true): '';
-    ($('.chkNeoplasm_2').is(':checked')) ? $('#chkSomeTherapyOfNeoplasm').prop('checked', true): '';
+    ($('.liSumTherRF_2').is(':checked')) ? $('#liRheumDiseasesOrInfection').prop('checked', true): '';
+    ($('.liThromboemb_1').is(':checked')) ? $('#chkVascularAnamnesis, #chkWasSomeVeinThromb').prop('checked', true): '';
+    ($('.liThromboemb_2').is(':checked')) ? $('#liWasPulmEmb').prop('checked', true): '';
+    ($('.liThromboemb_3').is(':checked')) ? $('#chkFamilyVeinThromb').prop('checked', true): '';
+    ($('.liProvocedVTE_1').is(':checked')) ? $('#chkWasProvocedVTE').prop('checked', true): '';
+    ($('.liTraum_1').is(':checked')) ? $('#chkFracturePpelvisFemurTibiaLess1Month').prop('checked', true): '';
+    ($('.liHighRiskThrombophilia_1').is(':checked')) ? $('#chkIsKnownHighRiskThrombophilia').prop('checked', true): '';
+    ($('.liNeoplasm_1').is(':checked')) ? $('#chkIsActiveNeoplasmOrTherapyOfNeoplasm').prop('checked', true): '';
+    ($('.liNeoplasm_2').is(':checked')) ? $('#chkSomeTherapyOfNeoplasm').prop('checked', true): '';
     ($('.chkStroke_1').is(':checked')) ? $('#chkStroke').prop('checked', true): '';
-    ($('#chkIsTraum, #chkLargeOperIn30Days').is(':checked')) ? $('#chkTraumOrOperIn30Days').prop('checked', true): '';
-    ($('#chkIsPulmonInsuff').is(':checked') || $('#chkIsHeartInsuff').is(':checked')) ? $('#chkPulmonOrHeartInsuff').prop('checked', true): '';
+    ($('#ulIsTraum, #chkLargeOperIn30Days').is(':checked')) ? $('#chkTraumOrOperIn30Days').prop('checked', true): '';
+    ($('#ulIsPulmInsuff').is(':checked') || $('#chkIsHeartInsuff').is(':checked')) ? $('#chkPulmonOrHeartInsuff').prop('checked', true): '';
     ($('.chkSevereRenalInsuff_1').is(':checked')) ? $('#chkSevereRenalInsuff').prop('checked', true): '';
     ($('.chkSevereRenalInsuff_2').is(':checked') || oPat.pkGFR < 30) ? $('#chkSevereRenalInsuff_3').prop('checked', true): '';
     $('#chkIsLiverFailure').is(':checked') ? oPat.pkSevereHepaticFailure = true : '';
@@ -410,29 +667,29 @@ oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop
     $('#chkActiveUlcerOfStomachOrDuodenum').is(':checked') ? oPat.pkActiveUlcerOfStomachOrDuodenum = true : '';
     $('#chkChronicDialysis').is(':checked') ? oPat.pkChronicDialysis = true : '';
     $('#chkArtificialHeartValve').is(':checked') ? oPat.pkArtificialHeartValve = true : '';
-    $('#chkUncontrolledSystemicHypertension').is(':checked') ? oPat.pkUncontrolledSystemicHypertension = true : '';
+    $('#liUncontrolSystHypert').is(':checked') ? oPat.pkUncontrolledSystemicHypertension = true : '';
 
     ($('#chkSevereRenalInsuff, #chkIsLiverFailure').is(':checked')) ? $('#chkSevereRenalOrLiverFailure').prop('checked', true): $('#chkSevereRenalOrLiverFailure').prop('checked', false);
 
 
     ($('.chkBurns_1').is(':checked')) ? $('#chkBurnsLess20Percent').prop('checked', true): '';
     ($('.chkBurns_2').is(':checked')) ? $('#chkBurnsMore20Percent').prop('checked', true): '';
-    ($('.chkObstComorbidities').is(':checked')) ? $('#chkIsObstComorbidityRF').prop('checked', true): '';
+    ($('.clsObstComorbidities').is(':checked')) ? $('#chkIsObstComorbidityRF').prop('checked', true): '';
     ($('.chkLabourRuRF_1').is(':checked')) ? $('#chkSeverePreeclampsiaOrStillbirth').prop('checked', true): '';
-    ($('.chkSumAtrFibrRF_1').is(':checked')) ? $('#chkVascularAnamnesis').prop('checked', true): '';
-    ($('.chkThrombocytopenia_1').is(':checked')) ? $('#chkThrombocytopenia').prop('checked', true): '';
+    ($('.liSumAtrFibrRF_1').is(':checked')) ? $('#chkVascularAnamnesis').prop('checked', true): '';
+    ($('.liThrombocytopenia_1').is(':checked')) ? $('#chkThrombocytopenia').prop('checked', true): '';
 
-    ($('#chkIsHemorragicSyndrome, #chkPriorMajorBleeding, #chkHbLess_100').is(':checked')) ? $('#chkBleedingOrHemorragicSyndrome').prop('checked', true): '';
+    ($('#chkIsHemorragicSyndrome, #chkPriorMajorBleeding, #liHbLess_100').is(':checked')) ? $('#chkBleedingOrHemorragicSyndrome').prop('checked', true): '';
 
-    ($('#chkIsAcuteInflammatoryDiseaseOrInfection').is(':checked') && $('#chkIsRestrictedMobility').is(':checked')) ? $('#chkAcuteInflammatoryDiseaseOrInfectionWithBedRest').prop('checked', true): '';
+    ($('#ulIsAcuteInflamDiseaseOrInf').is(':checked') && $('#chkIsRestrictedMobility').is(':checked')) ? $('#liAcuteInflamDiseaseOrInfectionWithBedRest').prop('checked', true): '';
 
-    ($('.chkSpinalCordInjure_1, #chkPlegia').is(':checked')) ? $('#chkSpinalCordDamageWithPlegia').prop('checked', true): '';
+    ($('.liSpinalCordInjure_1, #liPlegia').is(':checked')) ? $('#chkSpinalCordDamageWithPlegia').prop('checked', true): '';
 
-    ($('.chkStroke_1').is(':checked') && $('#chkPlegia').is(':checked')) ? $('#chkStrokeWithPlegia').prop('checked', true): '';
+    ($('.chkStroke_1').is(':checked') && $('#liPlegia').is(':checked')) ? $('#chkStrokeWithPlegia').prop('checked', true): '';
 
     ($('#chkArthritis').is(':checked') && $('#chkIsRestrictedMobility').is(':checked')) ? $('#chkArthritisWithRestrictedMobility').prop('checked', true): '';
     ($('#chkIsRestrictedMobility, #chkDehydration').is(':checked')) ? $('#chkIsRestrictedMobilityOrDehydration').prop('checked', true): '';
-    ($('.chkСoagulopathy_1').is(':checked')) ? $('#chkСoagulopathyWithoutThrombocytopenia').prop('checked', true): '';
+    ($('.liСoagulopathy_1').is(':checked')) ? $('#chkСoagulopathyWithoutThrombocytopenia').prop('checked', true): '';
 
 
 
@@ -494,7 +751,7 @@ if(oPat.pkIsOrNoSurg){
     // console.log(JSON.stringify($.extend({}, pkRfArr)));
     let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
     let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
-    $('.chk2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
+    $('.ul2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
 
     vIsBedRestBMI.prop('checked', true);
     vIsBedRestAge.prop('checked', true);

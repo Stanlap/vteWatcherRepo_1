@@ -143,8 +143,7 @@ app.get('/vte_obst_profile', auth, (req, res) => {
 
 app.get('/vte_patient_list_rf', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_patient_list_rf', {
-        title: 'vte Watcher Patient Risk Factors',
-        message: 'vte Watcher Patient Risk Factors'
+        title: 'vte Watcher Patient Risk Factors'       
     });
 });
 

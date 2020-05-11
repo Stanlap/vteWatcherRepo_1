@@ -13,7 +13,8 @@ const orderBehavior = item => {
         item.siblings('button').toggle();
         vCounter = 0;
         $('#fg_1').empty();
-    });
+        item.prop('id') === 'btnGynPathol' ? alert('ok'): '';
+        });
 }
 orderBehavior($('#btnPregnancy'));
 orderBehavior($('#btnChildbirth'));

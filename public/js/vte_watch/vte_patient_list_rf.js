@@ -810,9 +810,15 @@ function countRF() {
     oPat.pkIsGenAnesth ? (aRFVal.push('10000001000000000'), oPat.pkGeneralListOfRF.push(' общая анестезия')) : '';
 
 let selectedRF= [];
-    $.merge(selectedRF, $('#accListRF button.btn-secondary, #accListRF li.list-group-item-secondary'));    
+    $.merge(selectedRF, $('#accListRF button.btn-secondary'));    
     $(selectedRF).each((ind, el) => {
         aRFVal.push($(el).val())
+    });
+    selectedRF.length = 0;
+
+    $.merge(selectedRF, $('#accListRF li.list-group-item-secondary'));    
+    $(selectedRF).each((ind, el) => {
+        aRFVal.push(el.dataset.value);
     });
     selectedRF.length = 0;
 
@@ -820,8 +826,6 @@ let selectedRF= [];
     $(selectedRF).each((ind, el) => {
        oPat.pkGeneralListOfRF.push($(el).text());
     });
-
-    aRFVal.join();
 
     console.log(aRFVal, oPat.pkGeneralListOfRF, oPat);
 

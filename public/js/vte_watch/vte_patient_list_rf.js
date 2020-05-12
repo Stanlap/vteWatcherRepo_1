@@ -2,36 +2,33 @@ let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(oPat);
 
-let vIsShow = false,
+function creatMirrorRF(){
+    let vIsShow = false,
     vCardCounter = 0,
-    aLi = [],
-    selectedRF = [];
+    aLi = [];
 
-oPat.pkGeneralListOfRF = [];
+    const createCard = (cls, val, title, ind, content, id) => {
+        vCardCounter++;
+        $('#accListRF').append(`<div class="card  ${cls}"><div class="card-header" id="divCHeader_${ind}"><h5 class="mb-0"><button type="button"  class="btn btn-block" id="${id}" value="${val}" data-toggle="collapse" data-target="#collapse_${ind}" aria-controls="collapse_${ind}">${title}</button></h5></div>
+        <div id="collapse_${ind}" class="collapse ${vIsShow ? '': 'show'}" aria-labelledby="divCHeader_${ind}" data-parent="#accListRF"><div class="card-body"><ul class="list-group list-group-flush">${content}</ul></div></div></div>`);
+        vIsShow = true;
+    }
+    const creatReference = cmt => cmt ? `<span class="preReference"> &hellip;</span><span class="reference"> ${cmt}</span>` : '';
+    
+    const creatTitle = (ttl, cmt) => `${ttl}${creatReference(cmt)}`;
+    
+    const createLi = (cls, id, vle, ttl, cmt) => ($(`<li class="list-group-item ${cls}" id="${id}" data-value="${vle}">${creatTitle(ttl, cmt)}</li>`).prop('outerHTML'));
+    
+    const createBtn = ((cls, id, vle, ttl, cmt) => $('#accListRF').append($(`<button type="button"  class="btn btn-block btnSingleRF ${cls}" id="${id}" value="${vle}">${creatTitle(ttl, cmt)}</button>`).prop('outerHTML')));
 
-
-const createCard = (cls, val, title, ind, content, id) => {
-    vCardCounter++;
-    $('#accListRF').append(`<div class="card  ${cls}"><div class="card-header" id="divCHeader_${ind}"><h5 class="mb-0"><button type="button"  class="btn btn-block" id="${id}" value="${val}" data-toggle="collapse" data-target="#collapse_${ind}" aria-controls="collapse_${ind}">${title}</button></h5></div>
-    <div id="collapse_${ind}" class="collapse ${vIsShow ? '': 'show'}" aria-labelledby="divCHeader_${ind}" data-parent="#accListRF"><div class="card-body"><ul class="list-group list-group-flush">${content}</ul></div></div></div>`);
-    vIsShow = true;
-}
-const creatReference = cmt => cmt ? `<span class="preReference"> &hellip;</span><span class="reference"> ${cmt}</span>` : '';
-
-const creatTitle = (ttl, cmt) => `${ttl}${creatReference(cmt)}`;
-
-const createLi = (cls, id, vle, ttl, cmt) => ($(`<li class="list-group-item ${cls}" id="${id}" data-value="${vle}">${creatTitle(ttl, cmt)}</li>`).prop('outerHTML'));
-
-const createBtn = ((cls, id, vle, ttl, cmt) => $('#accListRF').append($(`<button type="button"  class="btn btn-block btnSingleRF ${cls}" id="${id}" value="${vle}">${creatTitle(ttl, cmt)}</button>`).prop('outerHTML')));
-
-// High Blood Pressure
+    // High Blood Pressure
 aLi.push(createLi('cls2RF', 'liSystHypert1th', '1000000000000000', ' артериальная гипертензия 1 степени', ', CАД 140-159 или ДАД 90-99 мм рт. ст.'));
 
-aLi.push(createLi('cls2BRF liSystHypert2thAndMoreStg', 'liSystHypert2th', '1000000000000000', ' артериальная гипертензия 2 степени', ', САД 160-179 или ДАД 100-109 мм рт. ст.'));
+aLi.push(createLi('cls2BRF liSystHypert_1', 'liSystHypert2th', '1000000000000000', ' артериальная гипертензия 2 степени', ', САД 160-179 или ДАД 100-109 мм рт. ст.'));
 
-aLi.push(createLi('cls2BRF liSystHypert2thAndMoreStg', 'liSystHypert3th', '1000000000000000', ' артериальная гипертензия 3 степени', ', САД &ge; 180 или АД &ge; 110 мм рт. ст.'));
+aLi.push(createLi('cls2BRF liSystHypert_1', 'liSystHypert3th', '1000000000000000', ' артериальная гипертензия 3 степени', ', САД &ge; 180 или АД &ge; 110 мм рт. ст.'));
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF liSystHypert2thAndMoreStg', 'liUncontrolSystHypert', '1000000001000100', ' неконтролируемая артериальная гипертензия', ', артериальное давление &ge; 200 мм рт.ст. систолическое или &ge; 120 мм рт.ст. диастолическое'));
+aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF liSystHypert_1', 'liUncontrolSystHypert', '1000000001000100', ' неконтролируемая артериальная гипертензия', ', артериальное давление &ge; 200 мм рт.ст. систолическое или &ge; 120 мм рт.ст. диастолическое'));
 
 createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF ul2_LvlRF clsOneChoice', '1000010000000000', 'артериальная гипертензия', vCardCounter, aLi.join(''));
 aLi = [];
@@ -112,7 +109,7 @@ aLi.push(createLi('cls3RF', '', '1000000010000000', '<span hidden>заболев
 
 aLi.push(createLi('cls3RF', '', '1000000010000000', ' ХОБЛ', ' (хроническая обструктивная болезнь легких)'));
 
-createCard('cls1RF ul2_LvlRF', '1000000100000000', 'заболевания легких с дыхательной недостаточностью', vCardCounter, aLi.join(''), 'ulIsPulmInsuff');
+createCard('cls3RF ul2_LvlRF', '1000000100000000', 'заболевания легких с дыхательной недостаточностью', vCardCounter, aLi.join(''), 'ulIsPulmInsuff');
 aLi = [];
 
 // Anemia
@@ -175,7 +172,7 @@ aLi.push(createLi('cls3RF liThrombocytopenia_1', '', '1000000030000000', ' ге�
 
 aLi.push(createLi('cls3BRF_1', '', '1000000001000000', ' нелеченная коагулопатия', '. Любая из коагулопатий без эффективной медикаментозной коррекции.'));
 
-createCard('cls1BRF cls2BRF cls3RF cls3BRF_1 cls4BRF cls10BRF ul2_LvlRF', '1000000000000000', 'геморраг. гемостазиопатии (геморраг. диатез, геморраг. с-м) ', vCardCounter, aLi.join(''), 'ulIsHemorrSyndrome');
+createCard('cls2BRF cls3RF cls3BRF_1 cls4BRF cls10BRF ul2_LvlRF', '1000000000000000', 'геморраг. гемостазиопатии (геморраг. диатез, геморраг. с-м) ', vCardCounter, aLi.join(''), 'ulIsHemorrSyndrome');
 aLi = [];
 
 // VTE
@@ -386,6 +383,35 @@ createBtn('cls4RF', 'btnArthritis', '1000000100000000', ' воспаление �
 createBtn('cls4RF cls10RF', 'btnDehydration', '1000000100000010', ' дегидратация', ' - cостояние, связанное со значительными потерями воды (потоотделение, рвота, диурез, диарея), либо недостаточным поступлением воды в организм');
 
 createBtn('cls3RF', '', '1000000100000000', ' миелопролиферативные заболевания', ': эссенциальная тромбоцитемия (увеличение числа тромбоцитов), истинная полицитемия (увеличенное количество эритроцитов), хронический миелолейкоз (увеличенное количество лейкоцитов)');
+}
+creatMirrorRF();
+$('#accListRF .card, #accListRF li,  #accListRF .btnSingleRF, span.reference').hide();
+oPat.pkGender === 1 ? $('.clsFemaleLvl').hide() : '';
+
+const showRF = (aRF, vB) => {
+    let aSRF = [];
+    vB ? $(aRF).each((ind, el) => $.merge(aSRF, $(`.cls${el}BRF`))) : '';
+    $(aRF).each((ind, el) => $.merge(aSRF, $(`.cls${el}RF`)));
+    if (aRF && vB) {
+        (aRF.includes(4) && aRF.includes(10)) ? aSRF = $.merge($(aSRF), $('.cls3BRF_1')): '';
+        ($.inArray(4, aRF) === -1 && $.inArray(10, aRF) === -1) ? aSRF = $.merge($(aSRF), $('.cls3BRF_1')): '';
+    };
+    oPat.pkDateOfChildbirth ? $.merge($(aSRF), $('.clsLabourRF')) : '';
+    
+    $.extend({
+        distinct: function (anArray) {
+            let result = [];
+            $.each(anArray, function (i, v) {
+                if ($.inArray(v, result) === -1) result.push(v);
+            });
+            return result;
+        }
+    });
+    $($.distinct(aSRF)).show();
+};
+showRF(oPat.pkMedProfiles, oPat.pkCalculateRiskOfBleeding);
+
+// Behavior Inside Mirror RF
 
 $("#accListRF .btnSingleRF").on('click', function () {
     $(this).toggleClass('btn-secondary');
@@ -398,10 +424,6 @@ $("#accListRF li").on('click', function (vTB) {
     $(this).hasClass('list-group-item-secondary') ? $(vTB).addClass('btn-secondary') : !$(this).siblings().hasClass('list-group-item-secondary') ? $(vTB).removeClass('btn-secondary') : '';
 });
 
-
-
-$('span.reference').hide();
-
 $('span.preReference').on('click', function () {
     $(this).hide().next().show();
 })
@@ -409,42 +431,13 @@ $('span.reference').on('click', function () {
     $(this).hide().prev().show();
 });
 
-$('#accListRF .card').hide();
-$('#accListRF .btnSingleRF').hide();
-oPat.pkGender === 1 ? $('.clsFemaleLvl').hide() : '';
-
-const collectSelectedRF = (aRF, vB) => {
-    vB ? $(aRF).each((ind, el) => $.merge(selectedRF, $(`.cls${el}BRF`))) : '';
-    $(aRF).each((ind, el) => $.merge(selectedRF, $(`.cls${el}RF`)));
-};
-collectSelectedRF(oPat.pkMedProfiles, oPat.pkCalculateRiskOfBleeding);
-
-if (oPat.pkSurgProfiles) {
-    (oPat.pkCalculateRiskOfBleeding && oPat.pkMedProfiles.includes(4) && oPat.pkMedProfiles.includes(10)) ? selectedRF = $.merge($(selectedRF), $('.cls3BRF_1')): '';
-    (oPat.pkCalculateRiskOfBleeding && $.inArray(4, oPat.pkMedProfiles) === -1 && $.inArray(10, oPat.pkMedProfiles) === -1) ? selectedRF = $.merge($(selectedRF), $('.cls3BRF_1')): '';
-};
-oPat.pkDateOfChildbirth ? $.merge($(selectedRF), $('.clsLabourRF')) : '';
-
-$.extend({
-    distinct: function (anArray) {
-        let result = [];
-        $.each(anArray, function (i, v) {
-            if ($.inArray(v, result) === -1) result.push(v);
-        });
-        return result;
-    }
-});
-
-selectedRF = $.distinct(selectedRF);
-$(selectedRF).show();
-selectedRF = [];
-
 const makeLiInteract_1 = (it_1, it_2) => {
     $(it_1).on('click', function (vTB) {
         vTB = $(this).parents('.collapse').siblings().find('button');
-        $(it_1).hasClass('list-group-item-secondary') ? $(it_2).addClass('list-group-item-secondary'): !$(this).siblings().hasClass('list-group-item-secondary') ? $(vTB).removeClass('btn-secondary') : '';
+        $(it_1).hasClass('list-group-item-secondary') ? $(it_2).addClass('list-group-item-secondary') : !$(this).siblings().hasClass('list-group-item-secondary') ? $(vTB).removeClass('btn-secondary') : '';
     });
 }
+
 
 makeLiInteract_1('#liSepsis', '#liAcuteInflamDisease');
 makeLiInteract_1('.liThromboemb_2', '#liWasPulmEmb');
@@ -719,147 +712,144 @@ makeLiInteract_1('.liThromboemb_2', '#liWasPulmEmb');
 
 
 function countRF() {
-    // Final
+
+    oPat.pkDiabetes = $('#ulIsDiabetes').hasClass('btn-secondary') ? true : false;
+    oPat.pkActiveUlcerOfStomachOrDuodenum = $('#ulActiveUlcerOfStomachOrDuodenum').hasClass('btn-secondary') ? true : false;
+    oPat.pkSevereHepaticFailure = $('#ulIsLiverFailure').hasClass('btn-secondary') ? true : false;
+
+    oPat.pkChronicDialysis = $('#liChronicDialysis').hasClass('list-group-item-secondary') ? true : false;
+    oPat.pkArtificialHeartValve = $('#liArtificialHeartValve').hasClass('list-group-item-secondary') ? true : false;
+
+    oPat.pkUncontroldSystHypert = $('#liUncontrolSystHypert').hasClass('list-group-item-secondary') ? true : false;
+    oPat.pkHeartInsuff3_4 = $('#liHeartInsuff3_4').hasClass('list-group-item-secondary') ? true : false;
+
+
     $('span.preReference, span.reference').remove();
+
     let aRFVal = [];
 
-    aRFVal.push(oPat.pkGender === 1? '101.000000000000' : '1000010000000000');
-    $('#ulIsAcuteInflamDiseaseOrInf').hasClass('btn-secondary')&& $('#ulIsRestrictedMobility').hasClass('btn-secondary')? aRFVal.push('1000000200000000'): '';
-    ($('.liSevereRenalInsuff_2').hasClass('list-group-item-secondary')|| oPat.pkGFR < 30)? aRFVal.push('1000001000000000') : '';
-    $('#ulIsTraum, #ulLargeOperIn30Days').hasClass('btn-secondary') ? aRFVal.push('1200000000000000'): '';
-    $('#ulIsPulmInsuff').hasClass('btn-secondary') ? aRFVal.push('1100000000000000'): '';
-    $('.liSevereRenalInsuff_1').hasClass('list-group-item-secondary')|| $('#ulIsLiverFailure').hasClass('btn-secondary')? aRFVal.push('1000000001000000'): '';
-    $('#ulIsHemorrSyndrome').hasClass('btn-secondary') || $('#liPriorMajorBleeding, #liHbLess_100').hasClass('list-group-item-secondary') ? aRFVal.push('1000001000000000'): '';
-    $('.liStroke_1').hasClass('list-group-item-secondary') && $('#liPlegia').hasClass('list-group-item-secondary') ? aRFVal.push('1000000300030000'): '';
-    $('.clsObstComorbidities').hasClass('list-group-item-secondary') || $('.clsObstComorbidities').hasClass('btn-secondary') ? aRFVal.push('1000000000003020'): '';
-    $('#ulIsRestrictedMobility, #btnDehydration').hasClass('btn-secondary') ? aRFVal.push('1000000000001000'): '';
-    $('#btnArthritis').hasClass('btn-secondary') && $('#ulIsRestrictedMobility').hasClass('btn-secondary') ? aRFVal.push('1000000000010000'): '';
+    aRFVal.push(oPat.pkGender === 1 ? '101.000000000000' : '1000010000000000');
+    $('#ulIsAcuteInflamDiseaseOrInf').hasClass('btn-secondary') && $('#ulIsRestrictedMobility').hasClass('btn-secondary') ? aRFVal.push('1000000200000000') : '';
+    ($('.liSevereRenalInsuff_2').hasClass('list-group-item-secondary') || oPat.pkGFR < 30) ? aRFVal.push('1000001000000000'): '';
+    $('#ulIsTraum, #ulLargeOperIn30Days').hasClass('btn-secondary') ? aRFVal.push('1200000000000000') : '';
+    $('#ulIsPulmInsuff').hasClass('btn-secondary') ? aRFVal.push('1100000000000000') : '';
+    $('.liSevereRenalInsuff_1').hasClass('list-group-item-secondary') || $('#ulIsLiverFailure').hasClass('btn-secondary') ? aRFVal.push('1000000001000000') : '';
+    $('#ulIsHemorrSyndrome').hasClass('btn-secondary') || $('#liPriorMajorBleeding, #liHbLess_100').hasClass('list-group-item-secondary') ? aRFVal.push('1000001000000000') : '';
+    $('.liStroke_1').hasClass('list-group-item-secondary') && $('#liPlegia').hasClass('list-group-item-secondary') ? aRFVal.push('1000000300030000') : '';
+    $('.clsObstComorbidities').hasClass('list-group-item-secondary') || $('.clsObstComorbidities').hasClass('btn-secondary') ? aRFVal.push('1000000000003020') : '';
+    $('#ulIsRestrictedMobility, #btnDehydration').hasClass('btn-secondary') ? aRFVal.push('1000000000001000') : '';
+    $('#btnArthritis').hasClass('btn-secondary') && $('#ulIsRestrictedMobility').hasClass('btn-secondary') ? aRFVal.push('1000000000010000') : '';
 
-const putVal = (item, val)=> $(item).hasClass('list-group-item-secondary') ? aRFVal.push(val): '';
+    const putVal = (item, val) => $(item).hasClass('list-group-item-secondary') ? aRFVal.push(val) : '';
 
-console.log(aRFVal);
+    putVal('.liSystHypert_1', '1000001000000000');
+    putVal('.liSumTherRF_1', '1100000000000000');
+    putVal('.liSumTherRF_2', '1100000000000000');
+    putVal('.liThromboemb_1, .liSumAtrFibrRF_1', '1000020000000000');
+    putVal('.liThromboemb_1', '130000013000000');
+    putVal('.liThromboemb_3', '1300000130000010');
+    putVal('.liProvocedVTE_1', '1000000000000020');
+    putVal('.liTraum_1', '1000000050000000');
+    putVal('.liHighRiskThrombophilia_1', '1300000300003030');
+    putVal('.liNeoplasm_1', '132.000100000000');
+    putVal('.liNeoplasm_2', '1000000300000000');
+    putVal('.liStroke_1', '1000001000000000');
+    putVal('.liSevereRenalInsuff_1', '1000000000100100');
+    putVal('.liBurns_1', '1000000200000000');
+    putVal('.liBurns_2', '1000000300000000');
+    putVal('.liSpinalCordInjure_1, #liPlegia', '1000000350000000');
+    putVal('.liСoagulopathy_1', '1000000000000100');
+    putVal('.liLabourRuRF_1', '1000000000000020');
+    putVal('.liThrombocytopenia_1', '1000000001000000');
 
-// putVal('.liSystHypert2thAndMoreStg','1000001000000000');
-// putVal('.liSumTherRF_1','1100000000000000');
-// putVal('.liSumTherRF_2','1100000000000000');
-// putVal('.liThromboemb_1, .liSumAtrFibrRF_1','1000020000000000');
-// putVal('.liThromboemb_1','130000013000000');
-// putVal('.liThromboemb_3','1300000130000010');
-// putVal('.liProvocedVTE_1','1000000000000020');
-// putVal('.liTraum_1','1000000050000000');
-// putVal('.liHighRiskThrombophilia_1','1300000300003030');
-// putVal('.liNeoplasm_1','132.000100000000');
-// putVal('.liNeoplasm_2','1000000300000000');
-// putVal('.liStroke_1','1000001000000000');
-// putVal('.liSevereRenalInsuff_1','1000000000100100');
-// putVal('.liBurns_1','1000000200000000');
-// putVal('.liBurns_2','1000000300000000');
-// putVal('.liSpinalCordInjure_1, #liPlegia','1000000350000000');
-// putVal('.liСoagulopathy_1','1000000000000100');
-// putVal('.liLabourRuRF_1','1000000000000020');
-// putVal('.liThrombocytopenia_1','1000000001000000');
+    if (oPat.pkIsOrNoSurg) {
+        oPat.oSelOp.pkArtroplasty ? aRFVal.push('1000000300000000') : '';
+        oPat.oSelOp.pkArthroscopicSurgery ? aRFVal.push('1000000000000000') : '';
+        oPat.oSelOp.pkShinFractureSurgery ? aRFVal.push('1000000000000000') : '';
+        oPat.oSelOp.pkHipFractureSurgery ? aRFVal.push('1000000300000000') : '';
+        oPat.oSelOp.pkLiverResection ? aRFVal.push('10000000000000001') : '';
+        oPat.oSelOp.pkPancreatoDuodResection ? aRFVal.push('1000000001000000') : '';
+        oPat.oSelOp.pkPulmonectomy ? aRFVal.push('10000000000000001') : '';
+        oPat.oSelOp.pkLaparoscopicIntervention ? aRFVal.push('1000000000000000') : '';
+        oPat.oSelOp.pkHeartSurgery ? aRFVal.push('1000000001000000') : '';
+        oPat.oSelOp.pkBrainOrSpinalCordSurg ? aRFVal.push('1000000001000000') : '';
+        oPat.oSelOp.pkElectiveCSection ? aRFVal.push('1000000000001000') : '';
+        oPat.oSelOp.pkCSectionInLabour ? aRFVal.push('1000000000002010') : '';
 
-// if (oPat.pkIsOrNoSurg) {
-//     oPat.oSelOp.pkArtroplasty? aRFVal.push('1000000300000000'): '';
-//     oPat.oSelOp.pkArthroscopicSurgery? aRFVal.push('1000000000000000'): '';
-//     oPat.oSelOp.pkShinFractureSurgery? aRFVal.push('1000000000000000'): '';
-//     oPat.oSelOp.pkHipFractureSurgery? aRFVal.push('1000000300000000'): '';
-//     oPat.oSelOp.pkLiverResection? aRFVal.push('10000000000000001'): '';
-//     oPat.oSelOp.pkPancreatoDuodResection ? aRFVal.push('1000000001000000'): '';
-//     oPat.oSelOp.pkPulmonectomy ? aRFVal.push('10000000000000001'): '';
-//     oPat.oSelOp.pkLaparoscopicIntervention ? aRFVal.push('1000000000000000'): '';
-//     oPat.oSelOp.pkHeartSurgery ? aRFVal.push('1000000001000000'): '';
-//     oPat.oSelOp.pkBrainOrSpinalCordSurg ? aRFVal.push('1000000001000000'): '';
-//     oPat.oSelOp.pkElectiveCSection ? aRFVal.push('1000000000001000'): '';
-//     oPat.oSelOp.pkCSectionInLabour ? aRFVal.push('1000000000002010'): '';
+        aRFVal.push(oPat.pkGradeOfOper > 0 ? '1000000000000000' : '1000000000000000');
+    }
 
-//     aRFVal.push(oPat.pkGradeOfOper > 0 ? '1000000000000000': '1000000000000000');
-// }
-
-// oPat.pkAge > 35? aRFVal.push('1000000000001010'): '';
-// oPat.pkAge > 40? aRFVal.push('1000000000000000'): '';
-// oPat.pkAge > 40 && oPat.pkAge < 61? aRFVal.push('1000000010000000'): '';
-// oPat.pkAge > 60 && oPat.pkAge < 76? aRFVal.push('1000000020000000'): '';
-// oPat.pkAge > 64 && oPat.pkAge < 75? aRFVal.push('1000010000000000'): '';
-// oPat.pkAge >= 40 && oPat.pkAge < 85? aRFVal.push('101.500000000000'): '';
-// oPat.pkAge > 65? aRFVal.push('1000001000000000'): '';
-// oPat.pkAge > 70? aRFVal.push('1100000000000000'): '';
-// oPat.pkAge >= 75? aRFVal.push('1000020030000000'): '';
-// oPat.pkAge >= 85? aRFVal.push('103.500000000000'): '';
-
-// const ageEnding = item => {
-//     let vA = String(item).split('').pop(); 
-//     switch(vA) {
-//         case vA > 1 && vA < 5:
-//             return 'года';
-//         case vA === 1:
-//             return 'год';
-//         default:
-//             return 'лет';
-//       }
-// }
-// oPat.pkGeneralListOfRF.push(` возраст ${oPat.pkAge} ${ageEnding(oPat.pkAge)}`);    
-
-// oPat.pkBMI > 25 ? (aRFVal.push('1000000010000000'),oPat.pkGeneralListOfRF.push(` ${oPat.pkAge <= 30 ? 'избыточный вес': 'ожирение'} (ИМТ &gt; ${oPat.pkBMI} кг/м2)`)): ''; 
-// oPat.pkBMI > 30 ? aRFVal.push('1100000100000000'): '';
-// oPat.pkBMI > 30 && oPat.pkBMI < 40 ? aRFVal.push('1000000100001010'): '';
-// oPat.pkBMI > 35 ? aRFVal.push('1000000000000000'): '';
-// oPat.pkBMI > 40 ? aRFVal.push('1000000000002000'): '';
-
-// console.log(aRFVal);
-  
-
-// oPat.pkIsGenAnesth ? (aRFVal.push('10000001000000000'), oPat.pkGeneralListOfRF.push(' общая анестезия')) : '';
-
-//     oPat.pkDiabetes = $('#ulIsDiabetes').hasClass('btn-secondary') ? true : false;
-//     oPat.pkActiveUlcerOfStomachOrDuodenum = $('#ulActiveUlcerOfStomachOrDuodenum').hasClass('btn-secondary') ? true : false;
-//     oPat.pkSevereHepaticFailure = $('#ulIsLiverFailure').hasClass('btn-secondary') ? true : false;
-
-//     oPat.pkChronicDialysis = $('#liChronicDialysis').hasClass('list-group-item-secondary') ? true : false;
-//     oPat.pkArtificialHeartValve = $('#liArtificialHeartValve').hasClass('list-group-item-secondary') ? true : false;
-
-//     oPat.pkUncontroldSystHypert = $('#liUncontrolSystHypert').hasClass('list-group-item-secondary') ? true : false;
-//     oPat.pkHeartInsuff3_4 = $('#liHeartInsuff3_4').hasClass('list-group-item-secondary') ? true : false;
+    oPat.pkGeneralListOfRF = [];
 
 
-//     console.log(aRFVal);
+    if(oPat.pkAge> 35) {
+        aRFVal.push('1000000000001010');
+        const ageEnding = item => {
+            let vA = +String(item).split('').pop();
+        return vA === 1 ? 'год': vA > 1 && vA < 5 ? 'года':'лет';
+            }
+        oPat.pkGeneralListOfRF.push(` возраст ${oPat.pkAge} ${ageEnding(oPat.pkAge)}`);
+    }
+        oPat.pkAge > 40 ? aRFVal.push('1000000000000000') : '';
+        oPat.pkAge > 40 && oPat.pkAge < 61 ? aRFVal.push('1000000010000000') : '';
+        oPat.pkAge > 60 && oPat.pkAge < 76 ? aRFVal.push('1000000020000000') : '';
+        oPat.pkAge > 64 && oPat.pkAge < 75 ? aRFVal.push('1000010000000000') : '';
+        oPat.pkAge >= 40 && oPat.pkAge < 85 ? aRFVal.push('101.500000000000') : '';
+        oPat.pkAge > 65 ? aRFVal.push('1000001000000000') : '';
+        oPat.pkAge > 70 ? aRFVal.push('1100000000000000') : '';
+        oPat.pkAge >= 75 ? aRFVal.push('1000020030000000') : '';
+        oPat.pkAge >= 85 ? aRFVal.push('103.500000000000') : '';
+    
+
+        oPat.pkBMI > 25 ? (aRFVal.push('1000000010000000'), oPat.pkGeneralListOfRF.push(` ${oPat.pkBMI <= 30 ? 'избыточный вес': 'ожирение'} (ИМТ > ${oPat.pkBMI} кг/м2)`)) : '';
+    oPat.pkBMI > 30 ? aRFVal.push('1100000100000000') : '';
+    oPat.pkBMI > 30 && oPat.pkBMI < 40 ? aRFVal.push('1000000100001010') : '';
+    oPat.pkBMI > 35 ? aRFVal.push('1000000000000000') : '';
+    oPat.pkBMI > 40 ? aRFVal.push('1000000000002000') : '';
+
+    oPat.pkIsGenAnesth ? (aRFVal.push('10000001000000000'), oPat.pkGeneralListOfRF.push(' общая анестезия')) : '';
+
+let selectedRF= [];
+    $.merge(selectedRF, $('#accListRF button.btn-secondary, #accListRF li.list-group-item-secondary'));    
+    $(selectedRF).each((ind, el) => {
+        aRFVal.push($(el).val())
+    });
+    selectedRF.length = 0;
+
+    $.merge(selectedRF, $('#accListRF .btnSingleRF.btn-secondary, #accListRF li.list-group-item-secondary'));
+    $(selectedRF).each((ind, el) => {
+       oPat.pkGeneralListOfRF.push($(el).text());
+    });
+
+    aRFVal.join();
+
+    console.log(aRFVal, oPat.pkGeneralListOfRF, oPat);
 
 
-//     $.merge(selectedRF, $('#accListRF button.btn-secondary'));
-//     $(selectedRF).each((ind, el) => aRFVal.push($(el).val()));
-//     selectedRF.length = 0;
-//     $.merge(selectedRF, $('#accListRF li.list-group-item-secondary'));
-//     $(selectedRF).each((ind, el) => {
-//         aRFVal.push(el.dataset.value);
-//         oPat.pkGeneralListOfRF.push($(el).text());
-//     });
-//     selectedRF.length = 0;
-//     console.log(aRFVal, oPat.pkGeneralListOfRF, oPat);
-//     console.log(aRFVal.join());
 
 
-    let oPatForCounter = {
-        age: oPat.pkAge,
-        isOrNoSurg: oPat.pkIsOrNoSurg,
-        operTimeMore60: oPat.pkOperTimeMore60,
-        gradeOfOper: oPat.pkGradeOfOper
-    };
-    $.post('/count', {
-            'rfArr': aRFVal.join(),
-            'oPatForCounter': JSON.stringify(oPatForCounter),
-        },
-        function (data) {
-            localStorage.setItem('objScalesVTE', data);
-            let fromRfArr = localStorage.getItem('objScalesVTE');
-            let objBallsRiskVTE = JSON.parse(fromRfArr);
-            console.log(objBallsRiskVTE.vCounterPaduaScore);
-            console.log(JSON.parse(data));
+    // let oPatForCounter = {
+    //     age: oPat.pkAge,
+    //     isOrNoSurg: oPat.pkIsOrNoSurg,
+    //     operTimeMore60: oPat.pkOperTimeMore60,
+    //     gradeOfOper: oPat.pkGradeOfOper
+    // };
+    // $.post('/count', {
+    //         'rfArr': aRFVal.join(),
+    //         'oPatForCounter': JSON.stringify(oPatForCounter),
+    //     },
+    //     function (data) {
+    //         localStorage.setItem('objScalesVTE', data);
+    //         let fromRfArr = localStorage.getItem('objScalesVTE');
+    //         let objBallsRiskVTE = JSON.parse(fromRfArr);
+    //         console.log(objBallsRiskVTE.vCounterPaduaScore);
+    //         console.log(JSON.parse(data));
 
-            // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-            // localStorage.removeItem('objScalesVTE');
-            // console.log(objBallsRiskVTE);
+    // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+    // localStorage.removeItem('objScalesVTE');
+    // console.log(objBallsRiskVTE);
 
-        });
+    // });
     serialObj = JSON.stringify(oPat);
     localStorage.setItem('Patient', serialObj);
     // $(location).attr('href', '/vte_concl');
@@ -867,57 +857,57 @@ console.log(aRFVal);
 
 $('#btnOne').on('click', countRF);
 
-    //  Old
-
-
-    
-    
-    // $('#inpCreatinineVal').val() == '' ? creatinVal = 90: creatinVal = $('#inpCreatinineVal').val();
-
-    // creatinUnits = $('#slctCrUnitsGroup').val();
-    // ($('#chkRaceB').is(':checked')) ? oPat.pkRace = 1: '';
-
-    // console.log(`GFR: ${calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)}`);
-
-    // oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[0];
-    // oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[1];
-
-    // oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
+//  Old
 
 
 
 
+// $('#inpCreatinineVal').val() == '' ? creatinVal = 90: creatinVal = $('#inpCreatinineVal').val();
+
+// creatinUnits = $('#slctCrUnitsGroup').val();
+// ($('#chkRaceB').is(':checked')) ? oPat.pkRace = 1: '';
+
+// console.log(`GFR: ${calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)}`);
+
+// oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[0];
+// oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[1];
+
+// oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
 
 
-    
-    
-    
-    
-    
-    
-    
 
-    // console.log(aRFVal.join());
-    // console.log(JSON.stringify($.extend({}, aRFVal)));
-    // let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
-    // let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
-    // $('.ul2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
 
-    // vIsBedRestBMI.prop('checked', true);
-    // vIsBedRestAge.prop('checked', true);
 
-    // function getStringOfRF(el) {
-    //     let a = 0,
-    //         b = '';
-    //     $(el).each(function () {
-    //         (a > 0) ? b += ',' + $(this).text(): b += $(this).text();
-    //         a += 1;
-    //     });
-    //     return b;
-    // }
 
-    // oPat.pkGeneralListOfRF = getStringOfRF($('#divAllRF input:checked').parent()) !== '' ? getStringOfRF($('#divAllRF input:checked').parent()) : 'отсутствуют';
-    // console.log(oPat);
 
-    // let serialObj = JSON.stringify(oPat);
-    // localStorage.setItem('Patient', serialObj);
+
+
+
+
+
+
+
+// console.log(aRFVal.join());
+// console.log(JSON.stringify($.extend({}, aRFVal)));
+// let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
+// let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
+// $('.ul2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
+
+// vIsBedRestBMI.prop('checked', true);
+// vIsBedRestAge.prop('checked', true);
+
+// function getStringOfRF(el) {
+//     let a = 0,
+//         b = '';
+//     $(el).each(function () {
+//         (a > 0) ? b += ',' + $(this).text(): b += $(this).text();
+//         a += 1;
+//     });
+//     return b;
+// }
+
+// oPat.pkGeneralListOfRF = getStringOfRF($('#divAllRF input:checked').parent()) !== '' ? getStringOfRF($('#divAllRF input:checked').parent()) : 'отсутствуют';
+// console.log(oPat);
+
+// let serialObj = JSON.stringify(oPat);
+// localStorage.setItem('Patient', serialObj);

@@ -2,10 +2,10 @@ let oPat = JSON.parse(localStorage.getItem('Patient'));
 localStorage.removeItem('Patient')
 console.log(oPat);
 
-function creatMirrorRF(){
+function creatMirrorRF() {
     let vIsShow = false,
-    vCardCounter = 0,
-    aLi = [];
+        vCardCounter = 0,
+        aLi = [];
 
     const createCard = (cls, val, title, ind, content, id) => {
         vCardCounter++;
@@ -14,375 +14,383 @@ function creatMirrorRF(){
         vIsShow = true;
     }
     const creatReference = cmt => cmt ? `<span class="preReference"> &hellip;</span><span class="reference"> ${cmt}</span>` : '';
-    
+
     const creatTitle = (ttl, cmt) => `${ttl}${creatReference(cmt)}`;
-    
+
     const createLi = (cls, id, vle, ttl, cmt) => ($(`<li class="list-group-item ${cls}" id="${id}" data-value="${vle}">${creatTitle(ttl, cmt)}</li>`).prop('outerHTML'));
-    
+
     const createBtn = ((cls, id, vle, ttl, cmt) => $('#accListRF').append($(`<button type="button"  class="btn btn-block btnSingleRF ${cls}" id="${id}" value="${vle}">${creatTitle(ttl, cmt)}</button>`).prop('outerHTML')));
 
     // High Blood Pressure
-aLi.push(createLi('cls2RF', 'liSystHypert1th', '1000000000000000', ' артериальная гипертензия 1 степени', ', CАД 140-159 или ДАД 90-99 мм рт. ст.'));
+    aLi.push(createLi('cls2RF', 'liSystHypert1th', '1000000000000000', ' артериальная гипертензия 1 степени', ', CАД 140-159 или ДАД 90-99 мм рт. ст.'));
 
-aLi.push(createLi('cls2BRF liSystHypert_1', 'liSystHypert2th', '1000000000000000', ' артериальная гипертензия 2 степени', ', САД 160-179 или ДАД 100-109 мм рт. ст.'));
+    aLi.push(createLi('cls2BRF liSystHypert_1', 'liSystHypert2th', '1000000000000000', ' артериальная гипертензия 2 степени', ', САД 160-179 или ДАД 100-109 мм рт. ст.'));
 
-aLi.push(createLi('cls2BRF liSystHypert_1', 'liSystHypert3th', '1000000000000000', ' артериальная гипертензия 3 степени', ', САД &ge; 180 или АД &ge; 110 мм рт. ст.'));
+    aLi.push(createLi('cls2BRF liSystHypert_1', 'liSystHypert3th', '1000000000000000', ' артериальная гипертензия 3 степени', ', САД &ge; 180 или АД &ge; 110 мм рт. ст.'));
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF liSystHypert_1', 'liUncontrolSystHypert', '1000000001000100', ' неконтролируемая артериальная гипертензия', ', артериальное давление &ge; 200 мм рт.ст. систолическое или &ge; 120 мм рт.ст. диастолическое'));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF liSystHypert_1', 'liUncontrolSystHypert', '1000000001000100', ' неконтролируемая артериальная гипертензия', ', артериальное давление &ge; 200 мм рт.ст. систолическое или &ge; 120 мм рт.ст. диастолическое'));
 
-createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF ul2_LvlRF clsOneChoice', '1000010000000000', 'артериальная гипертензия', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF clsOneChoice', '1000010000000000', 'артериальная гипертензия', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Diabetes mellitus
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF  clsObstComorbidities', '', '1000000000000000', '<span> сахарный диабет</span> I типа с нефропатией', ''));
+    // Diabetes mellitus
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF  clsObstComorbidities', '', '1000000000000000', '<span> сахарный диабет</span> I типа с нефропатией', ''));
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', '', '1000000000000000', '<span> сахарный диабет</span> II типа', ''));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', '', '1000000000000000', '<span> сахарный диабет</span> II типа', ''));
 
-createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF ul2_LvlRF clsOneChoice', '100001000000000', 'сахарный диабет', vCardCounter, aLi.join(''), 'ulIsDiabetes');
-aLi = [];
+    createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF clsOneChoice', '100001000000000', 'сахарный диабет', vCardCounter, aLi.join(''), 'ulIsDiabetes');
+    aLi = [];
 
-// Acute Infection
+    // Acute Infection
 
-aLi.push(createLi('cls3RF', 'liAcuteInflamDisease', '10000000000000000', ' острое воспалительное заболевание', ''));
+    aLi.push(createLi('cls3RF', 'liAcuteInflamDisease', '10000000000000000', ' острое воспалительное заболевание', ''));
 
-aLi.push(createLi('cls3RF', 'liSepsis', '1000000310000000', ' сепсис (&lt; 1 мес.)', ''));
+    aLi.push(createLi('cls3RF', 'liSepsis', '1000000310000000', ' сепсис (&lt; 1 мес.)', ''));
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF', '', '1000000000000000', ' септический эндокардит', ''));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF', '', '1000000000000000', ' септический эндокардит', ''));
 
-aLi.push(createLi('cls1RF cls3RF liSumTherRF_2', '', '1000000000000000', ' острая инфекция', ''));
+    aLi.push(createLi('cls1RF cls3RF liSumTherRF_2', '', '1000000000000000', ' острая инфекция', ''));
 
-createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF ul2_LvlRF', '1000000000001000', 'острое воспалительное заболевание или инфекция', vCardCounter, aLi.join(''), 'ulIsAcuteInflamDiseaseOrInf');
-aLi = [];
+    createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF', '1000000000001000', 'острое воспалительное заболевание или инфекция', vCardCounter, aLi.join(''), 'ulIsAcuteInflamDiseaseOrInf');
+    aLi = [];
 
-// Therm trauma
+    // Therm trauma
 
-aLi.push(createLi('cls8RF chkBurnsSuperficial_1 liBurns_1', '', '1000000000020000', ' ожоги поверхностные, площадью &lt; 20% поверхности тела', ''));
+    aLi.push(createLi('cls8RF liBurnsSuperficial_1 liBurns_1', '', '1000000000020000', ' ожоги поверхностные, площадью &lt; 20% поверхности тела', ''));
 
-aLi.push(createLi('cls8RF chkBurnsSuperficial_1 liBurns_2', '', '1000000000030000', '<span><span hidden>ожоги поверхностные, площадью</span> &gt; 20% поверхности тела</span>', ''));
+    aLi.push(createLi('cls8RF liBurnsSuperficial_1 liBurns_2', '', '1000000000030000', '<span><span hidden>ожоги поверхностные, площадью</span> &gt; 20% поверхности тела</span>', ''));
 
-aLi.push(createLi('cls8RF chkBurnsDeep_1 liBurns_1', '', '1000000000020000', '  ожоги глубокие, площадью &lt; 10% поверхности тела', ''));
+    aLi.push(createLi('cls8RF liBurnsDeep_1 liBurns_1', '', '1000000000020000', '  ожоги глубокие, площадью &lt; 10% поверхности тела', ''));
 
-aLi.push(createLi('cls8RF chkBurnsDeep_1 liBurns_1', '', '1000000000030000', ' ожоги глубокие, площадью от 10% до 20% поверхности тела', ''));
+    aLi.push(createLi('cls8RF liBurnsDeep_1 liBurns_1', '', '1000000000030000', ' ожоги глубокие, площадью от 10% до 20% поверхности тела', ''));
 
-aLi.push(createLi('cls8RF hkBurnsDeep_1 liBurns_2', '', '1000000000030000', ' ожоги глубокие, площадью &gt; 20% поверхности тела', ''));
+    aLi.push(createLi('cls8RF liBurnsDeep_1 liBurns_2', '', '1000000000030000', ' ожоги глубокие, площадью &gt; 20% поверхности тела', ''));
 
-aLi.push(createLi('cls3RF cls8RF chkThermalInhalationInjury_1', '', '100000020000000', ' термоингаляционная травма II степени', ''));
+    aLi.push(createLi('cls3RF cls8RF liThermalInhalationInjury_1', '', '100000020000000', ' термоингаляционная травма II степени', ''));
 
-aLi.push(createLi('cls8RF chkThermalInhalationInjury_1', '', '1000000300000000', ' термоингаляционная травма III степени', ''));
+    aLi.push(createLi('cls8RF liThermalInhalationInjury_1', '', '1000000300000000', ' термоингаляционная травма III степени', ''));
 
-aLi.push(createLi('cls8RF', '', '1000000000030000', ' отморожение II–IV степени', ''));
+    aLi.push(createLi('cls8RF', '', '1000000000030000', ' отморожение II–IV степени', ''));
 
-aLi.push(createLi('cls8RF cls3RF', '', '1000000300000000', ' осложнения ожоговой болезни', ': шок, острая токсемия и септикотоксемия'));
+    aLi.push(createLi('cls8RF cls3RF', '', '1000000300000000', ' осложнения ожоговой болезни', ': шок, острая токсемия и септикотоксемия'));
 
-createCard('cls8RF ul2_LvlRF', '1000000000000000', 'термическая травма', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls8RF', '1000000000000000', 'термическая травма', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Onco
+    // Onco
 
-aLi.push(createLi('cls3RF cls9RF', '', '1000000000000000', ' злокачественное новообразование в анамнезе', ''));
+    aLi.push(createLi('cls3RF cls9RF', '', '1000000000000000', ' злокачественное новообразование в анамнезе', ''));
 
-aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1', '', '1000000100000000', ' активное злокачественное новообразование', ': имеются локальные или отдаленные метастазы и/или химиотерапия/радиотерапия &lt; 6 мес назад'));
+    aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1', 'liActiveNeoplasm', '1000000100000000', ' активное злокачественное новообразование', ': имеются локальные или отдаленные метастазы и/или химиотерапия/радиотерапия &lt; 6 мес назад'));
 
-aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1 liNeoplasm_2', '', '1100000000000000', ' гормонотерапия у онкологических пациентов', ''));
+    aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1 liNeoplasm_2', '', '1100000000000000', ' гормонотерапия у онкологических пациентов', ''));
 
-aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1 liNeoplasm_2', '', '1000000000000000', ' химиотерапия, рентгенотерапия у онкологических пациентов', ''));
+    aLi.push(createLi('cls1RF cls3RF cls9RF liNeoplasm_1 liNeoplasm_2', '', '1000000000000000', ' химиотерапия, рентгенотерапия у онкологических пациентов', ''));
 
-createCard('cls9RF ul2_LvlRF clsObstComorbidities', '1000000020000000', 'злокачественное новообразование', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls9RF clsObstComorbidities', '1000000020000000', 'злокачественное новообразование', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Rheumo
+    // Rheumo
 
-aLi.push(createLi('cls1BRF', 'liRheumDiseases', '1000000000000000', '  ревматологическое заболевание', ''));
+    aLi.push(createLi('cls1BRF', 'liRheumDiseases', '1000000000000000', '  ревматологическое заболевание', ''));
 
-aLi.push(createLi('cls1RF liSumTherRF_2 clsObstComorbidities', 'liAcuteRheumDiseases', '1000000000000000', ' острое ревматологическое заболевание', ': активная системная красная волчанка, воспалительная полиартропатия'));
+    aLi.push(createLi('cls1RF liSumTherRF_2 clsObstComorbidities', 'liAcuteRheumDiseases', '1000000000000000', ' острое ревматологическое заболевание', ': активная системная красная волчанка, воспалительная полиартропатия'));
 
-createCard('cls9RF ul2_LvlRF clsObstComorbidities', '102.000000000000', 'ревматологическое заболевание', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls1RF clsObstComorbidities clsOneChoice', '102.000000000000', 'ревматологическое заболевание', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Lung Disease
+    // Lung Disease
 
-aLi.push(createLi('cls3RF liBedRestMore3Days_1 liLungDiseases_1', 'liSevereLungDiseases', '1000000300000000', '<span hidden> тяжелые заболевания легких</span> на ИВЛ', ': с выраженной дыхательной недостаточностью, требующие искусственной вентиляцией легких'));
+    aLi.push(createLi('cls3RF liLungDiseases_1', 'liSevereLungDiseases', '1000000300000000', '<span hidden> тяжелые заболевания легких</span> на ИВЛ', ': с выраженной дыхательной недостаточностью, требующие искусственной вентиляцией легких'));
 
-aLi.push(createLi('cls3RF', 'liModerateLungDiseases', '1000000200000000', '<span hidden> заболевания легких</span> без ИВЛ', ', в том числе пневмония, с дыхательной недостаточностью, не требующие искусственной вентиляции'));
+    aLi.push(createLi('cls3RF liLungDiseases_1', 'liModerateLungDiseases', '1000000200000000', '<span hidden> заболевания легких</span> без ИВЛ', ', в том числе пневмония, с дыхательной недостаточностью, не требующие искусственной вентиляции'));
 
-aLi.push(createLi('cls3RF', '', '1000000010000000', '<span hidden>заболевания легких длительностью</span> &lt; 1 мес.', ''));
+    aLi.push(createLi('cls3RF', '', '1000000010000000', '<span hidden>заболевания легких длительностью</span> &lt; 1 мес.', ''));
 
-aLi.push(createLi('cls3RF', '', '1000000010000000', ' ХОБЛ', ' (хроническая обструктивная болезнь легких)'));
+    aLi.push(createLi('cls3RF', '', '1000000010000000', ' ХОБЛ', ' (хроническая обструктивная болезнь легких)'));
 
-createCard('cls3RF ul2_LvlRF', '1000000100000000', 'заболевания легких с дыхательной недостаточностью', vCardCounter, aLi.join(''), 'ulIsPulmInsuff');
-aLi = [];
+    createCard('cls3RF', '1000000100000000', 'заболевания легких с дыхательной недостаточностью', vCardCounter, aLi.join(''), 'ulIsPulmInsuff');
+    aLi = [];
 
-// Anemia
+    // Anemia
 
-aLi.push(createLi('cls9RF', 'liHbLess_100', '1000000100000000', ' Hb &lt; 100 г/л'));
+    aLi.push(createLi('cls9RF', 'liHbLess_100', '1000000100000000', ' Hb &lt; 100 г/л'));
 
-aLi.push(createLi('cls10RF clsObstComorbidities', '', '1000000000000000', ' серповидноклеточная анемия'));
+    aLi.push(createLi('cls10RF clsObstComorbidities', '', '1000000000000000', ' серповидноклеточная анемия'));
 
-createCard('cls9RF cls10RF ul2_LvlRF', '1000000000000000', 'анемия', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls9RF cls10RF', '1000000000000000', 'анемия', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Thrombophilia
+    // Thrombophilia
 
-aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' полиморфизм фактора Лейдена', ' (V фактора свертывания крови)'));
+    aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' полиморфизм фактора Лейдена', ' (V фактора свертывания крови)'));
 
-aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' полиморфизм протромбина G20210A'));
+    aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' полиморфизм протромбина G20210A'));
 
-aLi.push(createLi('cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' гипергомоцистеинемия'));
+    aLi.push(createLi('cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' гипергомоцистеинемия'));
 
-aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' повышенный уровень антител к кардиолипину', ' (антифосфолипидный синдром)'));
+    aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' повышенный уровень антител к кардиолипину', ' (антифосфолипидный синдром)'));
 
 
-aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' наличие волчаночного антикоагулянта', ' (антифосфолипидный синдром)'));
+    aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' наличие волчаночного антикоагулянта', ' (антифосфолипидный синдром)'));
 
-aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' другая врожденная или приобретенная тромбофилия', ' (дефекты антитромбина, протеина С или S и др.)'));
+    aLi.push(createLi('cls1RF cls3RF liHighRiskThrombophilia_1', '', '1000000030000000', ' другая врожденная или приобретенная тромбофилия', ' (дефекты антитромбина, протеина С или S и др.)'));
 
-aLi.push(createLi('cls10RF', '', '1000000000001000', ' известная тромбофилия низкого риска (без ВТЭО)'));
+    aLi.push(createLi('cls10RF', '', '1000000000001000', ' известная тромбофилия низкого риска (без ВТЭО)'));
 
-createCard('cls1RF cls3RF ul2_LvlRF', '1000000000000000', 'тромбофилия ', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls1RF cls3RF', '1000000000000000', 'тромбофилия ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Hypercoagulation
+    // Hypercoagulation
 
-aLi.push(createLi('cls9RF', '', '1000000100000000', ' тромбоциты &gt; 350 × 10 <sup><small>9</small></sup>/л'));
+    aLi.push(createLi('cls9RF', '', '1000000100000000', ' тромбоциты &gt; 350 × 10 <sup><small>9</small></sup>/л'));
 
-aLi.push(createLi('cls9RF', '', '1000000100000000', ' фибриноген &gt; 400 мг/мл'));
+    aLi.push(createLi('cls9RF', '', '1000000100000000', ' фибриноген &gt; 400 мг/мл'));
 
-aLi.push(createLi('cls9RF', '', '1000000100000000', ' Д-димер &gt; 0,5 мкг/мл'));
+    aLi.push(createLi('cls9RF', '', '1000000100000000', ' Д-димер &gt; 0,5 мкг/мл'));
 
-createCard('cls9RF ul2_LvlRF', '1000000000000000', 'гиперкоагуляция ', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls9RF', '1000000000000000', 'гиперкоагуляция ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Hemorragic Syndrome
+    // Hemorragic Syndrome
 
-aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические генетические коагулопатии', ' . Наиболее часто встречаются гемофилия и болезнь Виллебранда. Более редкие генетические нарушения включают гемофилию С, гипопроконвертинемию и ряд других аномалий.'));
+    aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические генетические коагулопатии', ' . Наиболее часто встречаются гемофилия и болезнь Виллебранда. Более редкие генетические нарушения включают гемофилию С, гипопроконвертинемию и ряд других аномалий.'));
 
-aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические аутоиммунные коагулопатии', ' обусловлены появлением антител (ингибиторов свертывания) к факторам свёртывания крови или фосфолипидам. Наиболее часто встречается коагулопатия иммунного генеза на фоне Антифосфолипидного синдрома. Дефицит факторов свертывания в результате аутоиммунных реакций иногда происходит у пациентов после частых переливаний крови.'));
+    aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические аутоиммунные коагулопатии', ' обусловлены появлением антител (ингибиторов свертывания) к факторам свёртывания крови или фосфолипидам. Наиболее часто встречается коагулопатия иммунного генеза на фоне Антифосфолипидного синдрома. Дефицит факторов свертывания в результате аутоиммунных реакций иногда происходит у пациентов после частых переливаний крови.'));
 
-aLi.push(createLi('cls2BRF cls3BRF_1 cls4BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические приобретенные коагулопатии', ', могут быть обусловлены нарушением функции печени, применением разных антикоагулянтов, антиагрегантов или тромболитических препаратов, недостаточностью всасывания витамина «К» и повышенным потреблением компонентов системы свёртывания крови на фоне ДВС-синдрома. Поражение факторов свертываемости может быть в результате преждевременной отслойки плаценты, эмболии околоплодными водами и рака простаты. Коагулопатию вызывают некоторые виды гемотоксичных змеиных ядов, некоторые виды вирусных геморрагических лихорадок, иногда - лейкемия.'));
+    aLi.push(createLi('cls2BRF cls3BRF_1 cls4BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические приобретенные коагулопатии', ', могут быть обусловлены нарушением функции печени, применением разных антикоагулянтов, антиагрегантов или тромболитических препаратов, недостаточностью всасывания витамина «К» и повышенным потреблением компонентов системы свёртывания крови на фоне ДВС-синдрома. Поражение факторов свертываемости может быть в результате преждевременной отслойки плаценты, эмболии околоплодными водами и рака простаты. Коагулопатию вызывают некоторые виды гемотоксичных змеиных ядов, некоторые виды вирусных геморрагических лихорадок, иногда - лейкемия.'));
 
-aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические вазопатии', '- заболевания, обусловленные патологией сосудов. Типичные заболевания этой группы — болезнь Рандю–Ослера, пурпура Шёнляйна–Геноха, первичные геморрагические васкулиты.'));
+    aLi.push(createLi('cls2BRF cls10BRF liСoagulopathy_1', '', '1000000000000000', ' геморрагические вазопатии', '- заболевания, обусловленные патологией сосудов. Типичные заболевания этой группы — болезнь Рандю–Ослера, пурпура Шёнляйна–Геноха, первичные геморрагические васкулиты.'));
 
-aLi.push(createLi('cls2BRF cls10BRF liThrombocytopenia_1', 'liPlateletsLess150', '1000000000000000', ' тромбоциты в крови &lt; 150 х 10<sup><small>9</small></sup>/л', ' (тромбоцитопения)'));
+    aLi.push(createLi('cls2BRF cls10BRF liThrombocytopenia_1 liThrombocytopenia_2', 'liPlateletsLess150', '1000000000000000', ' тромбоциты в крови &lt; 150 х 10<sup><small>9</small></sup>/л', ' (тромбоцитопения)'));
 
-aLi.push(createLi('cls3BRF_1 cls10BRF liThrombocytopenia_1', 'liPlateletsLess75', '1000000000000100', ' тромбоциты в крови &lt; 75 х 10<sup><small>9</small></sup>/л'));
+    aLi.push(createLi('cls3BRF_1 cls10BRF liThrombocytopenia_1 liThrombocytopenia_2', 'liPlateletsLess75', '1000000000000100', ' тромбоциты в крови &lt; 75 х 10<sup><small>9</small></sup>/л'));
 
-aLi.push(createLi('cls3BRF_1 cls10BRF liThrombocytopenia_1', 'liPlateletsLess50', '104.000000000000', ' тромбоциты в крови &lt; 50 х 10<sup><small>9</small></sup>/л'));
+    aLi.push(createLi('cls3BRF_1 cls10BRF liThrombocytopenia_1  liThrombocytopenia_2', 'liPlateletsLess50', '104.000000000100', ' тромбоциты в крови &lt; 50 х 10<sup><small>9</small></sup>/л'));
 
-aLi.push(createLi('cls3RF liThrombocytopenia_1', '', '1000000030000000', ' гепарин-индуцированная тромбоцитопения'));
+    aLi.push(createLi('cls3RF liThrombocytopenia_1', '', '1000000030000000', ' гепарин-индуцированная тромбоцитопения'));
 
-aLi.push(createLi('cls3BRF_1', '', '1000000001000000', ' нелеченная коагулопатия', '. Любая из коагулопатий без эффективной медикаментозной коррекции.'));
+    aLi.push(createLi('cls3BRF_1', '', '1000000001000000', ' нелеченная коагулопатия', '. Любая из коагулопатий без эффективной медикаментозной коррекции.'));
 
-createCard('cls2BRF cls3RF cls3BRF_1 cls4BRF cls10BRF ul2_LvlRF', '1000000000000000', 'геморраг. гемостазиопатии (геморраг. диатез, геморраг. с-м) ', vCardCounter, aLi.join(''), 'ulIsHemorrSyndrome');
-aLi = [];
+    createCard('cls2BRF cls3RF cls3BRF_1 cls4BRF cls10BRF', '1000000000000000', 'геморраг. гемостазиопатии (геморраг. диатез, геморраг. с-м) ', vCardCounter, aLi.join(''), 'ulIsHemorrSyndrome');
+    aLi = [];
 
-// VTE
+    // VTE
 
-aLi.push(createLi('cls1RF cls2RF cls3RF liSumAtrFibrRF_1 liThromboemb_1', 'liWasPulmEmb', '1000000000000000', ' эпизод ВТЭО в анамнезе', ' (за исключением тромбоза поверхностных вен)'));
+    aLi.push(createLi('cls1RF cls2RF cls3RF liSumAtrFibrRF_1 liThromboemb_1', 'liWasPulmEmb', '1000000000000000', ' эпизод ВТЭО в анамнезе', ' (за исключением тромбоза поверхностных вен)'));
 
-aLi.push(createLi('cls10RF liThromboemb_1 liThromboemb_2', '', '1000000000004030', ' предшествующие рецидивирующие ВТЭО'));
+    aLi.push(createLi('cls10RF liThromboemb_1 liThromboemb_2', '', '1000000000004030', ' предшествующие рецидивирующие ВТЭО'));
 
-aLi.push(createLi('cls10RF liThromboemb_1 liThromboemb_2', '', '1000000000000030', ' предшествующие ВТЭО, ничем не спровоцированные или связанные с приемом эстрогенов'));
+    aLi.push(createLi('cls10RF liThromboemb_1 liThromboemb_2', '', '1000000000000030', ' предшествующие ВТЭО, ничем не спровоцированные или связанные с приемом эстрогенов'));
 
-aLi.push(createLi('cls2RF cls3RF cls10RF liThromboemb_1 liThromboemb_2 liProvocedVTE_1', '', '1000000000004000', ' предшествующие спровоцированные ВТЭО', ' кроме единичного эпизода, связанного с большим хирургическим вмешательством'));
+    aLi.push(createLi('cls2RF cls3RF cls10RF liThromboemb_1 liThromboemb_2 liProvocedVTE_1', '', '1000000000004000', ' предшествующие спровоцированные ВТЭО', ' кроме единичного эпизода, связанного с большим хирургическим вмешательством'));
 
-aLi.push(createLi('cls2RF cls3RF cls10RF liThromboemb_1 liThromboemb_2 liProvocedVTE_1', '', '1000000000003000', ' предшествующие ВТЭО спровоцированные большим хирургическим вмешательством'));
+    aLi.push(createLi('cls2RF cls3RF cls10RF liThromboemb_1 liThromboemb_2 liProvocedVTE_1', '', '1000000000003000', ' предшествующие ВТЭО спровоцированные большим хирургическим вмешательством'));
 
-aLi.push(createLi('cls10RF liThromboemb_3', '', '10000000000000003', ' тромбоэмболия в семейном анамнезе'));
+    aLi.push(createLi('cls10RF liThromboemb_3', '', '10000000000000003', ' тромбоэмболия в семейном анамнезе'));
 
-createCard('cls3RF cls10RF ul2_LvlRF', '1000000000000000', 'ВТЭО в анамнезе ', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls3RF cls10RF', '1000000000000000', 'ВТЭО в анамнезе ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Restricted Mobility
+    // Restricted Mobility
 
-aLi.push(createLi('cls3RF', '', '1000000010000000', ' постельный режим'));
+    aLi.push(createLi('cls3RF', '', '1000000010000000', ' постельный режим'));
 
-aLi.push(createLi('cls1RF cls3RF cls10R', 'liBedRestMore3Days', '1000000120000000', ' строгий постельный режим', ' (без посещения туалетной комнаты) &gt; 72 часов'));
+    aLi.push(createLi('cls1RF cls3RF cls10R', 'liBedRestMore3Days', '1000000120000000', ' строгий постельный режим', ' (без посещения туалетной комнаты) &gt; 72 часов'));
 
-aLi.push(createLi('cls3RF', '', '1000000020000000', ' гипсовая иммобилизация конечности', ' (давностью до 1 мес.)'));
+    aLi.push(createLi('cls3RF', '', '1000000020000000', ' гипсовая иммобилизация конечности', ' (давностью до 1 мес.)'));
 
-aLi.push(createLi('cls3RF', 'liPlegia', '1000000020000000', ' паралич или глубокий парез', ' (тетра- геми- или нижний грубый монопарез/плегия)'));
+    aLi.push(createLi('cls3RF', 'liPlegia', '1000000020000000', ' паралич или глубокий парез', ' (тетра- геми- или нижний грубый монопарез/плегия)'));
 
-aLi.push(createLi('cls3RF', '', '10000001000000000', ' длительное положение сидя', ' (например длительный перелет в эконом-классе или поездка на транспорте сидя)'));
+    aLi.push(createLi('cls3RF', '', '10000001000000000', ' длительное положение сидя', ' (например длительный перелет в эконом-классе или поездка на транспорте сидя)'));
 
-createCard('cls1RF cls3RF cls10RF ul2_LvlRF', '1300000000000010', 'ограниченная подвижность ', vCardCounter, aLi.join(''), 'ulIsRestrictedMobility');
-aLi = [];
+    createCard('cls1RF cls3RF cls10RF', '1300000000000010', 'ограниченная подвижность ', vCardCounter, aLi.join(''), 'ulIsRestrictedMobility');
+    aLi = [];
 
-// Is Trauma
+    // Is Trauma
 
-aLi.push(createLi('cls3RF liTraum_1', '', '1000000000030000', ' перелом костей таза', ' (давностью до 1 мес.)'));
+    aLi.push(createLi('cls3RF liTraum_1', '', '1000000000030000', ' перелом костей таза', ' (давностью до 1 мес.)'));
 
-aLi.push(createLi('cls3RF liTraum_1', '', '1000000000030000', ' перелом бедра', ' (давностью до 1 мес.)'));
+    aLi.push(createLi('cls3RF liTraum_1', '', '1000000000030000', ' перелом бедра', ' (давностью до 1 мес.)'));
 
-aLi.push(createLi('cls3RF  cls4RF liTraum_1', '', '1000000200000000', ' изолированные переломы голени', ' (давностью до 1 мес.)'));
+    aLi.push(createLi('cls3RF  cls4RF liTraum_1', '', '1000000200000000', ' изолированные переломы голени', ' (давностью до 1 мес.)'));
 
-aLi.push(createLi('cls3RF  cls4RF', '', '10000002000000005', ' повреждения связочного аппарата и сухожилий голени', ', требующие иммобилизации голеностопного сустава'));
+    aLi.push(createLi('cls3RF  cls4RF', '', '10000002000000005', ' повреждения связочного аппарата и сухожилий голени', ', требующие иммобилизации голеностопного сустава'));
 
-aLi.push(createLi('cls3RF  cls4RF cls5RF  liSpinalCordInjure_1', '', '1000000000000000', ' повреждение спинного мозга'));
+    aLi.push(createLi('cls3RF  cls4RF cls5RF', 'liSpinalCordInjure', '1000000000000000', ' повреждение спинного мозга'));
 
-aLi.push(createLi('cls3RF  cls4RF', '', '1000000350000000', ' множественная и сочетанная травма'));
+    aLi.push(createLi('cls3RF  cls4RF', '', '1000000350000000', ' множественная и сочетанная травма'));
 
-createCard('cls4RF cls5RF', '1000000000000000', 'есть травма &lt; 1 месяца назад ', vCardCounter, aLi.join(''), 'ulIsTraum');
-aLi = [];
+    createCard('cls4RF cls5RF', '1000000000000000', 'есть травма &lt; 1 месяца назад ', vCardCounter, aLi.join(''), 'ulIsTraum');
+    aLi = [];
 
-// Birth
+    // Birth
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001000', ' преждевременные роды', ' (37 недель при текущей беременности)'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001000', ' преждевременные роды', ' (37 недель при текущей беременности)'));
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' многоплодная беременность'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' многоплодная беременность'));
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' послеродовое кровотечение', ' требующее &gt; 1 литра трансфузии'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' послеродовое кровотечение', ' требующее &gt; 1 литра трансфузии'));
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' затяжные роды', ' (>24 часов)'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' затяжные роды', ' (>24 часов)'));
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' полостные или ротационные щипцы'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' полостные или ротационные щипцы'));
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001000', ' ВРТ, ЭКО', ' (ART - вспомогательные репродуктивные технологии, IVF - экстракорпоральное оплодотворение)'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001000', ' ВРТ, ЭКО', ' (ART - вспомогательные репродуктивные технологии, IVF - экстракорпоральное оплодотворение)'));
 
-aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' преэклампсия'));
+    aLi.push(createLi('clsLabourRF', '', '1000000000001010', ' преэклампсия'));
 
-aLi.push(createLi('clsLabourRF liLabourRuRF_1', 'liSeverePreeclampsia', '1000000000000000', ' тяжелая форма преэклампсии'));
+    aLi.push(createLi('clsLabourRF liLabourRuRF_1', 'liSeverePreeclampsia', '1000000000000000', ' тяжелая форма преэклампсии'));
 
-aLi.push(createLi('clsLabourRF liLabourRuRF_1', 'liStillbirth', '1000000000001000', ' мертворождение при текущей беременности'));
+    aLi.push(createLi('clsLabourRF liLabourRuRF_1', 'liStillbirth', '1000000000001000', ' мертворождение при текущей беременности'));
 
-createCard('clsLabourRF ul2_LvlRF', '1000000000000000', 'особенности данных родов ', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('clsLabourRF', '1000000000000000', 'особенности данных родов ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Chronic Heart Insuff 
+    // Chronic Heart Insuff 
 
-aLi.push(createLi('cls1RF cls2RF', 'liSomeHeartInsuff', '1000000000000000', '<span hidden> хроническая сердечная недостаточность</span> любой стадии'));
+    aLi.push(createLi('cls1RF cls2RF', 'liSomeHeartInsuff', '1000000000000000', '<span hidden> хроническая сердечная недостаточность</span> любой стадии'));
 
-aLi.push(createLi('cls3RF', 'liHeartInsuffLess1Month', '1000000000000000', '<span hidden> сердечная недостаточность любой стадии</span> &lt; 1 мес.'));
+    aLi.push(createLi('cls3RF', 'liHeartInsuffLess1Month', '1000000000000000', '<span hidden> сердечная недостаточность любой стадии</span> &lt; 1 мес.'));
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', 'liHeartInsuff3_4', '10000002000000000', ' хроническая сердечная недостаточность III—IV ФК по NYHA'));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', 'liHeartInsuff3_4', '10000002000000000', ' хроническая сердечная недостаточность III—IV ФК по NYHA'));
 
-aLi.push(createLi('cls3RF', 'liCongestHeartFailOrSystLVDysfunctEFLess40Percent', '10000000000000001', ' застойная сердечная недостаточность/дисфункция ЛЖ', ' (в частности, ФВ ≤ 40 %)'));
+    aLi.push(createLi('cls3RF', 'liCongestHeartFailOrSystLVDysfunctEFLess40Percent', '10000000000000001', ' застойная сердечная недостаточность/дисфункция ЛЖ', ' (в частности, ФВ ≤ 40 %)'));
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', 'liArtificialHeartValve', '10000000000000000', ' искусственный клапан сердца'));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', 'liArtificialHeartValve', '10000000000000000', ' искусственный клапан сердца'));
 
-createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF ul2_LvlRF', '100001000000000', 'хроническая сердечная недостаточность ', vCardCounter, aLi.join(''), 'ulIsHeartInsuff');
-aLi = [];
+    createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', '100001000000000', 'хроническая сердечная недостаточность ', vCardCounter, aLi.join(''), 'ulIsHeartInsuff');
+    aLi = [];
 
-// Hormone Taking
+    // Hormone Taking
 
-aLi.push(createLi('cls3RF clsFemaleLvl', '', '10000000000000000', ' применение эстроген-гестагенных препаратов', ' (контрацепция или гормональная заместительная терапия)'));
+    aLi.push(createLi('cls3RF clsFemaleLvl', '', '10000000000000000', ' применение эстроген-гестагенных препаратов', ' (контрацепция или гормональная заместительная терапия)'));
 
-aLi.push(createLi('cls3RF clsFemaleLvl', '', '1000000100000000', ' применение селективных модуляторов эстрогеновых рецепторов'));
+    aLi.push(createLi('cls3RF clsFemaleLvl', '', '1000000100000000', ' применение селективных модуляторов эстрогеновых рецепторов'));
 
-aLi.push(createLi('cls1RF cls3RF', '', '1000000000000000', ' гормональная заместительная терапия'));
+    aLi.push(createLi('cls1RF cls3RF', '', '1000000000000000', ' гормональная заместительная терапия'));
 
-createCard('cls1RF cls3RF ul2_LvlRF', '1100000010000000', 'применение гормональных препаратов ', vCardCounter, aLi.join(''), '');
-aLi = [];
+    createCard('cls1RF cls3RF', '1100000010000000', 'применение гормональных препаратов ', vCardCounter, aLi.join(''), '');
+    aLi = [];
 
-// Stroke
+    // Stroke
 
-aLi.push(createLi('cls1RF cls2BRF cls3RF cls3BRF_1 liSumTherRF_1 liStroke_1', '', '1000000151000100', ' острый период инсульта', ' - учитывается 30 суток т. к. используемая шкала принимает как параметр этот срок острого периода (несмотря на то, что в России острым считается период 21 сутки)'));
+    aLi.push(createLi('cls1RF cls2BRF cls3RF cls3BRF_1 liSumTherRF_1 liStroke_1', '', '1000000151000100', ' острый период инсульта', ' - учитывается 30 суток т. к. используемая шкала принимает как параметр этот срок острого периода (несмотря на то, что в России острым считается период 21 сутки)'));
 
-aLi.push(createLi('cls2RF cls2BRF liSumAtrFibrRF_1 liStroke_1', '', '1000000000000000', ' инсульт в анамнезе'));
+    aLi.push(createLi('cls2RF cls2BRF liSumAtrFibrRF_1 liStroke_1', '', '1000000000000000', ' инсульт в анамнезе'));
 
-createCard('cls1RF cls2RF cls2BRF cls3RF cls3BRF_1 ul2_LvlRF', '1000000000000000', 'ОНМК ', vCardCounter, aLi.join(''));
-aLi = [];
+    createCard('cls1RF cls2RF cls2BRF cls3RF cls3BRF_1', '1000000000000000', 'ОНМК ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-// Kidney Failure
+    // Kidney Failure
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF liSevereRenalInsuff_1 liSevereRenalInsuff_2', 'liChronicDialysis', '1000000000000000', ' хронический диализ'));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF liSevereRenalInsuff_1 liSevereRenalInsuff_2', 'liChronicDialysis', '1000000000000000', ' хронический диализ'));
 
-createCard('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF ul2_LvlRF', '1000000000000000', 'почечная недостаточность ', vCardCounter, aLi.join(''), 'btnIsRenalInsuff');
-aLi = [];
+    aLi.push(createLi('cls2BRF  cls3BRF_1 cls4BRF liSevereRenalInsuff_1 liSevereRenalInsuff_2', '', '1000000000000000', ' трансплантация почки'));
 
+    aLi.push(createLi('cls3RF clsObstComorbidities', '', '1000000100000000', ' нефротический синдром'));
 
+    aLi.push(createLi('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF liGlomerFiltrRate_1', 'liGlomerFiltrRate30_59', '101.000000000000', ' скорость клубочковой фильтрации 30—59 мл/мин'));
 
-// Liver Failure
+    aLi.push(createLi('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF liGlomerFiltrRate_1 liSevereRenalInsuff_1', 'liGlomerFiltrRateLess30', '102.500000000000', ' скорость клубочковой фильтрации &lt; 30 мл/мин'));
 
-aLi.push(createLi('cls1BRF cls3BRF_1', '', '1000000000000000', ' печеночная недостаточность (МНО &gt; 1,5)'));
+    createCard('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF', '1000000000000000', 'почечная недостаточность ', vCardCounter, aLi.join(''), 'ulIsRenalInsuff');
+    aLi = [];
 
-aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF cls3BRF_1 cls4BRF', '', '1000000000000000', ' нарушение функции печени', '. Хронические болезни печени (цирроз), либо значительные сдвиги в печеночных пробах (повышение билирубина &gt; чем в 2 раза от верхней границы нормы + повышение АЛТ/АСТ/щелочной фосфатазы &gt; чем в 3 раза от верхней границы нормы)'));
 
-createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF ul2_LvlRF', '102.501000000100', 'печеночная недостаточность ', vCardCounter, aLi.join(''), 'ulIsLiverFailure');
-aLi = [];
 
-// Bad Habits
+    // Liver Failure
 
-aLi.push(createLi('cls2BRF', '', '1000001000000000', ' злоупотребление алкоголем', ' (&gt; 8 стаканов в неделю)'));
+    aLi.push(createLi('cls1BRF cls3BRF_1', '', '1000000000000000', ' печеночная недостаточность (МНО &gt; 1,5)'));
 
-aLi.push(createLi('cls10RF', '', '1000000000000000', ' текущее внутривенное употребление наркотиков'));
+    aLi.push(createLi('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF cls3BRF_1 cls4BRF', '', '1000000000000000', ' нарушение функции печени', '. Хронические болезни печени (цирроз), либо значительные сдвиги в печеночных пробах (повышение билирубина &gt; чем в 2 раза от верхней границы нормы + повышение АЛТ/АСТ/щелочной фосфатазы &gt; чем в 3 раза от верхней границы нормы)'));
 
-aLi.push(createLi('cls10RF', '', '1000000000001010', ' курение'));
+    createCard('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', '102.501000000100', 'печеночная недостаточность ', vCardCounter, aLi.join(''), 'ulIsLiverFailure');
+    aLi = [];
 
-createCard('cls2BRF cls10RF ul2_LvlRF', '1000000000000000', 'вредные привычки ', vCardCounter, aLi.join(''));
-aLi = [];
+    // Bad Habits
 
-// Bleeding
+    aLi.push(createLi('cls2BRF', '', '1000001000000000', ' злоупотребление алкоголем', ' (&gt; 8 стаканов в неделю)'));
 
-aLi.push(createLi('cls1BRF', '', '104.000000000000', ' кровотечения', ' &lt; чем за 3 мес до госпитализации'));
+    aLi.push(createLi('cls10RF', '', '1000000000000000', ' текущее внутривенное употребление наркотиков'));
 
-aLi.push(createLi('cls3BRF_1 cls10BRF', '', '1000000001000100', ' продолжающееся активное кровотечение'));
+    aLi.push(createLi('cls10RF', '', '1000000000001010', ' курение'));
 
-aLi.push(createLi('cls4BRF', '', '1000000001000100', ' трудно контролируемое кровотечение во время текущего оперативного лечения /обширность хирургического вмешательства'));
+    createCard('cls2BRF cls10RF', '1000000000000000', 'вредные привычки ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-aLi.push(createLi('cls2BRF cls3BRF_1 cls4BRF', 'liPriorMajorBleeding', '1000000001000100', ' 1000000001100000', ' (интракраниальное, либо требующее госпитализации, либо со снижением Hb &gt; 2 г/л, либо требующее гемотрансфузии)'));
+    // Bleeding
 
-createCard('cls1RF cls2BRF cls3BRF_1 cls4BRF cls10BRF ul2_LvlRF', '1000000000000000', 'кровотечение активное или в анамнезе ', vCardCounter, aLi.join(''));
-aLi = [];
+    aLi.push(createLi('cls1BRF', '', '104.000000000000', ' кровотечения', ' &lt; чем за 3 мес до госпитализации'));
 
-// Single RF
+    aLi.push(createLi('cls3BRF_1 cls10BRF', '', '1000000001000100', ' продолжающееся активное кровотечение'));
 
-createBtn('cls2BRF cls3BRF_1 cls4BRF', '', '1000001001100000', ' текущее применение антикоагулянтов, антиагрегантов или тромболитических препаратов');
+    aLi.push(createLi('cls4BRF', '', '1000000001000100', ' трудно контролируемое кровотечение во время текущего оперативного лечения /обширность хирургического вмешательства'));
 
-createBtn('cls2BRF', '', '1000001000000000', ' лабильное МНО', ' (&lt; 60% времени в терапевтическом диапазоне)');
+    aLi.push(createLi('cls2BRF cls3BRF_1 cls4BRF', 'liPriorMajorBleeding', '1000000001000100', ' кровотечение в анамнезе', ' (интракраниальное, либо требующее госпитализации, либо со снижением Hb &gt; 2 г/л, либо требующее гемотрансфузии)'));
 
-createBtn('cls4RF cls5RF', 'btnSpCordDamage', '1000000000000000', ' повреждение спинного мозга в анамнезе');
+    createCard('cls1RF cls2BRF cls3BRF_1 cls4BRF cls10BRF', '1000000000000000', 'кровотечение активное или в анамнезе ', vCardCounter, aLi.join(''));
+    aLi = [];
 
-createBtn('cls1RF cls3RF liBedRestMore3Days_1 liSumTherRF_1', '', '1000000010000000', ' острый инфаркт миокарда', ' - 12-14 дней от начала, подострый - до 2 месяцев.');
+    // Single RF
 
-createBtn('cls10BRF', '', '1000000000000100', ' высокий риск кровотечения в родах', ' (например, предлежание плаценты)');
+    createBtn('cls2BRF cls3BRF_1 cls4BRF', '', '1000001001100000', ' текущее применение антикоагулянтов, антиагрегантов или тромболитических препаратов');
 
-createBtn('cls3RF', 'ulLargeOperIn30Days', '1000000010000000', ' большая операция &lt; 1 мес. назад');
+    createBtn('cls2BRF', '', '1000001000000000', ' лабильное МНО', ' (&lt; 60% времени в терапевтическом диапазоне)');
 
-createBtn('cls10RF', '', '1000000000003000', ' гиперемезис', ': форма раннего токсикоза, основными симптомами которой являются сильная тошнота, регулярная рвота, ощущение слабости.');
+    createBtn('cls4RF cls5RF', 'btnSpCordDamage', '1000000000000000', ' повреждение спинного мозга в анамнезе');
 
-createBtn('cls10RF', '', '1000000000003000', ' синдром гиперстимуляции яичников', ' (учитывается только в первом триместре)');
+    createBtn('cls1RF cls3RF liSumTherRF_1', '', '1000000010000000', ' острый инфаркт миокарда', ' - 12-14 дней от начала, подострый - до 2 месяцев.');
 
-createBtn('cls3RF clsFemaleLvl', 'liStillbirthsMiscarriagesPrematureBirth', '1000000010000000', ' необъяснимые мертворождения, выкидыши (&ge; 3), преждевременные роды с токсикозом или задержка внутриутробного развития');
+    createBtn('cls10BRF', '', '1000000000000100', ' высокий риск кровотечения в родах', ' (например, предлежание плаценты)');
 
-createBtn('cls10RF', '', '1000000000001010', ' роды в анамнезе больше 3');
+    createBtn('cls3RF', 'ulLargeOperIn30Days', '1000000010000000', ' большая операция &lt; 1 мес. назад');
 
-createBtn('cls10RF', '', '1000000000003030', ' хирургические вмешательства во время беременности или в раннем послеродовом периоде', ', за исключением немедленного восстановления промежности, а также аппендэктомии, послеродовой стерилизации');
+    createBtn('cls10RF', '', '1000000000003000', ' гиперемезис', ': форма раннего токсикоза, основными симптомами которой являются сильная тошнота, регулярная рвота, ощущение слабости.');
 
-createBtn('cls3RF', '', '1000000010000000', ' отек нижних конечностей');
+    createBtn('cls10RF', '', '1000000000003000', ' синдром гиперстимуляции яичников', ' (учитывается только в первом триместре)');
 
-createBtn('cls3RF cls10RF', '', '1000000110001010', ' варикозное расширение вен нижних конечностей');
+    createBtn('cls3RF clsFemaleLvl', 'liStillbirthsMiscarriagesPrematureBirth', '1000000010000000', ' необъяснимые мертворождения, выкидыши (&ge; 3), преждевременные роды с токсикозом или задержка внутриутробного развития');
 
-createBtn('cls3RF', '', '1000000100000000', ' сдавление вен', ' опухолью, гематомой и пр.');
+    createBtn('cls10RF', '', '1000000000001010', ' роды в анамнезе больше 3');
 
-createBtn('cls3RF cls4RF', '', '1000000110020000', ' воспалительные заболевания толстого кишечника');
+    createBtn('cls10RF', '', '1000000000003030', ' хирургические вмешательства во время беременности или в раннем послеродовом периоде', ', за исключением немедленного восстановления промежности, а также аппендэктомии, послеродовой стерилизации');
 
-createBtn('cls3BRF_1', '', '1000000001000000', ' люмбальная пункция, эпидуральная или спинномозговая анестезия', ' за 4 ч. до или в течение 12 ч после операции');
+    createBtn('cls3RF', '', '1000000010000000', ' отек нижних конечностей');
 
-// createBtn('cls4RF', 'btnGeneralAnesthesia', '10000001000000000', ' общая анестезия');
+    createBtn('cls3RF cls10RF', '', '1000000110001010', ' варикозное расширение вен нижних конечностей');
 
-createBtn('cls2RF', '', '1000010000000000', ' сосудистое заболевание', ' (инфаркт миокарда в анамнезе, периферический атеросклероз, атеросклеротические бляшки в аорте)');
+    createBtn('cls3RF', '', '1000000100000000', ' сдавление вен', ' опухолью, гематомой и пр.');
 
-createBtn('cls2BRF', '', '1000001000000000', ' совместный прием антикоагулянтов и НПВП', ' (нестероидных противовоспалительных препаратов)');
+    createBtn('cls3RF cls4RF', '', '1000000110020000', ' воспалительные заболевания толстого кишечника');
 
-createBtn('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', 'ulActiveUlcerOfStomachOrDuodenum', '104.500000000000', ' активная язва желудка или двенадцатиперстной кишки');
+    createBtn('cls3BRF_1', '', '1000000001000000', ' люмбальная пункция, эпидуральная или спинномозговая анестезия', ' за 4 ч. до или в течение 12 ч после операции');
 
-createBtn('cls1BRF', '', '102.500000000000', ' пребывание в отделении интенсивной терапии', ' в период госпитализации');
+    // createBtn('cls4RF', 'btnGeneralAnesthesia', '10000001000000000', ' общая анестезия');
 
-createBtn('cls1BRF cls3RF', 'btnCentralVeinCatheter', '102.001220000000', ' катетер в центральной вене');
+    createBtn('cls2RF', '', '1000010000000000', ' сосудистое заболевание', ' (инфаркт миокарда в анамнезе, периферический атеросклероз, атеросклеротические бляшки в аорте)');
 
-createBtn('cls3RF', 'btnCentralVeinCatheter', '1000000100000000', ' пароксизмальная ночная гемоглобинурия');
+    createBtn('cls2BRF', '', '1000001000000000', ' совместный прием антикоагулянтов и НПВП', ' (нестероидных противовоспалительных препаратов)');
 
-createBtn('cls4RF', '', '1000000100000000', ' наложение жгута/турникета во время операции');
+    createBtn('cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF cls2BRF  cls3BRF_1 cls4BRF', 'ulActiveUlcerOfStomachOrDuodenum', '104.500000000000', ' активная язва желудка или двенадцатиперстной кишки');
 
-createBtn('cls4RF', '', '1000000020000000', ' гипсовая иммобилизация конечности', ' &lt; 1 мес.');
+    createBtn('cls1BRF', '', '102.500000000000', ' пребывание в отделении интенсивной терапии', ' в период госпитализации');
 
-createBtn('cls9RF', '', '1000000100000000', ' лейкоциты крови &gt; 11 × 10<sup><small>9</small></sup>/л');
+    createBtn('cls1BRF cls3RF', 'btnCentralVeinCatheter', '102.001220000000', ' катетер в центральной вене');
 
-createBtn('cls4RF', 'btnArthritis', '1000000100000000', ' воспаление суставов нижних конечностей (артрит), остеомиелит');
+    createBtn('cls3RF', '', '1000000100000000', ' пароксизмальная ночная гемоглобинурия');
 
-createBtn('cls4RF cls10RF', 'btnDehydration', '1000000100000010', ' дегидратация', ' - cостояние, связанное со значительными потерями воды (потоотделение, рвота, диурез, диарея), либо недостаточным поступлением воды в организм');
+    createBtn('cls4RF', '', '1000000100000000', ' наложение жгута/турникета во время операции');
 
-createBtn('cls3RF', '', '1000000100000000', ' миелопролиферативные заболевания', ': эссенциальная тромбоцитемия (увеличение числа тромбоцитов), истинная полицитемия (увеличенное количество эритроцитов), хронический миелолейкоз (увеличенное количество лейкоцитов)');
+    createBtn('cls4RF', '', '1000000020000000', ' гипсовая иммобилизация конечности', ' &lt; 1 мес.');
+
+    createBtn('cls9RF', '', '1000000100000000', ' лейкоциты крови &gt; 11 × 10<sup><small>9</small></sup>/л');
+
+    createBtn('cls4RF', 'btnArthritis', '1000000100000000', ' воспаление суставов нижних конечностей (артрит), остеомиелит');
+
+    createBtn('cls4RF cls10RF', 'btnDehydration', '1000000100000010', ' дегидратация', ' - cостояние, связанное со значительными потерями воды (потоотделение, рвота, диурез, диарея), либо недостаточным поступлением воды в организм');
+
+    createBtn('cls3RF', '', '1000000100000000', ' миелопролиферативные заболевания', ': эссенциальная тромбоцитемия (увеличение числа тромбоцитов), истинная полицитемия (увеличенное количество эритроцитов), хронический миелолейкоз (увеличенное количество лейкоцитов)');
 }
 creatMirrorRF();
 $('#accListRF .card, #accListRF li,  #accListRF .btnSingleRF, span.reference').hide();
@@ -397,7 +405,7 @@ const showRF = (aRF, vB) => {
         ($.inArray(4, aRF) === -1 && $.inArray(10, aRF) === -1) ? aSRF = $.merge($(aSRF), $('.cls3BRF_1')): '';
     };
     oPat.pkDateOfChildbirth ? $.merge($(aSRF), $('.clsLabourRF')) : '';
-    
+
     $.extend({
         distinct: function (anArray) {
             let result = [];
@@ -441,275 +449,21 @@ const makeLiInteract_1 = (it_1, it_2) => {
 
 makeLiInteract_1('#liSepsis', '#liAcuteInflamDisease');
 makeLiInteract_1('.liThromboemb_2', '#liWasPulmEmb');
+makeLiInteract_1('.liNeoplasm_2', '#liActiveNeoplasm');
+makeLiInteract_1('#liHeartInsuff3_4, #liHeartInsuffLess1Month, #liCongestHeartFailOrSystLVDysfunctEFLess40Percent', '#liSomeHeartInsuff');
 
+const doActiveOneInGroup = (el) => {
+    $(el).on('click', function () {
+        $(el).not(this).removeClass('list-group-item-secondary');
+    });
+}
 
-// Old Body Start
-
-// oPat.pkPregnancyOrChildbirth < 2 ? $('#chkPostpartum').prop('checked', true) : '';
-
-// oPat.pkHasCentrAVAccess ? $('#btnCentralVeinCatheter').prop('checked', true) : '';
-
-
-
-
-// $('#btnIsRenalInsuff').on('click', function () {
-//     ($(this).html() === ('&gt;')) ? $('#frmGFR_CC').hide(): ($('#frmGFR_CC').show(), alert('Критически важно! Вводимые единицы измерения креатинина должны точно соответствовать его введенному значению. К сведению: если значение креатинина не введено, программа расценивает функцию почек как норму при назначении профилактики ВТЭО.'));
-// });
-
-// $('.liLungDiseases_1').on('click', function () {
-//     $('.liLungDiseases_1').not(this).prop('checked', false);
-//     if ($(this).is(':checked')) {
-//         ($(this).attr('id') === 'liSevereLungDiseases') ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', true): '';
-//         if ($(this).attr('id') === 'liModerateLungDiseases') {
-//             if ($('.liBedRestMore3Days_1').is(':checked')) {} else {
-//                 $('#chkIsBedRestMore3Days').prop('checked', false);
-//                 if ($('#liBedRestMore3Days').attr('data-hasMarked') == '0') {
-//                     $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', false);
-//                 }
-//             }
-//         }
-//     }
-// });
-
-// $('.liBedRestMore3Days_1').on('click', function () {
-//     ($(this).is(':checked')) ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', true): ($('.liBedRestMore3Days_1').is(':checked')) ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', true) : ($('#liBedRestMore3Days').attr('data-hasMarked') == '0') ? $('#chkIsBedRestMore3Days, #liBedRestMore3Days').prop('checked', false) : '';
-//     console.log($('#liBedRestMore3Days').attr('data-hasMarked'));
-// });
-
-// $('#liBedRestMore3Days').on('click', function () {
-//     let a = $(this).attr('data-hasMarked');
-//     console.log(a);
-//     ($(this).is(':checked')) ? $(this).attr('data-hasMarked', '1'): $(this).attr('data-hasMarked', '0');
-//     ($('#chkIsBedRestMore3Days').is(':checked')) ? (alert('Отмечены ранее патологические состояния и риск-факторы, которые требуют соблюдения больным строгого постального режима'), $(this).prop('checked', true)) : '';
-//     console.log($(this).attr('data-hasMarked'));
-// });
-
-
-// $('.chkGlomerularFiltrationRate_1').on('click', function () {
-//     $('.chkGlomerularFiltrationRate_1').not(this).prop('checked', false);
-// });
-
-// // $('.chkDiabetes_1').on('click', function () {
-// //     $('.chkDiabetes_1').not(this).prop('checked', false);
-// // });
-// // $('.liSystHypert1th').on('click', function () {
-// //     $('.liSystHypert1th').not(this).prop('checked', false);
-// // });
-
-// $('.chkBurnsSuperficial_1').on('click', function () {
-//     $('.chkBurnsSuperficial_1').not(this).prop('checked', false);
-// });
-
-// $('.chkBurnsDeep_1').on('click', function () {
-//     $('.chkBurnsDeep_1').not(this).prop('checked', false);
-// });
-
-// $('.chkThermalInhalationInjury_1').on('click', function () {
-//     $('.chkThermalInhalationInjury_1').not(this).prop('checked', false);
-// });
-
-// $('.liSpinalCordInjure_1').on('click', function () {
-//     $('.liSpinalCordInjure_1').not(this).prop('checked', false);
-// });
-
-// $('#liHeartInsuff3_4').on('click', function () {
-//     ($(this).is(':checked') && $('#lblSomeHeartInsuff').is(':visible')) ? $('#liSomeHeartInsuff').prop('checked', true): '';
-// });
-// $('#liHeartInsuffLess1Month').on('click', () => ($(this).is(':checked') && $('#lblSomeHeartInsuff').is(':visible')) ? $('#liSomeHeartInsuff').prop('checked', true) : '')
-
-// $('#liCongestHeartFailOrSystLVDysfunctEFLess40Percent').on('click', function () {
-//     ($(this).is(':checked') && $('#lblSomeHeartInsuff').is(':visible')) ? $('#liSomeHeartInsuff').prop('checked', true): '';
-// });
-// $('.liNeoplasm_2').on('click', function () {
-//     ($(this).is(':checked')) ? $('#chkActiveNeoplasm').prop('checked', true).closest('.divSingleLvlRF').hide():
-//         ($('#chkActiveNeoplasm').attr('data-hasMarked') == '0') ? $('#chkActiveNeoplasm').prop('checked', false).closest('.divSingleLvlRF').show() : '';
-// });
-// $('#chkActiveNeoplasm').on('change', function () {
-//     ($(this).is(':checked')) ? $(this).attr('data-hasMarked', '1'): $(this).attr('data-hasMarked', '0');
-// });
-// $('#liAcuteRheumDiseases').on('click', function () {
-//     ($(this).is(':checked')) ? $('#liRheumDiseases').prop('checked', true).closest('.divSingleLvlRF').hide():
-//         ($('#liRheumDiseases').attr('data-hasMarked') == '0') ? $('#liRheumDiseases').prop('checked', false).closest('.divSingleLvlRF').show() : '';
-// });
-
-// $('#liPlateletsLess150').on('click', function () {
-//     if ($(this).is(':checked')) {
-//         $(this).attr('data-hasMarked', '1');
-//     } else {
-//         $(this).attr('data-hasMarked', '0');
-//         $('#liPlateletsLess50, #liPlateletsLess75').prop('checked', false);
-//     }
-// });
-// $('#liPlateletsLess75').on('click', function () {
-//     if ($(this).is(':checked')) {
-//         $('#liPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').hide();
-//         $(this).attr('data-hasMarked', '1');
-
-//     } else {
-//         $('#liPlateletsLess50').prop('checked', false).closest('.divSingleLvlRF').show();
-//         $('#liPlateletsLess150').attr('data-hasMarked') == '0' ? $('#liPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : $('#liPlateletsLess150').closest('.divSingleLvlRF').show();
-//         $(this).attr('data-hasMarked', '0');
-//     }
-// });
-// $('#liPlateletsLess50').on('click', function () {
-//     ($(this).is(':checked')) ? $('#liPlateletsLess150, #liPlateletsLess75').prop('checked', true).closest('.divSingleLvlRF').hide():
-//         ($('#liPlateletsLess150').attr('data-hasMarked') == '1' && $('#liPlateletsLess75').attr('data-hasMarked') == '0') ? ($('#liPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show(), $('#liPlateletsLess75').prop('checked', false).closest('.divSingleLvlRF').show()) : ($('#liPlateletsLess75').attr('data-hasMarked') == '1') ?
-//         $('#liPlateletsLess75, #liPlateletsLess150').prop('checked', true).closest('.divSingleLvlRF').show() :
-//         ($('#liPlateletsLess75, #liPlateletsLess150').attr('data-hasMarked') == '0') ? $('#liPlateletsLess75, #liPlateletsLess150').prop('checked', false).closest('.divSingleLvlRF').show() : '';
-// });
-
-
-// function countStratRF(vCounterRF, x) {
-//     let vStratRF = '';
-//     switch (x) {
-//         case 'Padua':
-//             vCounterRF > 3 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-//             return vStratRF;
-//             break;
-//         case 'IMPROVE':
-//             vCounterRF > 7 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-//             return vStratRF;
-//             break;
-//         case 'HAS_BLED':
-//             vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-//             return vStratRF;
-//             break;
-//         case 'CHA2DS2_VASсOrRusSurgOrTraumRF':
-//             vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : vStratRF = 'высокий';
-//             return vStratRF;
-//             break;
-
-//         case 'Caprini':
-//             vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : (vCounterRF >= 3 && vCounterRF <= 4) ? vStratRF = 'высокий' : vStratRF = 'очень высокий';
-//             return vStratRF;
-//             break;
-//         case 'SurgOrTraumBleedingRF':
-//             vCounterRF >= 1 ? vStratRF = 'высокий' : vStratRF = 'низкий';
-//             return vStratRF;
-//             break;
-//         case 'GreenTop37aRus':
-//             (vCounterRF > 0 && vCounterRF <= 2) ? vStratRF = 'умеренный': (vCounterRF > 2 && vCounterRF != 0) ? vStratRF = 'высокий' : '';
-//             //
-//             //            vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'умеренный';
-//             return vStratRF;
-//     }
-// }
-// $.each(objCreatinineUnits, function (key, value) {
-//     $('#slctCrUnitsGroup')
-//         .append($('<option>', {
-//                 value: key
-//             })
-//             .text(key));
-// });
-
-// Old Body End
-
-// console.log(`CC and GFR: ${calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)}`);
-
-// let vRace = 1,
-//     vCreatinineValueEntered = '',
-//     vCreatinineUnits = '';
-//     function calculateGFRAndСС() {
-//     // Код универсального калькулятора для расчета КК и СКФ взят из открытолго источника http://boris.bikbov.ru/ Программирование: Бикбов Б.Т. Выполняя условия автора, дословно приводим комментарий, на котором настаивает автор кода:
-//     // Данный код может свободно распространяться и модифицироваться при использовании в некоммерческих целях
-//     // Обязательным условием использования и распространения данного кода являются:
-//     // 1. Сохранение комментариев с указанием авторства Бикбова Б.Т. в программном коде JavaScript
-//     // 2. Указание авторства Бикбова Б.Т. на странице с использованием данного програмного кода
-//     // 3. Указание активной ссылки на сайт http://boris.bikbov.ru/ на странице с использованием данного програмного кода
-//     //Комментарий автора кода.
-
-
-//     let gfr_cg = '',
-//         bsa = '',
-//         gfr_cg_bsa = '',
-//         vMDRD = '',
-//         vMDRD_Standartized = '',
-//         vCreatinineValue = '';
-//         vSKD_EPI = '';
-
-//         vCreatinineValue = vCreatinineValueEntered;
-//     vCreatinineUnits = Number(vCreatinineUnits);
-//     //    vCreatinineValue.replace(/[,]+/g, '.');
-
-//     if ((vCreatinineValue <= 0.00003) || (vCreatinineValue >= 6500)) {
-//         vCreatinineValue = 0;
-//     }
-//     // конвертирую креатинин
-//     switch (parseInt(vCreatinineUnits)) {
-//         case 1: // ммоль/л
-//             vCreatinineValue = 1000 * vCreatinineValue / 88.4;
-//             break;
-//         case 2: // мкмоль/л
-//             vCreatinineValue /= 88.4;
-//             break;
-//         case 4: // мкмоль/л
-//             vCreatinineValue /= 10;
-//             break;
-//     }
-//     // взрослые
-//     if (vCreatinineValue > 0 && oPat.pkGender >= 0 && oPat.pkAge > 0) {
-//         // CKD-EPI
-//         if (oPat.pkGender == 0) {
-//             if (vCreatinineValue <= 0.7) {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -0.329) * Math.pow(0.993, oPat.pkAge);
-//             } else {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.7), -1.209) * Math.pow(0.993, oPat.pkAge);
-//             }
-//         } else {
-//             if (vCreatinineValue <= 0.9) {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -0.411) * Math.pow(0.993, oPat.pkAge);
-//             } else {
-//                 vSKD_EPI = Math.pow((vCreatinineValue / 0.9), -1.209) * Math.pow(0.993, oPat.pkAge);
-//             }
-//         }
-//         // коэффициент для расы
-//         if (vRace == 1) { // белые
-//             if (oPat.pkGender == 0) {
-//                 vSKD_EPI = vSKD_EPI * 144;
-//             } else {
-//                 vSKD_EPI = vSKD_EPI * 141;
-//             }
-//         } else { // негроидная
-//             if (oPat.pkGender == 0) {
-//                 vSKD_EPI = vSKD_EPI * 166;
-//             } else {
-//                 vSKD_EPI = vSKD_EPI * 163;
-//             }
-//         }
-//         vSKD_EPI = Math.round(vSKD_EPI);
-//         if (vRace == 2) { // негродидная
-//             vRace = 1.212;
-//         }
-//         // 186 - для нестандартизованных наборов креатинина, 175 - для стандартизованных
-//         if (oPat.pkGender == 0) {
-//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * 0.742));
-//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * 0.742));
-//         } else {
-//             vMDRD = Math.round((186 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * oPat.pkGender));
-//             vMDRD_Standartized = Math.round((175 * (Math.pow(vCreatinineValue, -1.154)) * (Math.pow(oPat.pkAge, -0.203)) * vRace * oPat.pkGender));
-//         }
-//         //         кокрофт
-//         if (oPat.pkWeight > 0) {
-//             gfr_cg = ((140 - oPat.pkAge) * oPat.pkWeight / 72) / vCreatinineValue;
-//             if (oPat.pkGender == 0) {
-//                 gfr_cg = gfr_cg * 0.85;
-//             }
-//             if (oPat.pkHeight > 0) {
-//                 bsa = (oPat.pkHeight * oPat.pkWeight / 3600);
-//                 bsa = Math.sqrt(bsa);
-//                 gfr_cg_bsa = gfr_cg * 1.73 / bsa;
-//             }
-//         }
-//     }
-//     oPat.pkGFR = Math.min(vSKD_EPI, vMDRD, vMDRD_Standartized);
-//     oPat.pkCC = Math.round(gfr_cg_bsa);
-//     console.log(oPat.pkGFR, oPat.pkCC);
-//     console.log(vCreatinineValue, vCreatinineUnits, oPat.pkGender, oPat.pkAge, vRace, oPat.pkWeight, oPat.pkHeight);
-// }
-
-
-
-
+doActiveOneInGroup('.liLungDiseases_1');
+doActiveOneInGroup('.liBurnsSuperficial_1');
+doActiveOneInGroup('.liBurnsDeep_1');
+doActiveOneInGroup('.liThermalInhalationInjury_1');
+doActiveOneInGroup('.liThrombocytopenia_2');
+doActiveOneInGroup('.liGlomerFiltrRate_1');
 
 function countRF() {
 
@@ -757,10 +511,12 @@ function countRF() {
     putVal('.liSevereRenalInsuff_1', '1000000000100100');
     putVal('.liBurns_1', '1000000200000000');
     putVal('.liBurns_2', '1000000300000000');
-    putVal('.liSpinalCordInjure_1, #liPlegia', '1000000350000000');
+    putVal('#liSpinalCordInjure, #liPlegia', '1000000350000000');
     putVal('.liСoagulopathy_1', '1000000000000100');
     putVal('.liLabourRuRF_1', '1000000000000020');
     putVal('.liThrombocytopenia_1', '1000000001000000');
+
+    oPat.pkPostpartum ? aRFVal.push('1000000110000000') : '';
 
     if (oPat.pkIsOrNoSurg) {
         oPat.oSelOp.pkArtroplasty ? aRFVal.push('1000000300000000') : '';
@@ -782,26 +538,26 @@ function countRF() {
     oPat.pkGeneralListOfRF = [];
 
 
-    if(oPat.pkAge> 35) {
+    if (oPat.pkAge > 35) {
         aRFVal.push('1000000000001010');
         const ageEnding = item => {
             let vA = +String(item).split('').pop();
-        return vA === 1 ? 'год': vA > 1 && vA < 5 ? 'года':'лет';
-            }
+            return vA === 1 ? 'год' : vA > 1 && vA < 5 ? 'года' : 'лет';
+        }
         oPat.pkGeneralListOfRF.push(` возраст ${oPat.pkAge} ${ageEnding(oPat.pkAge)}`);
     }
-        oPat.pkAge > 40 ? aRFVal.push('1000000000000000') : '';
-        oPat.pkAge > 40 && oPat.pkAge < 61 ? aRFVal.push('1000000010000000') : '';
-        oPat.pkAge > 60 && oPat.pkAge < 76 ? aRFVal.push('1000000020000000') : '';
-        oPat.pkAge > 64 && oPat.pkAge < 75 ? aRFVal.push('1000010000000000') : '';
-        oPat.pkAge >= 40 && oPat.pkAge < 85 ? aRFVal.push('101.500000000000') : '';
-        oPat.pkAge > 65 ? aRFVal.push('1000001000000000') : '';
-        oPat.pkAge > 70 ? aRFVal.push('1100000000000000') : '';
-        oPat.pkAge >= 75 ? aRFVal.push('1000020030000000') : '';
-        oPat.pkAge >= 85 ? aRFVal.push('103.500000000000') : '';
-    
+    oPat.pkAge > 40 ? aRFVal.push('1000000000000000') : '';
+    oPat.pkAge > 40 && oPat.pkAge < 61 ? aRFVal.push('1000000010000000') : '';
+    oPat.pkAge > 60 && oPat.pkAge < 76 ? aRFVal.push('1000000020000000') : '';
+    oPat.pkAge > 64 && oPat.pkAge < 75 ? aRFVal.push('1000010000000000') : '';
+    oPat.pkAge >= 40 && oPat.pkAge < 85 ? aRFVal.push('101.500000000000') : '';
+    oPat.pkAge > 65 ? aRFVal.push('1000001000000000') : '';
+    oPat.pkAge > 70 ? aRFVal.push('1100000000000000') : '';
+    oPat.pkAge >= 75 ? aRFVal.push('1000020030000000') : '';
+    oPat.pkAge >= 85 ? aRFVal.push('103.500000000000') : '';
 
-        oPat.pkBMI > 25 ? (aRFVal.push('1000000010000000'), oPat.pkGeneralListOfRF.push(` ${oPat.pkBMI <= 30 ? 'избыточный вес': 'ожирение'} (ИМТ > ${oPat.pkBMI} кг/м2)`)) : '';
+
+    oPat.pkBMI > 25 ? (aRFVal.push('1000000010000000'), oPat.pkGeneralListOfRF.push(` ${oPat.pkBMI <= 30 ? 'избыточный вес': 'ожирение'} (ИМТ > ${oPat.pkBMI} кг/м2)`)) : '';
     oPat.pkBMI > 30 ? aRFVal.push('1100000100000000') : '';
     oPat.pkBMI > 30 && oPat.pkBMI < 40 ? aRFVal.push('1000000100001010') : '';
     oPat.pkBMI > 35 ? aRFVal.push('1000000000000000') : '';
@@ -809,14 +565,14 @@ function countRF() {
 
     oPat.pkIsGenAnesth ? (aRFVal.push('10000001000000000'), oPat.pkGeneralListOfRF.push(' общая анестезия')) : '';
 
-let selectedRF= [];
-    $.merge(selectedRF, $('#accListRF button.btn-secondary'));    
+    let selectedRF = [];
+    $.merge(selectedRF, $('#accListRF button.btn-secondary'));
     $(selectedRF).each((ind, el) => {
         aRFVal.push($(el).val())
     });
     selectedRF.length = 0;
 
-    $.merge(selectedRF, $('#accListRF li.list-group-item-secondary'));    
+    $.merge(selectedRF, $('#accListRF li.list-group-item-secondary'));
     $(selectedRF).each((ind, el) => {
         aRFVal.push(el.dataset.value);
     });
@@ -824,7 +580,7 @@ let selectedRF= [];
 
     $.merge(selectedRF, $('#accListRF .btnSingleRF.btn-secondary, #accListRF li.list-group-item-secondary'));
     $(selectedRF).each((ind, el) => {
-       oPat.pkGeneralListOfRF.push($(el).text());
+        oPat.pkGeneralListOfRF.push($(el).text());
     });
 
     console.log(aRFVal, oPat.pkGeneralListOfRF, oPat);
@@ -861,8 +617,15 @@ let selectedRF= [];
 
 $('#btnOne').on('click', countRF);
 
-//  Old
 
+// Old Body Start
+
+// $('#ulIsRenalInsuff').on('click', function () {
+//     ($(this).html() === ('&gt;')) ? $('#frmGFR_CC').hide(): ($('#frmGFR_CC').show(), alert('Важно! Вводимые единицы измерения креатинина должны точно соответствовать его введенному значению. Если значение креатинина не введено, программа расценивает функцию почек как норму.'));
+// });
+
+
+// Old Body End
 
 
 
@@ -876,42 +639,5 @@ $('#btnOne').on('click', countRF);
 // oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[0];
 // oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[1];
 
-// oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#chkGlomerularFiltrationRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#chkGlomerularFiltrationRateLess30').prop('checked', true) : '';
+// oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#liGlomerFiltrRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#liGlomerFiltrRateLess30').prop('checked', true) : '';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// console.log(aRFVal.join());
-// console.log(JSON.stringify($.extend({}, aRFVal)));
-// let vIsBedRestBMI = $('#divAllRF input[id*="BMIMore"]:checked ').last();
-// let vIsBedRestAge = $('#divAllRF input[id*="AgeMore"]:checked ').last();
-// $('.ul2_LvlRF, .chk3_LvlRF input:checked').prop('checked', false);
-
-// vIsBedRestBMI.prop('checked', true);
-// vIsBedRestAge.prop('checked', true);
-
-// function getStringOfRF(el) {
-//     let a = 0,
-//         b = '';
-//     $(el).each(function () {
-//         (a > 0) ? b += ',' + $(this).text(): b += $(this).text();
-//         a += 1;
-//     });
-//     return b;
-// }
-
-// oPat.pkGeneralListOfRF = getStringOfRF($('#divAllRF input:checked').parent()) !== '' ? getStringOfRF($('#divAllRF input:checked').parent()) : 'отсутствуют';
-// console.log(oPat);
-
-// let serialObj = JSON.stringify(oPat);
-// localStorage.setItem('Patient', serialObj);

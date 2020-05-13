@@ -31,6 +31,7 @@ function goToRF() {
     oPat.pkIsOrNoSurg = $('#chkIsOrNoOper').prop('checked') ? true : false;
     oPat.pkSurgProfiles = $('#chkIsOrNoOper').prop('checked') ? true : false;
     oPat.pkPregnancyOrChildbirth = oPat.pkWeekOfPregnancy || oPat.pkDateOfChildbirth ? true : false;
+    oPat.pkPostpartum= oPat.pkDateOfChildbirth? true: false;
     // console.log(oPat);
     let serialObj = JSON.stringify(oPat);
     localStorage.setItem('Patient', serialObj);

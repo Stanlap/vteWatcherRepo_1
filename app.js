@@ -169,8 +169,7 @@ app.get('/vte_2', auth, (req, res) => {
 });
 app.get('/vte_concl', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_concl.ejs', {
-        title: 'vte Conclusion about risk of VTE',
-        message: 'vte Conclusion about risk of VTE'
+        title: 'vte Conclusion about risk of VTE'
     });
 });
 app.get('/vte_drug', auth, (req, res) => {

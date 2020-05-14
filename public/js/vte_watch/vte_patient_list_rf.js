@@ -290,6 +290,8 @@ function creatMirrorRF() {
 
     aLi.push(createLi('cls3RF clsObstComorbidities', '', '1000000100000000', ' нефротический синдром'));
 
+    aLi.push(createLi('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF', 'liCC', '1000000000000000', ' повышен креатинин крови'));
+
     aLi.push(createLi('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF liGlomerFiltrRate_1', 'liGlomerFiltrRate30_59', '101.000000000000', ' скорость клубочковой фильтрации 30—59 мл/мин'));
 
     aLi.push(createLi('cls1BRF cls2BRF cls3BRF_1 cls4BRF cls1RF cls2RF cls3RF cls4RF cls5RF cls8RF cls9RF cls10RF liGlomerFiltrRate_1 liSevereRenalInsuff_1', 'liGlomerFiltrRateLess30', '102.500000000000', ' скорость клубочковой фильтрации &lt; 30 мл/мин'));
@@ -431,6 +433,14 @@ $("#accListRF li").on('click', function (vTB) {
     $(this).parents('div.card').hasClass('clsOneChoice') ? $(this).siblings().removeClass('list-group-item-secondary') : '';
     $(this).hasClass('list-group-item-secondary') ? $(vTB).addClass('btn-secondary') : !$(this).siblings().hasClass('list-group-item-secondary') ? $(vTB).removeClass('btn-secondary') : '';
 });
+
+$('#liCC').on('click', function () {
+    $(this).hasClass('list-group-item-secondary') ? $('#liCC').after('<div><form class="border-secondary border-bottom"" id="frmGFR_CC"><div class="form-row align-items-center"><div class="col-auto my-1"><label class="mr-sm-2" for="inpCreatinineVal">Значение:</label><input type="number" class="form-control" id="inpCreatinineVal" ></div><div class="col-auto my-1"><label class="mr-sm-2" for="slctCrUnitsGroup">Единицы:</label><select class="custom-select mr-sm-2" id="slctCrUnitsGroup"><option>мкмоль/л</option><option>ммоль/л</option><option>мг/100 мл, мг/дл, мг%</option><option>мкг/мл, мг/100 мл</option></select></div><div class="col-auto my-1"><div class="custom-control custom-checkbox mr-sm-2"><input type="checkbox" class="custom-control-input" id="chkRaceB" value="1000000000000000"><label class="custom-control-label" for="chkRaceB">негроидная раса</label></div></div></div></form><div class="alert alert-warning alert-dismissible" id= "warning-alert_2" role="alert"></div>') : $(this).next().remove();
+    $('#warning-alert_2').html('Важно! Единицы измерения креатинина должны строго соответствовать его введенному значению.');
+    $('<button type="button" class="close" id="close_1"  data-dismiss="alert" aria-label="Close">').appendTo('#warning-alert_2');
+    $('<span aria-hidden="true">&times;</span></button>').appendTo('#warning-alert_2 .close');
+});
+
 
 $('span.preReference').on('click', function () {
     $(this).hide().next().show();
@@ -585,59 +595,35 @@ function countRF() {
 
     console.log(aRFVal, oPat.pkGeneralListOfRF, oPat);
 
+    if ($('#liCC').hasClass('list-group-item-secondary')) {
+        let creatinVal = $('#inpCreatinineVal').val() ? $('#inpCreatinineVal').val() : 94,
+            creatinUnits = $('#slctCrUnitsGroup').val(),
+            vRace = ($('#chkRaceB').is(':checked')) ? 1 : 0;
+        oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, vRace, creatinVal, creatinUnits)[0];
+        oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, vRace, creatinVal, creatinUnits)[1];
+    } else {
+        $('#liGlomerFiltrRate30_59').hasClass('list-group-item-secondary') ? (oPat.pkGFR = 59, oPat.pkCC = 72) : $('#liGlomerFiltrRateLess30').hasClass('list-group-item-secondary') ? (oPat.pkGFR = 29, oPat.pkCC = 40) : (oPat.pkGFR = 80, oPat.pkCC = 94);
+    }
 
+    console.log(`GFR: ${oPat.pkGFR}, CC ${oPat.pkCC}`);
 
+    let oPatForCounter = {
+        age: oPat.pkAge,
+        isOrNoSurg: oPat.pkIsOrNoSurg,
+        operTimeMore60: oPat.pkOperTimeMore60,
+        gradeOfOper: oPat.pkGradeOfOper
+    };
+    $.post('/count', {
+            'rfArr': aRFVal.join(),
+            'oPatForCounter': JSON.stringify(oPatForCounter),
+        },
+        function (data) {
+            localStorage.setItem('objScalesVTE', data);
+        });
 
-    // let oPatForCounter = {
-    //     age: oPat.pkAge,
-    //     isOrNoSurg: oPat.pkIsOrNoSurg,
-    //     operTimeMore60: oPat.pkOperTimeMore60,
-    //     gradeOfOper: oPat.pkGradeOfOper
-    // };
-    // $.post('/count', {
-    //         'rfArr': aRFVal.join(),
-    //         'oPatForCounter': JSON.stringify(oPatForCounter),
-    //     },
-    //     function (data) {
-    //         localStorage.setItem('objScalesVTE', data);
-    //         let fromRfArr = localStorage.getItem('objScalesVTE');
-    //         let objBallsRiskVTE = JSON.parse(fromRfArr);
-    //         console.log(objBallsRiskVTE.vCounterPaduaScore);
-    //         console.log(JSON.parse(data));
-
-    // let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-    // localStorage.removeItem('objScalesVTE');
-    // console.log(objBallsRiskVTE);
-
-    // });
     serialObj = JSON.stringify(oPat);
     localStorage.setItem('Patient', serialObj);
-    // $(location).attr('href', '/vte_concl');
+    $(location).attr('href', '/vte_concl');
 }
 
 $('#btnOne').on('click', countRF);
-
-
-// Old Body Start
-
-// $('#ulIsRenalInsuff').on('click', function () {
-//     ($(this).html() === ('&gt;')) ? $('#frmGFR_CC').hide(): ($('#frmGFR_CC').show(), alert('Важно! Вводимые единицы измерения креатинина должны точно соответствовать его введенному значению. Если значение креатинина не введено, программа расценивает функцию почек как норму.'));
-// });
-
-
-// Old Body End
-
-
-
-// $('#inpCreatinineVal').val() == '' ? creatinVal = 90: creatinVal = $('#inpCreatinineVal').val();
-
-// creatinUnits = $('#slctCrUnitsGroup').val();
-// ($('#chkRaceB').is(':checked')) ? oPat.pkRace = 1: '';
-
-// console.log(`GFR: ${calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)}`);
-
-// oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[0];
-// oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, oPat.pkRace, creatinVal, creatinUnits)[1];
-
-// oPat.pkGFR > 29 && oPat.pkGFR < 60 ? $('#liGlomerFiltrRate30_59').prop('checked', true) : (oPat.pkGFR < 30) ? $('#liGlomerFiltrRateLess30').prop('checked', true) : '';
-

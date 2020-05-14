@@ -8,7 +8,7 @@
         <div class="row h-100">
             <div class="col bg-secondary">
             </div>
-            <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5"><%- include('../partials/header_prog') %>
+            <div class="col-12 col-sm-10 col-md-8 col-lg-7 col-xl-6"><%- include('../partials/header_prog') %>
                 <form>
                     <h4>Антропометрические данные пациента</h4>
                     <p>Дата рождения</p>
@@ -52,17 +52,19 @@
                             <option value='11' hidden>пусто</option>
                         </select>
                     </div>
-                    <p>Пациенту планируется:</p>
+                    <p>Пациенту планируются:</p>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="chkInvasions">
+                        <label class="custom-control-label" for="chkInvasions">манипуляции с высоким риском
+                            кровотечения</label>
+                    </div>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="chkIsOrNoSurg">
                         <label class="custom-control-label" id="lblIsOrNoSurg" for="chkIsOrNoSurg">оперативное
                             лечение</label>
                     </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="chkInvasions">
-                        <label class="custom-control-label" for="chkInvasions">манипуляции с высоким риском
-                            кровотечения</label>
-                    </div><br>
+
+                    <br>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="chkCalculateRiskOfBleeding" checked>
                         <label class="custom-control-label" for="chkCalculateRiskOfBleeding"><strong>Учитывать риск

@@ -1,24 +1,14 @@
-let objBallsRiskVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
-console.log(objBallsRiskVTE);
+let oScalesVTE = JSON.parse(localStorage.getItem('objScalesVTE'));
+console.log(oScalesVTE);
 let oPat = JSON.parse(localStorage.getItem('Patient'));
 console.log(oPat);
-oPat.pkHighRiskOfBleeding = false;
+oPat.pkHighRiskOfBleed = false;
 
 
-objBallsRiskVTE.vCounterIMPROVE > 7 || objBallsRiskVTE.vCounterHAS_BLED > 2 || objBallsRiskVTE.vCounterMajorBleedingScoreRF > 0 || objBallsRiskVTE.vCounterTraumBleedingRF > 0 || objBallsRiskVTE.vCounterObstBleedingRF > 2 ? oPat.pkRiskBleed = 1 : oPat.pkRiskBleed = 0;
+oScalesVTE.sIMPROVE > 7 || oScalesVTE.sHAS_BLED > 2 || oScalesVTE.sMajorBleedScore > 0 || oScalesVTE.sTraumBleed > 0 || oScalesVTE.sObstBleed > 2 ? oPat.pkRiskBleed = 1 : oPat.pkRiskBleed = 0;
 
-function bindBalls(counter) {
-    let vBalls;
-    if (counter == 1) {
-        vBalls = ' балл';
-    }
-    if (counter > 1 && counter < 5) {
-        vBalls = ' балла';
-    }
-    if (counter > 4) {
-        vBalls = ' баллов';
-    }
-    return counter + vBalls;
+const ballsEnding = item => {
+    return item === 1 ? 'балл' : item > 1 && item < 5 ? 'балла' : 'баллов';
 }
 
 function countStratRF(vCounterRF, vScaleTitle) {
@@ -55,60 +45,51 @@ function countStratRF(vCounterRF, vScaleTitle) {
     }
 }
 
-// $('#btnTwo').on('click', function () {
-// $('#pTitleOfConclusion').show();
+oPat.pkGeneralListOfRF.length ? $('<p>', {
+    text: (`Риск-факторы: ${oPat.pkGeneralListOfRF}.`)
+}).appendTo($('#divConcl')): '';
 
-(oPat.pkGeneralListOfRF != '') ? $('<p>', {
-    text: ('Заболевания и риск-факторы: ' + oPat.pkGeneralListOfRF + '.'),
-    class: 'pTextContainer'
-}).appendTo($('#pTextCollector_1')): '';
+oPat.pkAllChoosedOperations ? $('<p>', {
+    text: (`Операции: ${oPat.pkAllChoosedOperations}.`)
+}).appendTo($('#divConcl')): '';
 
-// (oPat.pkGeneralListOfRF != '') ? $('<p>', {
-//     text: (oPat.pkGeneralListOfRF + '.'),
-//     class: 'pTextContainer'
-// }).appendTo($('#pTextCollector_1')):  $('<p>',{
-//     text: 'нет.',
-//     class: 'pTextContainer'
-// }).appendTo($('#pTextCollector_1'));
+!oPat.pkGeneralListOfRF.length && !oPat.pkAllChoosedOperations.length ? 
+$('<p>', {
+    text: (`Риск ВТЭО низкий. Медикаментозная профилактика не показана.`)
+}).appendTo($('#divConcl')): '';
 
-(oPat.pkAllChoosedOperations != '') ? $('<p>', {
-    text: ('Операции:' + oPat.pkAllChoosedOperations + '.'),
-    class: 'pTextContainer'
-}).appendTo($('#pTextCollector_1')): '';
 
-($('#pTextCollector_1').children().length > 0) ? $('#pTitleOfConclusion').show(): $('#pBestConclusion').show();
-
-(objBallsRiskVTE.vCounterPaduaScore > 3 && oPat.pkValuesMedPfofile.includes(1)) ? $('<p>', {
-    text: ('Padua: ' + bindBalls(objBallsRiskVTE.vCounterPaduaScore) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterPaduaScore, 'Padua') + '.'),
+(oScalesVTE.sPadua > 3 && oPat.pkMedProfiles.includes(1)) ? $('<p>', {
+    text: ('Padua: ' + ballsEnding(oScalesVTE.sPadua) + '. Риск ' + countStratRF(oScalesVTE.sPadua, 'Padua') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-(objBallsRiskVTE.vCounterCHA2DS2_VASс >= 1 && oPat.pkValuesMedPfofile.includes(2)) ? $('<p>', {
-    text: ('CHA2DS2-VASс: ' + bindBalls(objBallsRiskVTE.vCounterCHA2DS2_VASс) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterCHA2DS2_VASс, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
+(oScalesVTE.sCHA2DS2_VASс >= 1 && oPat.pkMedProfiles.includes(2)) ? $('<p>', {
+    text: ('CHA2DS2-VASс: ' + ballsEnding(oScalesVTE.sCHA2DS2_VASс) + '. Риск ' + countStratRF(oScalesVTE.sCHA2DS2_VASс, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-( oPat.pkIsOrNoSurg && objBallsRiskVTE.vCounterCapriniRF >= 2 && oPat.pkAllSurgProfiles == true) ? $('<p>', {
-    text: ('Caprini: ' + bindBalls(objBallsRiskVTE.vCounterCapriniRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterCapriniRF, 'Caprini') + '.'),
+( oPat.pkIsOrNoSurg && oScalesVTE.sCaprini >= 2 && oPat.pkAllSurgProfiles == true) ? $('<p>', {
+    text: ('Caprini: ' + ballsEnding(oScalesVTE.sCaprini) + '. Риск ' + countStratRF(oScalesVTE.sCaprini, 'Caprini') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-( oPat.pkIsOrNoSurg && objBallsRiskVTE.vCounterRusSurgRF >= 1 && oPat.pkAllSurgProfiles == true) ? $('<p>', {
-    text: ('Российская риска ВТЭО в хирургии: ' + bindBalls(objBallsRiskVTE.vCounterRusSurgRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterRusSurgRF, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
+( oPat.pkIsOrNoSurg && oScalesVTE.sRusSurgRF >= 1 && oPat.pkAllSurgProfiles == true) ? $('<p>', {
+    text: ('Российская риска ВТЭО в хирургии: ' + ballsEnding(oScalesVTE.sRusSurgRF) + '. Риск ' + countStratRF(oScalesVTE.sRusSurgRF, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-( oPat.pkIsOrNoSurg && objBallsRiskVTE.vCounterRusTraumRF > 2 && oPat.pkValuesMedPfofile.includes(4)) ? $('<p>', {
-    text: ('Российская риска ВТЭО в травматологии: ' + bindBalls(objBallsRiskVTE.vCounterRusTraumRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterRusTraumRF, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
+( oPat.pkIsOrNoSurg && oScalesVTE.sRusTraumRF > 2 && oPat.pkMedProfiles.includes(4)) ? $('<p>', {
+    text: ('Российская риска ВТЭО в травматологии: ' + ballsEnding(oScalesVTE.sRusTraumRF) + '. Риск ' + countStratRF(oScalesVTE.sRusTraumRF, 'CHA2DS2_VASсOrRusSurgOrTraumRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 
-(objBallsRiskVTE.vCounterGreenTop37a > 0 && oPat.pkGender === 0 && oPat.pkValuesMedPfofile.includes(10)) ? $('<p>', {
-    text: ('GreenTopGuideline37a: ' + bindBalls(objBallsRiskVTE.vCounterGreenTop37a) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterGreenTop37a, 'GreenTop37aRus') + '.'),
+(oScalesVTE.sGreenTop37a > 0 && oPat.pkGender === 0 && oPat.pkMedProfiles.includes(10)) ? $('<p>', {
+    text: ('GreenTopGuideline37a: ' + ballsEnding(oScalesVTE.sGreenTop37a) + '. Риск ' + countStratRF(oScalesVTE.sGreenTop37a, 'GreenTop37aRus') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
-(objBallsRiskVTE.vCounterObstRuRF > 0 && oPat.pkGender === 0 && oPat.pkValuesMedPfofile.includes(10)) ? $('<p>', {
-    text: ('Российская риска ВТЭО в акушерстве-гинекологии: ' + bindBalls(objBallsRiskVTE.vCounterObstRuRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterObstRuRF, 'GreenTop37aRus') + '.'),
+(oScalesVTE.sObstRusRF > 0 && oPat.pkGender === 0 && oPat.pkMedProfiles.includes(10)) ? $('<p>', {
+    text: ('Российская риска ВТЭО в акушерстве-гинекологии: ' + ballsEnding(oScalesVTE.sObstRusRF) + '. Риск ' + countStratRF(oScalesVTE.sObstRusRF, 'GreenTop37aRus') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_2')): '';
 $('#pTextCollector_2').children().length > 0 ? $('#pTextCollector_2').show() : $('#pBestConclusion').show();
@@ -116,31 +97,31 @@ $('#pTextCollector_2').children().length === 0 && oPat.pkRiskVTE === 0 ? $('#pBe
 
 
 
-(objBallsRiskVTE.vCounterIMPROVE > 7 && oPat.pkValuesMedPfofile.includes(1)) ? $('<p>', {
-    text: ('IMPROVE: ' + bindBalls(objBallsRiskVTE.vCounterIMPROVE) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterIMPROVE, 'IMPROVE') + '.'),
+(oScalesVTE.sIMPROVE > 7 && oPat.pkMedProfiles.includes(1)) ? $('<p>', {
+    text: ('IMPROVE: ' + ballsEnding(oScalesVTE.sIMPROVE) + '. Риск ' + countStratRF(oScalesVTE.sIMPROVE, 'IMPROVE') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_3')): '';
-(objBallsRiskVTE.vCounterHAS_BLED > 2 && oPat.pkValuesMedPfofile.includes(2)) ? $('<p>', {
-    text: ('HAS-BLED: ' + bindBalls(objBallsRiskVTE.vCounterHAS_BLED) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterHAS_BLED, 'HAS_BLED') + '.'),
-    class: 'pTextContainer'
-}).appendTo($('#pTextCollector_3')): '';
-
-(objBallsRiskVTE.vCounterMajorBleedingScoreRF > 0 && oPat.pkAllSurgProfiles == true) ? $('<p>', {
-    text: ('Major Bleeding Score: ' + bindBalls(objBallsRiskVTE.vCounterMajorBleedingScoreRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterMajorBleedingScoreRF, 'SurgOrTraumBleedingRF') + '.'),
+(oScalesVTE.sHAS_BLED > 2 && oPat.pkMedProfiles.includes(2)) ? $('<p>', {
+    text: ('HAS-BLED: ' + ballsEnding(oScalesVTE.sHAS_BLED) + '. Риск ' + countStratRF(oScalesVTE.sHAS_BLED, 'HAS_BLED') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_3')): '';
 
-(objBallsRiskVTE.vCounterTraumBleedingRF > 0 && oPat.pkValuesMedPfofile.includes(4)) ? $('<p>', {
-    text: ('... при больших травматологических вмешательствах: ' + bindBalls(objBallsRiskVTE.vCounterTraumBleedingRF) + '. Риск ' + countStratRF(objBallsRiskVTE.vCounterTraumBleedingRF, 'SurgOrTraumBleedingRF') + '.'),
+(oScalesVTE.sMajorBleedScore > 0 && oPat.pkAllSurgProfiles == true) ? $('<p>', {
+    text: ('Major Bleeding Score: ' + ballsEnding(oScalesVTE.sMajorBleedScore) + '. Риск ' + countStratRF(oScalesVTE.sMajorBleedScore, 'SurgOrTraumBleedingRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_3')): '';
 
-(objBallsRiskVTE.vCounterObstBleedingRF > 0 && oPat.pkGender === 0 && oPat.pkValuesMedPfofile.includes(10)) ? $('<p>', {
-    text: ('... в акушерстве-гинекологии: ' + bindBalls(objBallsRiskVTE.vCounterObstBleedingRF) + '.'),
+(oScalesVTE.sTraumBleed > 0 && oPat.pkMedProfiles.includes(4)) ? $('<p>', {
+    text: ('... при больших травматологических вмешательствах: ' + ballsEnding(oScalesVTE.sTraumBleed) + '. Риск ' + countStratRF(oScalesVTE.sTraumBleed, 'SurgOrTraumBleedingRF') + '.'),
     class: 'pTextContainer'
 }).appendTo($('#pTextCollector_3')): '';
 
-$('#pTextCollector_3').children().length > 0 && oPat.pkCalculateRiskOfBleeding ? ($('#pTextCollector_3').show(), oPat.pkHighRiskOfBleeding = true) : '';
+(oScalesVTE.sObstBleed > 0 && oPat.pkGender === 0 && oPat.pkMedProfiles.includes(10)) ? $('<p>', {
+    text: ('... в акушерстве-гинекологии: ' + ballsEnding(oScalesVTE.sObstBleed) + '.'),
+    class: 'pTextContainer'
+}).appendTo($('#pTextCollector_3')): '';
+
+$('#pTextCollector_3').children().length > 0 && oPat.pkCalculateRiskOfBleeding ? ($('#pTextCollector_3').show(), oPat.pkHighRiskOfBleed = true) : '';
 
 $('.pTextContainer:contains("высокий")').css({
     'color': 'red'
@@ -155,20 +136,20 @@ oPat.pkMedProfile = 1;
 
 function getMainMedProfile() {
     let arrStratRF = [0, 0, 0, [0, 0], 0];
-    objBallsRiskVTE.vCounterPaduaScore > 3 ? arrStratRF[1] = 2 : '';
-    if (oPat.pkValuesMedPfofile.includes(2)) {
-        objBallsRiskVTE.vCounterCHA2DS2_VASс > 0 ? arrStratRF[2] = 2 : '';
+    oScalesVTE.sPadua > 3 ? arrStratRF[1] = 2 : '';
+    if (oPat.pkMedProfiles.includes(2)) {
+        oScalesVTE.sCHA2DS2_VASс > 0 ? arrStratRF[2] = 2 : '';
     };
     if (oPat.pkIsOrNoSurg) {
-        objBallsRiskVTE.vCounterRusSurgRF >= 1 && objBallsRiskVTE.vCounterRusSurgRF <= 2 ? arrStratRF[3][0] = 1 : objBallsRiskVTE.vCounterRusSurgRF >= 3 ? arrStratRF[3][0] = 2 : '';
-        objBallsRiskVTE.vCounterCapriniRF === 2 ? arrStratRF[3][1] = 1 : objBallsRiskVTE.vCounterCapriniRF >= 3 ? arrStratRF[3][1] = 2 : '';
+        oScalesVTE.sRusSurgRF >= 1 && oScalesVTE.sRusSurgRF <= 2 ? arrStratRF[3][0] = 1 : oScalesVTE.sRusSurgRF >= 3 ? arrStratRF[3][0] = 2 : '';
+        oScalesVTE.sCaprini === 2 ? arrStratRF[3][1] = 1 : oScalesVTE.sCaprini >= 3 ? arrStratRF[3][1] = 2 : '';
         // !!!!!! Код ниже для шкалы Caprini с умеренным риском профилактики ВТЭО с одного балла по шкале.
-        // objBallsRiskVTE.vCounterCapriniRF >= 1 && objBallsRiskVTE.vCounterCapriniRF <= 2 ? arrStratRF[3][1] = 1 : objBallsRiskVTE.vCounterCapriniRF >= 3 ? arrStratRF[3][1] = 2 : '';
+        // oScalesVTE.sCaprini >= 1 && oScalesVTE.sCaprini <= 2 ? arrStratRF[3][1] = 1 : oScalesVTE.sCaprini >= 3 ? arrStratRF[3][1] = 2 : '';
     };
-    if (oPat.pkValuesMedPfofile.includes(4)) {
-        objBallsRiskVTE.vCounterRusTraumRF >= 1 && objBallsRiskVTE.vCounterRusTraumRF <= 2 ? arrStratRF[4] = 1 : objBallsRiskVTE.vCounterRusTraumRF >= 2 ? arrStratRF[4] = 2 : '';
+    if (oPat.pkMedProfiles.includes(4)) {
+        oScalesVTE.sRusTraumRF >= 1 && oScalesVTE.sRusTraumRF <= 2 ? arrStratRF[4] = 1 : oScalesVTE.sRusTraumRF >= 2 ? arrStratRF[4] = 2 : '';
     };
-    objBallsRiskVTE.vCounterObstRuRF == 2 ? arrStratRF[5] = 1 : objBallsRiskVTE.vCounterObstRuRF > 2 ? arrStratRF[5] = 2 : '';
+    oScalesVTE.sObstRusRF == 2 ? arrStratRF[5] = 1 : oScalesVTE.sObstRusRF > 2 ? arrStratRF[5] = 2 : '';
 
     arrStratRF[3] = Math.max.apply(null, arrStratRF[3]);
 
@@ -207,7 +188,7 @@ localStorage.setItem("Patient", serialObj);
 
 $('#btnTwo').bind('click', function(){
     let VTEProphylDecision = false;
-    if(oPat.pkHighRiskOfBleeding){
+    if(oPat.pkHighRiskOfBleed){
         VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
     };
     if(oPat.pkRiskVTE > 0){
@@ -216,7 +197,7 @@ $('#btnTwo').bind('click', function(){
         $(location).attr('href', '/vte_assignment_sheet');
     };
 // $('#btnTwo').bind('click', function(){
-//     if(oPat.pkHighRiskOfBleeding){
+//     if(oPat.pkHighRiskOfBleed){
 //          let VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
 //         VTEProphylDecision === false && oPat.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
 //     }else{

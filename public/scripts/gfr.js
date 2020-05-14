@@ -1,10 +1,3 @@
-let objCreatinineUnits = {
-    'мкмоль/л': false,
-    'ммоль/л': false,
-    'мг/100 мл, мг/дл, мг%': false,
-    'мкг/мл, мг/100 мл': false
-};
-
 function calcCCAndGFR(gender, age, weight, race, creatinVal, crUns) {
     function uniformCrValue(cU, vC) {
         cU === 'мкг/мл, мг/100 мл' ? vC = 10 : cU === 'ммоль/л' ? vC = 0.0884 : cU === 'мкмоль/л' ? vC = 88.4 : vC = 1;

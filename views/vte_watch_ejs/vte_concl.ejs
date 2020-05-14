@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+<%- include('../partials/head') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><%= title %></title>
-</head>
-
-<body>
-    <!-- <a href="/">Главная страница</a><br> -->
-    <a href="/programs">Программы</a><br>
-    <a href="/logout">Logout</a><br>
-    <p><%= message %></p>
-
-    <p id='pTitleOfConclusion' hidden>Комплексная оценка риска ВТЭО:</p>
-    <p id='pTextCollector_1'</p>
+<body> <%- include('../partials/header_2') %>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+          <div class="col bg-secondary">
+          </div>
+          <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+            <%- include('../partials/header_prog') %>
+            <h5>Оценка риска ВТЭО: </h5>
+            
+    <p id='divConcl'</p>
     <p id='pTextCollector_2' hidden>Шкалы риска ВТЭО:</p>
     <p id='pTextCollector_3' hidden>Шкалы риска кровотечения при профилактике ВТЭО:</p>
 
     <p id='pBestConclusion' hidden>Риск ВТЭО низкий. Медикаментозная профилактика не показана.</p>
 
     <button id='btnTwo'>OK</button>
-    
-    <br><br>
-    <footer>&copy;SmartMedInterface</footer>
-    <script src="/scripts/jquery.min.js"></script>
+</div>
+<div class="col bg-secondary">
+</div>
+</div>
+<%- include('../partials/footer') %>
+    <%- include('../partials/scripts') %>
+    <script src="/scripts/gfr.js"></script>
     <script src="/js/vte_watch/vte_concl.js" defer></script>
 </body>
 <html>

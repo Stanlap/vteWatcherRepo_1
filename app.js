@@ -187,10 +187,7 @@ app.get('/vte_assignment_sheet', auth, (req, res) => {
 });
 
 app.post('/count', auth, (req, res) => {
-    console.log(req.body.rfArr);
-    let xAr = countRF.countKindsRF(req.body.rfArr, req.body.objPatientForCounter);
-    let jxAr = JSON.stringify(xAr);
-    return res.send(jxAr);
+    res.send(JSON.stringify(countRF.countKindsRF(req.body.rfArr, req.body.aForCounter)));
 });
 
 app.listen(port, () => console.log(`Server is listening on port ${port}!`));

@@ -20,6 +20,9 @@ $(document).ready(function () {
             'Heparin sodium': 'Гепарин натрия'
         };
 
+        console.log(oPat);
+
+
     oPat.pkINRDates = [];
     oPat.pkBridgeTherMedGroup = '';
     oPat.pkDaysSincePrevAnalysisToStartVTEProph = 0;
@@ -29,29 +32,35 @@ $(document).ready(function () {
 
     localStorage.removeItem('Patient');
 
-    $('<div/>').prop({
+
+    $('<h5/>').prop({
             id: 'invitToAct_1',
             class: 'invits'
         })
         .html('')
-        .appendTo('#dialogMain');
+        .appendTo('#divMainDialog');
     $('<div/>').prop({
         id: 'dialog_0'
-    }).appendTo('#dialogMain');
+    }).appendTo('#divMainDialog');
     $('<div/>').prop({
         id: 'dialog_1',
         class: 'dialogs'
-    }).appendTo('#dialogMain');
+    }).appendTo('#divMainDialog');
+    $('<div/>').prop({
+        id: 'dialog_1',
+        class: 'input-group'
+    }).appendTo('#dialog_1');
+   
     $('<select/>').prop({
             id: 'select_1',
             value: '',
-            class: 'selects'
+            class: 'custom-select selects'
         })
         .appendTo('#dialog_1');
     $('<div/>').prop({
         id: 'dialog_2',
         class: 'dialogs'
-    }).appendTo('#dialogMain');
+    }).appendTo('#divMainDialog');
     $('<div/>').prop({
             id: 'invitToAct_2',
             class: 'invits'
@@ -60,13 +69,13 @@ $(document).ready(function () {
     $('<select/>').prop({
             id: 'select_2',
             value: '',
-            class: 'selects'
+            class: 'custom-select selects'
         })
         .appendTo('#dialog_2');
     $('<div/>').prop({
         id: 'dialog_3',
         class: 'dialogs'
-    }).appendTo('#dialogMain');
+    }).appendTo('#divMainDialog');
     $('<div/>').prop({
             id: 'invitToAct_3',
             class: 'invits'
@@ -75,28 +84,39 @@ $(document).ready(function () {
     $('<select/>').prop({
             id: 'select_3',
             value: '',
-            class: 'selects'
+            class: 'custom-select selects'
         })
         .appendTo('#dialog_3');
     $('<div/>').prop({
         id: 'dialog_4',
         class: 'dialogs'
-    }).appendTo('#dialogMain');
+    }).appendTo('#divMainDialog');
     $('<input/>').prop({
             id: 'inpDate_4',
             type: 'date',
-            value: formatDate()
+            class: 'form-control',
+            value: correctDate(addDays(new Date(), 0))
         })
         .appendTo('#dialog_4');
-    $('<br>').prop({}).appendTo('#dialogMain');
-    $('<input/>').prop({
-            id: 'btnOne',
-            type: 'button',
-            value: 'OK'
-        })
-        .appendTo('#dialogMain');
+    $('<br>').prop({}).appendTo('#divMainDialog');
 
-    oPat.pkIsOrNoSurg ? oPat.pkStartDateOfVTEProphyl = oPat.pkDateOfOper : oPat.pkStartDateOfVTEProphyl = formatDate();
+
+    // $(`${addDatePicker(formatDate(), 1)}`).appendTo('#divMainDialog');
+
+    // $('<input/>').prop({
+    //     id: 'dP_1',
+    //     type: 'date',
+    //     class: 'form-control',
+    //     value: correctDate(addDays(new Date(), 0))
+    // })
+    // .appendTo('#divMainDialog');
+
+    // console.log($('#dP_1').val());
+
+// const addDatePicker = (vDate, ind) => `<input class="form-control" type="date" value= "${vDate}" id="inpDate_${ind}">`;
+
+
+oPat.pkStartDateOfVTEProphyl = oPat.pkIsOrNoSurg ? oPat.pkDateOfOper : formatDate();
     console.log(oPat.pkStartDateOfVTEProphyl);
 
     oPat.pkRiskVTE === 1 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : oPat.pkRiskVTE === 2 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
@@ -206,7 +226,7 @@ $(document).ready(function () {
     function clearValues() {
         $('.invits').html('');
         $('.dialogs').hide();
-        $('#inpDate_4').val(formatDate());
+        $('#inpDate_4').val(correctDate(addDays(new Date(), 0)));
         $('.selects').off('input').empty();
         $('#btnOne, #btnTwo').off('click');
     }
@@ -222,6 +242,7 @@ $(document).ready(function () {
         aLineOfFuncs.push(askStartDateMedicineTaking, askEndDateMedicineTaking, askAnotherDrug);
         emptyOChoosDrug();
         clearValues();
+        $('#btnTwo').hide();
         executeFuncsLine();
     }
 
@@ -356,6 +377,7 @@ $(document).ready(function () {
         $('<input/>').prop({
             id: 'inpText_0',
             type: 'number',
+            class: 'form-control',
             value: oChoosDrug.officDose
         }).appendTo('#dialog_0');
         $('#btnOne').on('click', defineRealSingleDoseOfMedicine);
@@ -523,12 +545,18 @@ $(document).ready(function () {
         console.log('askStartDateMedicineTaking');
         $('#invitToAct_1').html('Укажите дату начала профилактики ВТЭО:');
         $('#dialog_4').show();
-        if (aStartDates.length === 0) {
-            $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
-        } else {
+        if (aStartDates.length) {
             let vPD = addDays(new Date(oPat.pkStartDateOfVTEProphyl), 1);
             $('#inpDate_4').val(`${vPD.getFullYear()}-${('0' + (vPD.getMonth() + 1)).slice(-2)}-${('0' + vPD.getDate()).slice(-2)}`);
+        } else {
+            $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
         }
+        // if (aStartDates.length === 0) {
+        //     $('#inpDate_4').val(oPat.pkStartDateOfVTEProphyl);
+        // } else {
+        //     let vPD = addDays(new Date(oPat.pkStartDateOfVTEProphyl), 1);
+        //     $('#inpDate_4').val(`${vPD.getFullYear()}-${('0' + (vPD.getMonth() + 1)).slice(-2)}-${('0' + vPD.getDate()).slice(-2)}`);
+        // }
         $('#inpDateOfOper').hide();;
         $('#btnOne').on('click', defineStartDateMedicineTaking);
     }
@@ -735,13 +763,10 @@ $(document).ready(function () {
 
     function askAnotherDrug() {
         $('#invitToAct_1').html('Выбрать следующий препарат?');
-        $('<input/>').prop({
-                id: 'btnTwo',
-                type: 'button',
-                value: 'Exit'
-            })
-            .appendTo('#dialogMain');
-        $('#btnOne').on('click', defineAnotherDrug);
+        $('#btnTwo').show();
+        $('#btnOne').on('click', function(){
+            defineAnotherDrug();
+        });
         $('#btnTwo').on('click', () => {
             $(aChMeds).each((ind, el) => {
                 oPat.aOrdersContainer.push([el.signature, el.aLine]);
@@ -761,7 +786,6 @@ $(document).ready(function () {
 
     function defineAnotherDrug() {
         console.log('defineAnotherDrug');
-        $('#btnTwo').remove();
         prepareToStart();
     }
 

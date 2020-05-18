@@ -175,7 +175,6 @@ app.get('/vte_concl', auth, (req, res) => {
 app.get('/vte_drug', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_drug.ejs', {
         title: 'vte Define Drug',
-        message: 'vte Define Drug'
     });
 });
 

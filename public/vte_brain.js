@@ -1,35 +1,31 @@
 module.exports.countKindsRF = (tArr, oP) => {
-    let oP_2 = JSON.parse(oP);
+    oP = oP.split(',');
+    let tArr_2 = [];
+tArr.split(',').forEach(el => tArr_2.push(el.split('')));
+tArr = [];
+tArr_2.forEach(el => {
+    let el_2 = [];
+    el.forEach(item => el_2.push(item = +item))
+    el = el_2;
+    el_2 = [];
+    tArr.push(el);
+});
 
-    let objRF = {},
-        tArr_2 = [],
-        tArr_3 = [];
-
-    tArr.split(',').forEach(el => tArr_2.push(el.split('')));
-
-    tArr_2.forEach(el => {
-        let el_2 = [];
-        el.forEach(item => el_2.push(item = +item))
-        el = el_2;
-        el_2 = [];
-        tArr_3.push(el);
-    });
-
-    objRF = {
-        vCounterPaduaScore: 0,
-        vCounterCHA2DS2_VASс: 0,
-        vCounterIMPROVE: 0,
-        vCounterHAS_BLED: 0,
-        vCounterRusSurgRF: 0,
-        vCounterCapriniRF: 0,
-        vCounterMajorBleedingScoreRF: 0,
-        vSetRusSurgRF: [],
-        vSetRusTraumRF: [],
-        vCounterRusTraumRF: 0,
-        vCounterTraumBleedingRF: 0,
-        vCounterGreenTop37a: 0,
-        vCounterObstRuRF: 0,
-        vCounterObstBleedingRF: 0
+    oRF = {
+        sPadua: 0,
+        sCHA2DS2_VASс: 0,
+        sIMPROVE: 0,
+        sHAS_BLED: 0,
+        sRusSurgRF: 0,
+        sCaprini: 0,
+        sMajorBleed: 0,
+        aSetRusSurgRF: [],
+        aSetRusTraumRF: [],
+        sRusTraumRF: 0,
+        sTraumBleed: 0,
+        sGreenTop37a: 0,
+        sObstRusRF: 0,
+        sObstBleed: 0
     };
     let i = [],
         m = 0;
@@ -39,30 +35,30 @@ module.exports.countKindsRF = (tArr, oP) => {
         i.push(el[4]);
         m = Number(i.join(''));
         i = [];
-        objRF.vCounterIMPROVE += Number(m);
+        oRF.sIMPROVE += Number(m);
     });
 
-    tArr_3.forEach(el => {
-        objRF.vCounterPaduaScore += el[1];
-        objRF.vCounterCHA2DS2_VASс += el[5];
-        objRF.vCounterHAS_BLED += el[6];
-        objRF.vSetRusSurgRF.push(el[7]);
-        objRF.vCounterCapriniRF += el[8];
-        objRF.vCounterMajorBleedingScoreRF += el[9];
-        objRF.vCounterTraumBleedingRF += el[10];
-        objRF.vSetRusTraumRF.push(el[11]);
-        objRF.vCounterGreenTop37a += el[12];
-        objRF.vCounterObstBleedingRF += el[13];
-        objRF.vCounterObstRuRF += el[14];
+    tArr.forEach(el => {
+        oRF.sPadua += el[1];
+        oRF.sCHA2DS2_VASс += el[5];
+        oRF.sHAS_BLED += el[6];
+        oRF.aSetRusSurgRF.push(el[7]);
+        oRF.sCaprini += el[8];
+        oRF.sMajorBleed += el[9];
+        oRF.sTraumBleed += el[10];
+        oRF.aSetRusTraumRF.push(el[11]);
+        oRF.sGreenTop37a += el[12];
+        oRF.sObstBleed += el[13];
+        oRF.sObstRusRF += el[14];
     });
 
-    objRF.vSetRusTraumRF.concat(objRF.vSetRusTraumRF, objRF.vSetRusSurgRF);
+    oRF.aSetRusTraumRF.concat(oRF.aSetRusTraumRF, oRF.aSetRusSurgRF);
 
-    objRF.vSetRusSurgRF = objRF.vSetRusSurgRF.filter(function (item, pos) {
-        return objRF.vSetRusSurgRF.indexOf(item) == pos;
+    oRF.aSetRusSurgRF = oRF.aSetRusSurgRF.filter(function (item, pos) {
+        return oRF.aSetRusSurgRF.indexOf(item) == pos;
     });
-    objRF.vSetRusTraumRF = objRF.vSetRusTraumRF.filter(function (item, pos) {
-        return objRF.vSetRusTraumRF.indexOf(item) == pos;
+    oRF.aSetRusTraumRF = oRF.aSetRusTraumRF.filter(function (item, pos) {
+        return oRF.aSetRusTraumRF.indexOf(item) == pos;
     });
 
     function estimateSurgRiskGrade(age, time, kindSurg, risk) {
@@ -75,42 +71,19 @@ module.exports.countKindsRF = (tArr, oP) => {
         return i;
     }
 
-    if (oP_2.isOrNoSurg) {
-        oP_2.gradeOfOper === 1 || oP_2.gradeOfOper === 2 ? objRF.vCounterCapriniRF += 2 : oP_2.gradeOfOper === 3 ? (objRF.vCounterRusSurgRF = 3, objRF.vCounterCapriniRF += 5, objRF.vCounterRusTraumRF = 3) : objRF.vCounterCapriniRF += 1;
-        objRF.vCounterRusSurgRF = estimateSurgRiskGrade(oP_2.age, oP_2.operTimeMore60, oP_2.gradeOfOper, objRF.vSetRusSurgRF.includes(1));
-        objRF.vCounterRusTraumRF = estimateSurgRiskGrade(oP_2.age, oP_2.operTimeMore60, oP_2.gradeOfOper, objRF.vSetRusTraumRF.includes(1));    
+    if (oP.isOrNoSurg) {
+        oP.gradeOfOper === 1 || oP.gradeOfOper === 2 ? oRF.sCaprini += 2 : oP.gradeOfOper === 3 ? (oRF.sRusSurgRFF = 3, oRF.sCaprini += 5, oRF.sRusTraumRF = 3) : oRF.sCaprini += 1;
+        oRF.sRusSurgRFF = estimateSurgRiskGrade(oP.age, oP.operTimeMore60, oP.gradeOfOper, oRF.aSetRusSurgRF.includes(1));
+        oRF.sRusTraumRF = estimateSurgRiskGrade(oP.age, oP.operTimeMore60, oP.gradeOfOper, oRF.aSetRusTraumRF.includes(1));    
     };
 
-    objRF.vSetRusSurgRF.includes(2) && objRF.vCounterRusSurgRF < 3 ? objRF.vCounterRusSurgRF = 2 : '';
-    objRF.vSetRusSurgRF.includes(3) ? objRF.vCounterRusSurgRF = 3 : '';
+    oRF.aSetRusSurgRF.includes(2) && oRF.sRusSurgRFF < 3 ? oRF.sRusSurgRFF = 2 : '';
+    oRF.aSetRusSurgRF.includes(3) ? oRF.sRusSurgRFF = 3 : '';
 
-    objRF.vSetRusTraumRF.indexOf(2) != -1 && objRF.vCounterRusTraumRF < 3 ? objRF.vCounterRusTraumRF = 2: '';
-    objRF.vSetRusTraumRF.indexOf(3) != -1 ? objRF.vCounterRusTraumRF = 3 : '';
+    oRF.aSetRusTraumRF.indexOf(2) != -1 && oRF.sRusTraumRF < 3 ? oRF.sRusTraumRF = 2: '';
+    oRF.aSetRusTraumRF.indexOf(3) != -1 ? oRF.sRusTraumRF = 3 : '';
 
-    objRF.vCounterMajorBleedingScoreRF > 0 ? objRF.vCounterMajorBleedingScoreRF = 1 : '';
-    objRF.vCounterTraumBleedingRF > 0 ? objRF.vCounterTraumBleedingRF = 1 : '';
-
-    // if (oP_2.isOrNoSurg) {
-    //     oP_2.gradeOfOper === 3 ? objRF.vCounterRusSurgRF = 3 : objRF.vCounterRusSurgRF = estimateSurgRiskGrade(oP_2.age, oP_2.operTimeMore60, oP_2.gradeOfOper, objRF.vSetRusSurgRF.includes(1));
-
-    // };
-
-    // objRF.vSetRusSurgRF.includes(2) && objRF.vCounterRusSurgRF < 3 ? objRF.vCounterRusSurgRF = 2 : '';
-    // objRF.vSetRusSurgRF.includes(3) ? objRF.vCounterRusSurgRF = 3 : '';
-
-    // if (oP_2.isOrNoSurg) {
-    //     oP_2.gradeOfOper === 3 ? objRF.vCounterCapriniRF += 5 : (oP_2.gradeOfOper === 1 || oP_2.gradeOfOper === 2) ? objRF.vCounterCapriniRF += 2 : objRF.vCounterCapriniRF += 1;
-    // };
-
-    // if (oP_2.isOrNoSurg) {
-    //     oP_2.gradeOfOper === 3 ? objRF.vCounterRusTraumRF = 3 : objRF.vCounterRusTraumRF = estimateSurgRiskGrade(oP_2.age, oP_2.operTimeMore60, oP_2.gradeOfOper, objRF.vSetRusTraumRF.includes(1));
-    // };
-
-    // (objRF.vSetRusTraumRF.indexOf(2) != -1 && objRF.vCounterRusTraumRF < 3) ? objRF.vCounterRusTraumRF = 2: '';
-    // (objRF.vSetRusTraumRF.indexOf(3) != -1) ? objRF.vCounterRusTraumRF = 3: '';
-
-    // (objRF.vCounterMajorBleedingScoreRF > 0) ? objRF.vCounterMajorBleedingScoreRF = 1: '';
-    // (objRF.vCounterTraumBleedingRF > 0) ? objRF.vCounterTraumBleedingRF = 1: '';
-    // console.log(objRF);
-    return objRF;
+    oRF.sMajorBleed > 0 ? oRF.sMajorBleed = 1 : '';
+    oRF.sTraumBleed > 0 ? oRF.sTraumBleed = 1 : '';
+    return oRF;
 };

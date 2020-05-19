@@ -1,10 +1,15 @@
 $(document).ready(function () {
-    let aLineOfFuncs = [askAssignSheet, askAgreement, askPrintAndSave],
-        vPersonality = confirm('Вы укажете ФИО, № палаты, № истории б-ни пациента?') ? aLineOfFuncs.unshift(askPersonDates) : '',
-        oPat = JSON.parse(localStorage.getItem('Patient')),
+    let aLineOfFuncs = [],
+    oPat = JSON.parse(localStorage.getItem('Patient')),
         oUsr = JSON.parse(localStorage.getItem('User'));
     localStorage.removeItem('Patient');
     console.log(oPat, oUsr);
+
+    $('<div class="modal" tabindex="-1" role="dialog" id="#divModal" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>Вы укажете ФИО, № палаты, № истории б-ни пациента?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnModalYes_1">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnModalNo_1">Нет</button></div></div></div></div>').modal('show');
+    $('#btnModalYes_1').on('click',()=> askPersonDates());
+
+    aLineOfFuncs = [askAssignSheet, askAgreement, askPrintAndSave];
+
     let vAgreement = '',
         vTblAssignSheet = '';
     oPat.pkIsOrNoSurg ? (

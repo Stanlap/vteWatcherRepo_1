@@ -180,8 +180,7 @@ app.get('/vte_drug', auth, (req, res) => {
 
 app.get('/vte_assignment_sheet', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_assignment_sheet.ejs', {
-        title: 'vte Assignment sheet',
-        message: 'vte Assignment sheet'
+        title: 'vte Assignment sheet'
     });
 });
 

@@ -15,7 +15,7 @@ const createCard = (title, ind, content) => {
     <div id="collapse_${ind}" class="collapse ${vIsShow ? '': 'show'}" aria-labelledby="divCHeader_${ind}" data-parent="#accListOp"><div class="card-body"><ul class="list-group list-group-flush">${content}</ul></div></div></div>`);
     vIsShow = true;
 }
-
+// addDatePicker(correctDate(addDays(new Date(), 1)), 1)
 $(`${addDatePicker(formatDate(), 1)}`).appendTo('#divForDate_1');
 
 $('#lblTimeOfSurg').hide();
@@ -89,7 +89,7 @@ $('#txtInvasions').on('input', function () {
 });
 
 function goToRF() {
-
+    oPat.pkDateOfOper = $('#inpDate_1').val();
     if (+$('#selKindOfAnesth option:selected').val() === 3) {
         oPat.pkIsSpinalAnesth = true;
         oPat.pkStandDateITCath = $('#inpDate_2').val();

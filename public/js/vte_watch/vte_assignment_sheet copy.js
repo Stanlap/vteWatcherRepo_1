@@ -7,14 +7,11 @@ $(document).ready(function () {
 
     $('<div class="modal" tabindex="-1" role="dialog" id="#divModal" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>Вы укажете ФИО, № палаты, № истории б-ни пациента?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnModalYes_1">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnModalNo_1">Нет</button></div></div></div></div>').modal('show');
     $('#btnModalYes_1').on('click', () => askPersonDates());
-    $('#btnModalNo_1').on('click', () => askAssignSheet());
 
     let vAgreement = '',
         vTblAssignSheet = '';
-
-        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl)));
-
-    oPat.pkIsOrNoSurg ? (       
+    oPat.pkIsOrNoSurg ? (
+        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl))),
         oPat.aOrdersContainer.push(['компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]),
         oPat.aOrdersContainer.push(['активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]])
     ) : '';
@@ -110,7 +107,6 @@ $(document).ready(function () {
         $('#invitToAct_1').html('Проверьте лист назначений:');
         $('#dialog_0').show();
         $('<table/>').prop({
-            class: 'table table-bordered table-sm table-responsive',
                 id: 'tblAssignSheet',
             })
             .appendTo('#dialog_0');
@@ -121,9 +117,7 @@ $(document).ready(function () {
             .html(`${oUsr.org} ${oUsr.depart}`)
             .appendTo('#tblAssignSheet');
 
-        $('<tbody/>').prop({
-            class: 'table-striped table-hover'
-        })
+        $('<tbody/>')
             .html(`<tr><th colspan="5" contenteditable>Мед. карта: ${oPat.pkMedCard}</th><th colspan="13" contenteditable>Пациент: ${oPat.pkName}</th><th colspan="3" contenteditable>Палата: ${oPat.pkRoom}</th></tr><tr id="trDocTitle"><td id="tdDocTitle" colspan="21">Лист врачебных назначений профилактики ВТЭО</td></tr>`)
             .appendTo('#tblAssignSheet');
 
@@ -141,8 +135,8 @@ $(document).ready(function () {
         };
 
         for (let i = 0; i < 14; i++) {
-            tArD.push(`<td>${(addDays(new Date(), i)).getDate()}</td>`);
-            tArMY.push(`<td>${1 + (addDays(new Date(), i)).getMonth()}/${(addDays(new Date(), i)).getFullYear().toString().slice(2)}</td>`);
+            tArD.push(`<td>${(addDays('2020-04-16', i)).getDate()}</td>`);
+            tArMY.push(`<td>${1 + (addDays('2020-04-16', i)).getMonth()}/${(addDays('2020-04-16', i)).getFullYear().toString().slice(2)}</td>`);
         };
         $('#tblAssignSheet > tbody:last-child').append(`<tr class="trDates"><td id="tdSignTitle" colspan="6" rowspan="2">Назначения:</td><td colspan="1">м./г.</td>${tArMY.join('')}</tr><tr class="trSignature"></td><td colspan="1">День</td>${tArD.join('')}</tr>`);
 
@@ -171,12 +165,11 @@ $(document).ready(function () {
 
     function defineAssignSheet() {
         console.log('defineAssignSheet');
-        $('header, a, p, footer, input, #invitToAct_1').hide();
+        $('a, p, footer, input, #invitToAct_1').hide();
         // vTblAssignSheet = $('body').html();
         vTblAssignSheet = printDoc($('body').html(), 1);
         $('a, p, footer, input, #invitToAct_1').show();
         $('#dialog_0').empty();
-        aLineOfFuncs = [askAgreement, askPrintAndSave];
         clearValues();
         executeFuncsLine();
     }

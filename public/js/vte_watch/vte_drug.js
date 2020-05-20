@@ -1,4 +1,17 @@
 $(document).ready(function () {
+    let vTakesVTEProph = false;
+    const initModal = (quest, ind) => {
+        $(`<div class="modal" tabindex="-1" role="dialog" id="#divModal_${ind}" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>${quest}</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnMYes_${ind}">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnMNo_${ind}">Нет</button></div></div></div></div>`).modal('show');
+    };
+
+    const initAlert = msg => $(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${msg}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`);
+
+
+    initModal('Пациент уже получает антикоагулянтную терапию?', 1);
+    $('#btnMYes_1').on('click', () => {
+        vTakesVTEProph = true;
+    });
+
     let oPat = JSON.parse(localStorage.getItem('Patient')),
         aPairs = [],
         oDrugsPairs = {},
@@ -12,7 +25,6 @@ $(document).ready(function () {
         aStartDatesNative = [],
         aSplitPeriod = [0, 0],
         relDayOfManipul = 0,
-        vTakesVTEProph = false,
         oBridgeTherDrugsList = {
             'Enoxaparin sodium': 'Эноксапарин натрия',
             'Nadroparin calcium': 'Надропарин кальция',
@@ -33,14 +45,6 @@ $(document).ready(function () {
     localStorage.removeItem('Patient');
 
 
-    const initModal = (quest, ind) => {
-        $(`<div class="modal" tabindex="-1" role="dialog" id="#divModal_${ind}" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>${quest}</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnMYes_${ind}">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnMNo_${ind}">Нет</button></div></div></div></div>`).modal('show');
-    };
-
-    initModal('Пациент уже получает антикоагулянтную терапию?', 1);
-    $('#btnMYes_1').on('click', () => {
-        vTakesVTEProph = true;
-    });
 
 
     $('<h5/>').prop({
@@ -253,7 +257,6 @@ $(document).ready(function () {
     function prepareToStart() {
         oDrugsPairs = checkConditions(getObjFromArrPairs(getArrPairs(oDrugsList)));
         aLineOfFuncs.push(askGroupOfMedicine, askNameOfMedicine, askOfficDoseOfMedicine);
-        vTakesVTEProph ? aLineOfFuncs.push(askHadTakenSingleDoseOfMedicine) : '';
         aLineOfFuncs.push(askStartDateMedicineTaking, askEndDateMedicineTaking, askAnotherDrug);
         emptyOChoosDrug();
         clearValues();
@@ -289,8 +292,6 @@ $(document).ready(function () {
 
     function defineGroupOfMedicine() {
         oChoosDrug.titleGroupCyr = $('#select_1').val();
-        vTakesVTEProph = $('#chkHadTakenDrug').is(':checked') ? true : '';
-        console.log(vTakesVTEProph);
         $.each(oDrugsPairs, function (index, value) {
             value === oChoosDrug.titleGroupCyr ? oChoosDrug.titleGroupLat = index : '';
         });
@@ -430,6 +431,8 @@ $(document).ready(function () {
         console.log(oChoosDrug.officDose, oChoosDrug.singleDoseOfAspirin, oChoosDrug.sheduleAspirinTakingDaily);
         console.log(parseFloat($('#select_1').val()));
         makeSignatureOfMedicine(oChoosDrug, oDrugsList[oChoosDrug.titleGroupLat], oChoosDrug.oOfficDose, oChoosDrug.officDose);
+        vTakesVTEProph ? aLineOfFuncs.unshift(askHadTakenSingleDoseOfMedicine) : '';
+
         oChoosDrug.titleGroupCyr === 'Варфарин' ? aLineOfFuncs.unshift(askOfINRAndVKI) : '';
         clearValues();
         executeFuncsLine();
@@ -461,9 +464,7 @@ $(document).ready(function () {
     function defineRealSingleDoseOfMedicine() {
         console.log('defineRealSingleDoseOfMedicine');
         let tRSD = correctEnteredValue($('#inpText_0').val());
-        !isFinite(tRSD) || tRSD === 0 ? (alert(`Вы ввели некорректное значение ${$('#inpText_0').val()}`), $('#inpText_0').val('').focus()) : (oChoosDrug.realSingleDose = correctEnteredValue($('#inpText_0').val()), $('#inpText_0').hide(), $('#inpText_0').off('input'), clearValues(), executeFuncsLine());
-        $('#inpText_0').remove();
-        console.log(oChoosDrug);
+        !isFinite(tRSD) || tRSD === 0 ? (initAlert('Вы ввели некорректное значение').prependTo('#dialog_0'), $('#inpText_0').val('').focus()) : (oChoosDrug.realSingleDose = correctEnteredValue($('#inpText_0').val()), $('#inpText_0').hide(), $('#inpText_0').off('input'), clearValues(), executeFuncsLine(), $('#inpText_0').remove(), $().alert('dispose'));
     }
 
     function correctEnteredValue(el) {
@@ -666,6 +667,7 @@ $(document).ready(function () {
             sheduleMedicineTaking();
         };
         interactOfXaInhibAndVKA();
+        $().alert('dispose');
         clearValues();
         executeFuncsLine();
     }
@@ -826,9 +828,10 @@ $(document).ready(function () {
             oPat.pkINRDates[1] = oPat.pkINRDates[0] + 1;
             console.log(oPat.pkINRDates);
             if (diffDates(new Date(aStartDatesNative[findIndXaInhibitors(aTitles, vInd = -1)]), new Date(aStartDatesNative[aTitles.indexOf('Варфарин')])) < 0) {
-                alert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.')
+
+                initAlert('При переходе с НОАК на АВК стоит иметь в виду, что НОАК влияют на МНО. Для более адекватного определения степени антикоагуляции при одновременном приеме НОАК и АВК МНО необходимо определять непосредственно перед приемом очередной дозы НОАК и через 24 часа после приема последней дозы НОАК.').prependTo('#divMainDialog');
             } else {
-                alert('НОАК  после АВК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.');
+                initAlert('НОАК  после АВК могут быть назначены в этот же или на следующий день при значении МНО 2,0-2,5. Ривароксабан может быть назначен при МНО ≤3,0; эдоксабан – при МНО≤2,5; апиксабан и дабигатран – при МНО ≤2,0. Если значения превышают указанные, повторяют исследование МНО, при достижении указанных показателей назначают препарат.').prependTo('#divMainDialog');
                 $(aChMeds).each((ind, el) => {
                     vXaInhibitors(el.titleGroupCyr) ? el.aLine = [] : '';
                 });
@@ -906,7 +909,7 @@ let vBridge = false;
         });
         // vBridge = confirm('Планируется периоперационная мост-терапия?');
         !vBridge ? (clearValues(), executeFuncsLine()) : (
-            oPat.pkIsSpinalAnesth ? alert('При спинальной анестезии предпочтительно использовать НМГ.') : '',
+            oPat.pkIsSpinalAnesth ? initAlert('При спинальной анестезии предпочтительно использовать НМГ.').prependTo('#divDialogMain') : '',
             $('#invitToAct_1').html('Выберите группу препарата для мост-терапии:'),
             $('#dialog_1').show(),
             oDrugsList['Bemiparinum natrium'].drugs.hasOwnProperty('Zibor 2500') ? (delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'],
@@ -923,6 +926,7 @@ let vBridge = false;
 
     function defineBridgeTherUsage() {
         console.log('defineBridgeTherUsage');
+        $().alert('dispose');
         oPat.pkBridgeTherMedGroup = $('#select_1 :selected').val();
         console.log(oPat.pkBridgeTherMedGroup);
         sheduleMedicineTaking();
@@ -1030,7 +1034,7 @@ let vBridge = false;
             id: 'dialog_5',
         }).appendTo('#dialog_4');
         $(aTLine).each(function (ind, el) {
-            $(`<br><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id = "chkTest_${ind}"><label class="custom-control-label" id="lblIsOrNoSurg" for="chkTest_${ind}">${el[0]}</label></div>`).appendTo('#dialog_5');
+            $(`<br><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id = "chkTest_${ind}"><label class="custom-control-label" id="chkTest_${ind}" for="chkTest_${ind}">${el[0]}</label></div>`).appendTo('#dialog_5');
 
 
             // $('<br>').appendTo('#dialog_5');
@@ -1053,8 +1057,10 @@ let vBridge = false;
 
 
     function definePrevLabExams() {
+        console.log('definePrevLabExams');
+        console.log(oPat.pkIncludeWeekends);
         let aTTCyr = [];
-        $('#dialog_5 input:checked').each((ind, el) => aTTCyr.push(el.value));
+        $('#dialog_5 input:checked').each((ind, el) => aTTCyr.push($(el).next().text()));
         if (aTTCyr.length > 0) {
             oPat.pkStartDateOfPrevAnalysis = $('#inpDate_4').val();
             oPat.pkDaysSincePrevAnalysisToStartVTEProph = Math.round(diffDates(new Date(aStartDates[0]), new Date($('#inpDate_4').val())));
@@ -1064,13 +1070,14 @@ let vBridge = false;
                 console.log(el);
             });
         };
-        aTLine = !oPat.pkIncludeWeekends ? takeIntoConsiderationWeekend(aTLine) : '';
+        aTLine = !oPat.pkIncludeWeekends ? takeIntoConsiderationWeekend(aTLine) : aTLine;
+        console.log(aTLine);
         oPat.aOrdersContainer = oPat.aOrdersContainer.concat(aTLine);
         // $('#dialog_5').remove();
         // clearValues();
         // executeFuncsLine();
         // console.log(aTLine);
-        // console.log(oPat.aOrdersContainer);
+        console.log(oPat.aOrdersContainer);
         goToAssignSheet();
 
     }

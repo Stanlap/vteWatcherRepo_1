@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "minimist": ">=1.2.3"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "ejs": "^3.0.1",

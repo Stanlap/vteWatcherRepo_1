@@ -1,35 +1,35 @@
-let objUser = {};
+let oUser = {};
 $('#btn1').on('click', function () {
 
-    objUser.name = $('#name').val();
-    objUser.patronymic = $('#patronymic').val();
-    objUser.surname = $('#surname').val();
-    objUser.chief = $('#chief').val();
-    objUser.org = $('#org').val();
-    objUser.depart = $('#depart').val();
-    objUser.signature = (objUser.name + objUser.patronymic + objUser.surname).match(/[А-Я]/g).join('');
-    objUser.surnameAndInitials = (`${objUser.surname} ${(objUser.name).match(/[А-Я]/g)}. ${(objUser.patronymic).match(/[А-Я]/g)}.`);
+    oUser.name = $('#name').val();
+    oUser.patronymic = $('#patronymic').val();
+    oUser.surname = $('#surname').val();
+    oUser.chief = $('#chief').val();
+    oUser.org = $('#org').val();
+    oUser.depart = $('#depart').val();
+    oUser.signature = (oUser.name + oUser.patronymic + oUser.surname).match(/[А-Я]/g).join('');
+    oUser.surnameAndInitials = (`${oUser.surname} ${(oUser.name).match(/[А-Я]/g)}. ${(oUser.patronymic).match(/[А-Я]/g)}.`);
 
-    let serialObj = JSON.stringify(objUser);
+    let serialObj = JSON.stringify(oUser);
     localStorage.removeItem('User');
     localStorage.setItem('User', serialObj);
-    alert(`User ${objUser.surnameAndInitials} has creared!`);
+    alert(`User ${oUser.surnameAndInitials} has creared!`);
     this.form.reset();
 });
 
 $('#btn3').on('click', function () {
     localStorage.getItem('User') ? (
-        objUser = JSON.parse(localStorage.getItem('User')),
-        $('#name').val(objUser.name),
-        $('#patronymic').val(objUser.patronymic),
-        $('#surname').val(objUser.surname),
-        $('#chief').val(objUser.chief),
-        $('#org').val(objUser.org),
-        $('#depart').val(objUser.depart)
+        oUser = JSON.parse(localStorage.getItem('User')),
+        $('#name').val(oUser.name),
+        $('#patronymic').val(oUser.patronymic),
+        $('#surname').val(oUser.surname),
+        $('#chief').val(oUser.chief),
+        $('#org').val(oUser.org),
+        $('#depart').val(oUser.depart)
     ) : '';
 });
 
 $('#btn4').on('click', function () {
-    alert(`User ${objUser.surnameAndInitials} deleted!`);
+    alert(`User ${oUser.surnameAndInitials} deleted!`);
     localStorage.removeItem('User');
 });

@@ -86,6 +86,13 @@ app.get('/logout', (req, res) => {
     foundedUser = {};
 });
 
+app.get('/chat', (req, res) => {
+    res.render('chat', {
+        title: 'Chat page'
+    });
+});
+
+
 const auth = (req, res, next) => {
     if (req.isAuthenticated()) {
         next()

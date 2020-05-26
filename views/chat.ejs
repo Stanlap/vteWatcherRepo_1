@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+
+<body> <%- include('partials/header_1') %>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col bg-secondary">
+            </div>
+            <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+                <br>
+                <div class="bg-secondary text-white justify-content-start">
+                    <p class="mb-0" id="pStatus"></p>
+                </div>
+                    <ul class="list-group" id="ulMsgs"></ul></ul>
+                <form id="frmMsg">
+                    <div class="form-group">
+                        <label for="inpName">
+                            <h5>Создать сообщение</h5>
+                        </label>
+                        <input type="text" class="form-control" id="inpName" placeholder="Укажите имя" required
+                            autofocus autocomplete="off">
+                        <div class="form-group">
+                            <label for="taMsg"></label>
+                            <textarea class="form-control" id="taMsg" cols="30" rows="5"
+                                placeholder="Текст сообщения..."></textarea>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col bg-secondary">
+            </div>
+        </div>
+    </div>
+    <style>
+        #pStatus {
+            color: #0F0;
+        }
+    </style>
+    <%- include('partials/footer') %>
+    <%- include('partials/scripts') %>
+    <script src="/js/chat_2.js"></script>
+</body>
+<html>

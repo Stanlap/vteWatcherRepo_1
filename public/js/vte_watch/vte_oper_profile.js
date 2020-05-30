@@ -79,7 +79,7 @@ $('span.comments').on('click', function () {
 });
 
 $('#selKindOfAnesth').on('input', () => {
-    +$('#selKindOfAnesth option:selected').val() === 3 ? ($(`<br><span>Дата установки катетера</span>${addDatePicker($('#inpDate_1').val(), 2)}`).appendTo('#divForDate_2'), $(`<span>Дата удаления катетера</span>${addDatePicker($('#inpDate_1').val(), 3)}<br>`).appendTo('#divForDate_2')) : $('#divForDate_2').empty();
+    +$('#selKindOfAnesth option:selected').val() === 3 ? ($(`<br><span>Дата установки катетера</span>${addDatePicker($('#inpDate_1').val(), 2)}`).appendTo('#divForDate_2'), $(`<span>Дата удаления катетера</span>${addDatePicker($('#inpDate_1').val(), 3)}`).appendTo('#divForDate_2')) : $('#divForDate_2').empty();
 });
 
 $('#txtInvasions').on('input', function () {
@@ -114,13 +114,13 @@ console.log(aOperDifficultyGrades, oPat.pkAllChoosedOperations);
 oPat.oSelOp = {
 pkArtroplastyHipJoint: oPat.pkAllChoosedOperations.includes(' эндопротезирование тазобедренного сустава')? true: false,
 pkArtroplastyKneeJoint: oPat.pkAllChoosedOperations.includes(' эндопротезирование коленного сустава')? true: false,
-pkArthroscopicSurgery: oPat.pkAllChoosedOperations.includes(' эндоскопические операции на суставах нижней конечности')? true: false,
-pkShinFractureSurgery: oPat.pkAllChoosedOperations.includes(' остеотомии и остеосинтез голени')? true: false,
+// pkArthroscopicSurgery: oPat.pkAllChoosedOperations.includes(' эндоскопические операции на суставах нижней конечности')? true: false,
+// pkShinFractureSurgery: oPat.pkAllChoosedOperations.includes(' остеотомии и остеосинтез голени')? true: false,
 pkHipFractureSurgery: oPat.pkAllChoosedOperations.includes(' операции при переломах бедра')? true: false,
 pkLiverResection: oPat.pkAllChoosedOperations.includes(' резекция печени')? true: false,
 pkPancreatoDuodResection: oPat.pkAllChoosedOperations.includes(' панкреатодуоденальная резекция')? true: false,
 pkPulmonectomy: oPat.pkAllChoosedOperations.includes(' пульмонэктомия или расширенная резекция легкого')? true: false,
-pkLaparoscopicIntervention: oPat.pkAllChoosedOperations.includes(' лапароскопическое вмешательство (длительностью > 45 мин.)')? true: false,
+// pkLaparoscopicIntervention: oPat.pkAllChoosedOperations.includes(' лапароскопическое вмешательство (длительностью > 45 мин.)')? true: false,
 
 pkBrainOrSpinalCordSurg: oPat.pkAllChoosedOperations.includes(' операции на головном и спинном мозге')? true: false
 };

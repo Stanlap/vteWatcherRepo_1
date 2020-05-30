@@ -7,7 +7,7 @@
     <div class="row h-100">
       <div class="col bg-secondary">
       </div>
-      <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+      <div class="wCol col-10 col-sm-10 col-md-8 col-lg-6 col-xl-5">
         <%- include('../partials/header_prog') %>
         <div id="divOper">
           <button type="button" class="btn btn-primary btn-lg btn-block" id="btnChooseOp">Выбрать операцию из
@@ -35,7 +35,7 @@
                   травматичная. Длительность &gt; 60 минут</span>
               </label>
             </div>
-            <br>
+            <br><br>
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="chkTimeOfSurg" value='1000000000000000'>
               <label class="custom-control-label" id="lblTimeOfSurg" for="chkTimeOfSurg">
@@ -64,10 +64,11 @@
           <div class="col-7" id="divForDate_2">
           </div><br>
         </div>
-        <input type="text" class="form-control" placeholder="Инвазивная манипуляция (название)" list="lstInvasions" id="txtInvasions">
+        <input type="text" class="form-control" placeholder="Инвазивная манипуляция (название)" list="lstInvasions"
+          id="txtInvasions">
         <datalist id="lstInvasions">
           <option value="Центральный венозный доступ"></option>
-          <option value="Пункция паренхиматозного органа"></option>
+          <option value="Биопсия паренхиматозного органа"></option>
           <option value="Артериальный катетер"></option>
         </datalist>
         <br>
@@ -75,6 +76,11 @@
         </div>
         <br>
         <button type="button" class="btn btn-primary" id="btnOne">Принять</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
       </div>
       <div class="col bg-secondary">
       </div>

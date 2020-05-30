@@ -49,6 +49,11 @@ app.get('/registration', (req, res) => {
         passMessage: 'Пароль допускает строчные и прописные латинские буквы, цифры, спецсимволы. Минимум 8 знаков.'
     });
 });
+app.get('/aboutUs', (req, res) => {
+    res.render('aboutUs', {
+        title: 'About Us Page',
+    });
+});
 app.post('/login', (req, res, next) => {
     passport.authenticate('local', function (err, user) {
         if (err) {
@@ -130,6 +135,11 @@ app.get('/programs', auth, (req, res) => {
     });
 });
 
+app.get('/vte_reference', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_reference', {
+        title: 'vte Watcher Reference Page',
+    });
+});
 app.get('/vte_patient_profile', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_patient_profile', {
         title: 'vte Watcher Patient Profile Page',

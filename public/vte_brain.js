@@ -71,12 +71,12 @@ tArr_2.forEach(el => {
         return i;
     }
 
-    if (oP.isOrNoSurg) {
-        oP.gradeOfOper === 1 || oP.gradeOfOper === 2 ? oRF.sCaprini += 2 : oP.gradeOfOper === 3 ? (oRF.sRusSurgRFF = 3, oRF.sCaprini += 5, oRF.sRusTraumRF = 3) : oRF.sCaprini += 1;
-        oRF.sRusSurgRFF = estimateSurgRiskGrade(oP.age, oP.operTimeMore60, oP.gradeOfOper, oRF.aSetRusSurgRF.includes(1));
-        oRF.sRusTraumRF = estimateSurgRiskGrade(oP.age, oP.operTimeMore60, oP.gradeOfOper, oRF.aSetRusTraumRF.includes(1));    
+    if (oP[1]) {
+        +oP[3] === 1 || +oP[3] === 2 ? oRF.sCaprini += 2 : +oP[3] === 3 ? (oRF.sRusSurgRFF = 3, oRF.sCaprini += 5, oRF.sRusTraumRF = 3) : oRF.sCaprini += 1;
+        oRF.sRusSurgRFF = estimateSurgRiskGrade(+oP[0], oP[2], +oP[3], oRF.aSetRusSurgRF.includes(1));
+        oRF.sRusTraumRF = estimateSurgRiskGrade(+oP[0], oP[2], +oP[3], oRF.aSetRusTraumRF.includes(1));    
     };
-
+console.log(+oP[3], oRF.sCaprini);
     oRF.aSetRusSurgRF.includes(2) && oRF.sRusSurgRFF < 3 ? oRF.sRusSurgRFF = 2 : '';
     oRF.aSetRusSurgRF.includes(3) ? oRF.sRusSurgRFF = 3 : '';
 

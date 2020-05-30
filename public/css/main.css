@@ -1,7 +1,15 @@
-﻿html,body {
-height: 100%;
+﻿html,
+body {
+    height: 100%;
 }
-.preReference,.reference
-{
+
+.preReference,
+.reference {
     cursor: help
+}
+
+@media (min-width: 650px) {
+    .wCol {
+        max-width: 650px;
+    }
 }

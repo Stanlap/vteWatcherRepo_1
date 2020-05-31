@@ -4,8 +4,7 @@ let oPat = JSON.parse(localStorage.getItem('Patient'));
 console.log(oPat);
 oPat.pkHighRiskOfBleed = false;
 
-
-oSc.sIMPROVE > 7 || oSc.sHAS_BLED > 2 || oSc.sMajorBleed > 0 || oSc.sTraumBleed > 0 || oSc.sObstBleed > 2 ? oPat.pkRiskBleed = 1 : oPat.pkRiskBleed = 0;
+oPat.pkRiskBleed = oSc.sIMPROVE > 7 || oSc.sHAS_BLED > 2 || oSc.sMajorBleed > 0 || oSc.sTraumBleed > 0 || oSc.sObstBleed > 2 ?  1 : 0;
 
 const ballsEnding = item => {
     return item === 1 ? 'балл' : item > 1 && item < 5 ? 'балла' : 'баллов';
@@ -24,16 +23,16 @@ function countStratRF(vCounterRF, vScaleTitle) {
             vCounterRF > 2 ? vStratRF = 'высокий' : vStratRF = 'низкий';
             return vStratRF;
         case 'CHA2DS2_VASсOrRusSurgOrTraumRF':
-            vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : vStratRF = 'высокий';
+            vCounterRF == 0 ? vStratRF = 'низкий' : vCounterRF >= 1 && vCounterRF <= 2 ? vStratRF = 'умеренный' : vStratRF = 'высокий';
             return vStratRF;
         case 'Caprini':
-            vCounterRF == 0 ? vStratRF = 'низкий' : (vCounterRF >= 1 && vCounterRF <= 2) ? vStratRF = 'умеренный' : (vCounterRF >= 3 && vCounterRF <= 4) ? vStratRF = 'высокий' : vStratRF = 'очень высокий';
+            vCounterRF == 0 ? vStratRF = 'низкий' : vCounterRF >= 1 && vCounterRF <= 2 ? vStratRF = 'умеренный' : vCounterRF >= 3 && vCounterRF <= 4 ? vStratRF = 'высокий' : vStratRF = 'очень высокий';
             return vStratRF;
         case 'SurgOrTraumBleedingRF':
             vCounterRF >= 1 ? vStratRF = 'высокий' : vStratRF = 'низкий';
             return vStratRF;
         case 'GreenTop37aRus':
-            (vCounterRF === 1) ? vStratRF = 'умеренный': (vCounterRF > 1) ? vStratRF = 'высокий' : vStratRF = 'низкий';
+            vCounterRF === 1 ? vStratRF = 'умеренный': vCounterRF > 1 ? vStratRF = 'высокий' : vStratRF = 'низкий';
             return vStratRF;
     }
 }
@@ -49,14 +48,6 @@ oPat.pkAllChoosedOperations ? $('<p>', {
 $('<div/>').prop({'id': 'divT_2'}).text('Шкалы риска ВТЭО:').appendTo('.textContainer').hide();
 
 $('<div/>').prop({'id': 'divT_3'}).text('Шкалы риска кровотечения при профилактике ВТЭО:').appendTo('.textContainer').hide();
-
-// oSc.sPadua = 4;
-// oSc.sCHA2DS2_VASс = 2;
-// oSc.sCaprini = 3;
-// oSc.sRusSurgRF = 2;
-// oSc.sRusTraumRF = 3;
-// sGreenTop37a = 1;
-// oSc.sObstRusRF = 1;
 
 const makeScale = (sVal, sName, sExactName, par) => 
 $('<p>', {text : `Шкала ${sName}: ${sVal} ${ballsEnding(sVal)}. Риск ${countStratRF(sVal, sExactName)}.`}).appendTo(par);
@@ -84,30 +75,15 @@ $('<p>', {text: `... в акушерстве-гинекологии: ${oSc.sObst
 
 $('#divT_3').children().length && oPat.pkCalculateRiskOfBleeding ? ($('#divT_3').show(), oPat.pkHighRiskOfBleed = true) : '';
 
-// !oPat.pkGeneralListOfRF.length && !oPat.pkAllChoosedOperations.length ? 
-// $('<p>', {
-//     text: (`Риск ВТЭО низкий. Медикаментозная профилактика не показана.`)
-// }).appendTo($('.textContainer')): '';
-
-// $('#divT_2').children().length && oPat.pkRiskVTE === 0 ? $('#pBestConclusion').show() : '';
-
 $('.textContainer p:contains("высокий")').addClass('text-danger');
 $('.textContainer p:contains("умеренный")').addClass('text-warning');
-
-// var myList = document.getElementById("tCont").textContent;
-// console.log(myList);
-// var myP = document.getElementById("tCont");
-// console.log(myP.innerText);
-
 
 oPat.pkMainProfile = 1;
 
 function getMainMedProfile() {
     let arrStratRF = [0, 0, 0, [0, 0], 0];
     oSc.sPadua > 3 ? arrStratRF[1] = 2 : '';
-    if (oPat.pkMedProfiles.includes(2)) {
-        oSc.sCHA2DS2_VASс > 0 ? arrStratRF[2] = 2 : '';
-    };
+    oPat.pkMedProfiles.includes(2) && oSc.sCHA2DS2_VASс > 0 ? arrStratRF[2] = 2 : '';
     if (oPat.pkIsOrNoSurg) {
         oSc.sRusSurgRF >= 1 && oSc.sRusSurgRF <= 2 ? arrStratRF[3][0] = 1 : oSc.sRusSurgRF >= 3 ? arrStratRF[3][0] = 2 : '';
         oSc.sCaprini === 2 ? arrStratRF[3][1] = 1 : oSc.sCaprini >= 3 ? arrStratRF[3][1] = 2 : '';
@@ -141,12 +117,12 @@ console.log(oPat.pkRiskVTE);
 $('#btnOne').on('click', function(){
     let VTEProphylDecision = false;
     if(oPat.pkHighRiskOfBleeding){
-        VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить мед. профилактику ВТЭО?');
+        VTEProphylDecision = confirm('Риск кровотечения высокий. Отменить медикаментозную профилактику ВТЭО?');
     };
     if(oPat.pkRiskVTE > 0){
             VTEProphylDecision ? $(location).attr('href', '/vte_assignment_sheet') :$(location).attr('href', '/vte_drug');
     }else{
         $(location).attr('href', '/vte_assignment_sheet');
     };
-        oPat.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
+        // oPat.pkRiskVTE > 0 ? $(location).attr('href', '/vte_drug') : alert('Переходим к листу профилактики ВТЭО.');        
 });

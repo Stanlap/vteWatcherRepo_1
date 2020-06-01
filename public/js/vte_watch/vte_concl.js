@@ -66,6 +66,8 @@ $('#divT_2').children().length ? $('#divT_2').show() : '';
 
 vPar = '#divT_3';
 
+
+
 oSc.sIMPROVE > 7 && oPat.pkMedProfiles.includes(1) ? makeScale(oSc.sIMPROVE, 'IMPROVE', 'IMPROVE', vPar): '';
 oSc.sHAS_BLED > 2 && oPat.pkMedProfiles.includes(2) ? makeScale(oSc.sHAS_BLED, 'HAS-BLED', 'HAS_BLED', vPar): '';
 oSc.sMajorBleed > 0 && oPat.pkAllSurgProfiles == true ? makeScale(oSc.sMajorBleed, 'Major Bleeding Score', 'SurgOrTraumBleedingRF', vPar): '';

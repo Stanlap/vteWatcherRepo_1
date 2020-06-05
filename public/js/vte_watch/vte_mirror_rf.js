@@ -105,11 +105,11 @@ function creatMirrorRF() {
 
     // Anemia
 
-    aLi.push(createLi('cls9RF', 'liHbLess_100', '1000000100000000', ' Hb &lt; 100 г/л'));
+    aLi.push(createLi('cls9RF cls2BRF', 'liHbLess_100', '1000000100000000', ' Hb &lt; 100 г/л'));
 
     aLi.push(createLi('cls10RF clsObstComorbidities', '', '1000000000000000', ' серповидноклеточная анемия'));
 
-    createCard('cls9RF cls10RF', '1000000000000000', 'анемия', vCardCounter, aLi.join(''));
+    createCard('cls9RF cls10RF cls2BRF', '1000000000000000', 'анемия', vCardCounter, aLi.join(''));
     
     // Thrombophilia
 
@@ -299,7 +299,7 @@ function creatMirrorRF() {
     
     // Bleeding
 
-    aLi.push(createLi('cls1BRF', '', '104.000000000000', ' кровотечения', ' &lt; чем за 3 мес до госпитализации'));
+    aLi.push(createLi('cls1BRF', '', '104.000000000000', ' кровотечения &lt; чем за 3 мес до госпитализации'));
 
     aLi.push(createLi('cls3BRF_1 cls10BRF', '', '1000000001000100', ' продолжающееся активное кровотечение'));
 

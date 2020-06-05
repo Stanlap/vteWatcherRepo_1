@@ -13,7 +13,7 @@ $(document).ready(function () {
         vTblAssignSheet = '';
 
         relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl)));
-
+        oPat.aOrdersContainer =[];
     oPat.pkIsOrNoSurg ? (       
         oPat.aOrdersContainer.push(['компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]),
         oPat.aOrdersContainer.push(['активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]])
@@ -110,21 +110,15 @@ $(document).ready(function () {
         $('#invitToAct_1').html('Проверьте лист назначений:');
         $('#dialog_0').show();
         $('<table/>').prop({
-            class: 'table table-bordered table-sm table-responsive',
+            class: 'table table-bordered table-sm table-responsive table-striped table-hover',
                 id: 'tblAssignSheet',
             })
             .appendTo('#dialog_0');
 
-        $('<caption/>').prop({
-                id: 'tblAssignSheet'
-            })
-            .html(`${oUsr.org} ${oUsr.depart}`)
+        $('<caption/>').html(`${oUsr.org} ${oUsr.depart}`)
             .appendTo('#tblAssignSheet');
 
-        $('<tbody/>').prop({
-            class: 'table-striped table-hover'
-        })
-            .html(`<tr><th colspan="5" contenteditable>Мед. карта: ${oPat.pkMedCard}</th><th colspan="13" contenteditable>Пациент: ${oPat.pkName}</th><th colspan="3" contenteditable>Палата: ${oPat.pkRoom}</th></tr><tr id="trDocTitle"><td id="tdDocTitle" colspan="21">Лист врачебных назначений профилактики ВТЭО</td></tr>`)
+        $('<tbody/>').html(`<tr><td colspan="21">Лист врачебных назначений профилактики ВТЭО</td></tr><tr><th colspan="5" contenteditable>Мед. карта: ${oPat.pkMedCard}</th><th colspan="13" contenteditable>Пациент: ${oPat.pkName}</th><th colspan="3" contenteditable>Палата: ${oPat.pkRoom}</th></tr>`)
             .appendTo('#tblAssignSheet');
 
         let tArD = [],
@@ -171,10 +165,10 @@ $(document).ready(function () {
 
     function defineAssignSheet() {
         console.log('defineAssignSheet');
-        $('header, a, p, footer, input, #invitToAct_1').hide();
+        $('header, a, p, footer, input, #invitToAct_1, button').hide();
         // vTblAssignSheet = $('body').html();
         vTblAssignSheet = printDoc($('body').html(), 1);
-        $('a, p, footer, input, #invitToAct_1').show();
+        $('header, a, p, footer, input, #invitToAct_1, button').show();
         $('#dialog_0').empty();
         aLineOfFuncs = [askAgreement, askPrintAndSave];
         clearValues();
@@ -185,10 +179,10 @@ $(document).ready(function () {
         console.log('askAgreement');
         $('#invitToAct_1').html('Проверьте текст согласия на профилактику ВТЭО:');
         $('#dialog_0').show();
-        $('<textarea/>').prop({
+        $('<div/>').prop({
             contenteditable: true,
             id: 'taDialog_0'
-        }).html(fillAgreement()).appendTo('#dialog_0');
+        }).css({'overflow': 'auto'}).html(fillAgreement()).appendTo('#dialog_0');
         $('#btnOne').on('click', defineAgreement);
     }
 
@@ -202,10 +196,9 @@ $(document).ready(function () {
     }
 
     function fillAgreement() {
-        return `        СОГЛАСИЕ ПАЦИЕНТА НА ПРЕДЛОЖЕННЫЙ ПЛАН
-        ПРОФИЛАКТИКИ ТРОМБОЭМБОЛИИ ЛЕГОЧНОЙ АРТЕРИИ
-        Приложение к медицинской карте N ${oPat.pkMedCard ? oPat.pkMedCard: '_______'}
-        Я,
+        return `<p>СОГЛАСИЕ ПАЦИЕНТА НА ПРЕДЛОЖЕННЫЙ ПЛАН
+        ПРОФИЛАКТИКИ ТРОМБОЭМБОЛИИ ЛЕГОЧНОЙ АРТЕРИИ</p>Приложение к медицинской карте N ${oPat.pkMedCard ? oPat.pkMedCard: '_______'}
+        <P>Я,
         ${oPat.pkName ? oPat.pkName : '________________________________________________________'}
         получил  разъяснения  по  поводу  необходимости  профилактики тромбоэмболии
         легочной  артерии,  информацию  об  особенностях,  длительности  течения  и
@@ -216,9 +209,9 @@ $(document).ready(function () {
         Я извещен, что несоблюдение рекомендаций врача может осложнить лечение и отрицательно сказаться на состоянии здоровья.
         Я извещен о возможном течении заболевания при отказе от профилактики тромбоэмболии легочной артерии.
         Я имел возможность задать любые интересующие меня вопросы, касающиеся состояния моего здоровья, профилактики тромбоэмболии легочной артерии, получил на них удовлетворяющие меня ответы.
-        Я получил информацию об альтернативных методах профилактики, а также об их примерной стоимости.
+        Я получил информацию об альтернативных методах профилактики, а также об их примерной стоимости.</P>
         Беседу провел врач ${oUsr.surnameAndInitials} (_______________)      ${convertDateToRuFormat(new Date())} г.
-        Пациент ${oPat.pkName ? oPat.pkName: '__________________________________'} (_______________)      ${convertDateToRuFormat(new Date())} г.`;
+        <p>Пациент ${oPat.pkName ? oPat.pkName: '__________________________________'} (_______________)      ${convertDateToRuFormat(new Date())} г.</p>`;
     }
 
 
@@ -239,35 +232,37 @@ $(document).ready(function () {
     function askPrintAndSave() {
         console.log('askPrintAndSave');
         $('#invitToAct_1').html('Дальнейшие действия с документами:');
-        $('#dialog_0').show();
-        $('<label/>').attr({
-            for: 'chkB_0'
-        }).html('Распечатать').appendTo('#dialog_0');
-        $('<input/>').prop({
-            id: 'chkB_0',
-            type: 'checkbox',
-            checked: 'checked'
-        }).appendTo('#dialog_0');
-        $('<br>').appendTo('#dialog_0');
-        $('<label/>').attr({
-            for: 'chkB_1'
-        }).html('Сохранить').appendTo('#dialog_0');
-        $('<input/>').prop({
-            id: 'chkB_1',
-            type: 'checkbox'
-        }).appendTo('#dialog_0');
+        // $('#dialog_0').show();
+        // $('<label/>').attr({
+        //     for: 'chkB_0'
+        // }).html('Распечатать').appendTo('#dialog_0');
+        // $('<input/>').prop({
+        //     id: 'chkB_0',
+        //     type: 'checkbox',
+        //     checked: 'checked'
+        // }).appendTo('#dialog_0');
+        // $('<br>').appendTo('#dialog_0');
+        // $('<label/>').attr({
+        //     for: 'chkB_1'
+        // }).html('Сохранить').appendTo('#dialog_0');
+        // $('<input/>').prop({
+        //     id: 'chkB_1',
+        //     type: 'checkbox'
+        // }).appendTo('#dialog_0');
+        $('#btnOne').text('Печать');
         $('#btnOne').on('click', definePrintAndSave);
     }
 
     function definePrintAndSave() {
         console.log('definePrintAndSave');
-        $('#chkB_0').prop('checked') ? (vTblAssignSheet.print(), printDoc(vAgreement)) : '';
+        vTblAssignSheet.print();
+        printDoc(vAgreement);
         $('#if_1').remove();
-        $('#chkB_1').prop('checked') ? '' : '';
-        $('#dialog_0').empty();
+        // $('#chkB_1').prop('checked') ? '' : '';
+        // $('#dialog_0').empty();
         clearValues();
-        executeFuncsLine();
-
+        // executeFuncsLine();
+        $(location).attr('href', '/vte_patient_profile');
     }
     // $('<div/>').prop({
     //     id: 'to_print',
@@ -290,42 +285,42 @@ $(document).ready(function () {
 
 
 
-    if (window.webkitRequestFileSystem) {
-        console.log("fileSystem api  поддерживается!");
-    } else {
-        console.log("fileSystem api не поддерживается!");
+    // if (window.webkitRequestFileSystem) {
+    //     console.log("fileSystem api  поддерживается!");
+    // } else {
+    //     console.log("fileSystem api не поддерживается!");
 
-        function error(err) {
-            console.log(err);
-        }
+    //     function error(err) {
+    //         console.log(err);
+    //     }
 
-        function success(file) {
-            var fileSystem = file.root.createReader();
-            fileSystem.readEntries(function (results) {
-                console.log(results);
-            });
+    //     function success(file) {
+    //         var fileSystem = file.root.createReader();
+    //         fileSystem.readEntries(function (results) {
+    //             console.log(results);
+    //         });
 
-        }
+    //     }
 
-        window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, success, error);
-        var fileSystem = file.root.createReader();
+    //     window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, success, error);
+    //     var fileSystem = file.root.createReader();
 
-        function createFile(name, content, type) {
-            window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, function (file) {
-                var strblob = new Blob([content], {
-                    type: type
-                });
-                file.root.getFile(name, {
-                    create: true
-                }, function (fileEntry) {
-                    fileEntry.createWriter(function (fileWriter) {
-                        fileWriter.write(strblob);
-                        console.log(fileEntry.toURL());
-                    }, error);
-                }, error);
-            }, error);
-        }
+    //     function createFile(name, content, type) {
+    //         window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, function (file) {
+    //             var strblob = new Blob([content], {
+    //                 type: type
+    //             });
+    //             file.root.getFile(name, {
+    //                 create: true
+    //             }, function (fileEntry) {
+    //                 fileEntry.createWriter(function (fileWriter) {
+    //                     fileWriter.write(strblob);
+    //                     console.log(fileEntry.toURL());
+    //                 }, error);
+    //             }, error);
+    //         }, error);
+    //     }
 
-        createFile("test.html", "<h1>Секретная страница fileSystem api! Тссс...</h1>", "text/html");
-    }
+    //     createFile("test.html", "<h1>Секретная страница fileSystem api! Тссс...</h1>", "text/html");
+    // }
 });

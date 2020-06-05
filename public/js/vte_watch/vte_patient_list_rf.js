@@ -105,7 +105,7 @@ function countRF() {
 
     aRFVal.push(oPat.pkGender === 1 ? '101.000000000000' : '10000100000000000');
     $('#ulIsAcuteInflamDiseaseOrInf').hasClass('btn-secondary') && $('#ulIsRestrictedMobility').hasClass('btn-secondary') ? aRFVal.push('1000000200000000') : '';
-    ($('.liSevereRenalInsuff_2').hasClass('list-group-item-secondary') || oPat.pkGFR < 30) ? aRFVal.push('1000001000000000'): '';
+    $('.liSevereRenalInsuff_2').hasClass('list-group-item-secondary') ? aRFVal.push('1000001000000000'): '';
     $('#ulIsTraum, #ulLargeOperIn30Days').hasClass('btn-secondary') ? aRFVal.push('1200000000000000') : '';
     ($('#ulIsHeartInsuff').hasClass('btn-secondary') || $('.liLungDiseases_1').hasClass('list-group-item-secondary')) ? aRFVal.push('1100000000000000') : '';
     $('.liSevereRenalInsuff_1').hasClass('list-group-item-secondary') || $('#ulIsLiverFailure').hasClass('btn-secondary') ? aRFVal.push('1000000001000000') : '';
@@ -143,9 +143,9 @@ function countRF() {
     if (oPat.pkIsOrNoSurg) {
         oPat.oSelOp.pkArtroplasty ? aRFVal.push('1000000300000000') : '';
         oPat.oSelOp.pkHipFractureSurgery ? aRFVal.push('1000000300000000') : '';
-        oPat.oSelOp.pkLiverResection ? aRFVal.push('10000000000000001') : '';
+        oPat.oSelOp.pkLiverResection ? aRFVal.push('10000000010000001') : '';
         oPat.oSelOp.pkPancreatoDuodResection ? aRFVal.push('1000000001000000') : '';
-        oPat.oSelOp.pkPulmonectomy ? aRFVal.push('10000000000000001') : '';
+        oPat.oSelOp.pkPulmonectomy ? aRFVal.push('10000000010000001') : '';
         oPat.oSelOp.pkHeartSurgery ? aRFVal.push('1000000001000000') : '';
         oPat.oSelOp.pkBrainOrSpinalCordSurg ? aRFVal.push('1000000001000000') : '';
         oPat.oSelOp.pkElectiveCSection ? aRFVal.push('1000000000001000') : '';
@@ -153,7 +153,6 @@ function countRF() {
     }
 
     oPat.pkGeneralListOfRF = [];
-
 
     if (oPat.pkAge > 35) {
         aRFVal.push('1000000000001010');
@@ -173,7 +172,6 @@ function countRF() {
     oPat.pkAge >= 75 ? aRFVal.push('1000020030000000') : '';
     oPat.pkAge >= 85 ? aRFVal.push('103.500000000000') : '';
 
-
     oPat.pkBMI > 25 ? (aRFVal.push('1000000010000000'), oPat.pkGeneralListOfRF.push(` ${oPat.pkBMI <= 30 ? 'избыточный вес': 'ожирение'} (ИМТ > ${oPat.pkBMI} кг/м2)`)) : '';
     oPat.pkBMI > 30 ? aRFVal.push('1100000100000000') : '';
     oPat.pkBMI > 30 && oPat.pkBMI < 40 ? aRFVal.push('1000000100001010') : '';
@@ -181,8 +179,23 @@ function countRF() {
     oPat.pkBMI > 40 ? aRFVal.push('1000000000002000') : '';
 
     oPat.pkIsGenAnesth ? (aRFVal.push('10000001000000000'), oPat.pkGeneralListOfRF.push(' общая анестезия')) : '';
+    oPat.pkIsSpinalAnesth ? (aRFVal.push('1000000001000000'), oPat.pkGeneralListOfRF.push(' люмбальная пункция')) : '';
+
     oPat.pkWeekOfPregnancy ? oPat.pkGeneralListOfRF.push(` беременность ${oPat.pkWeekOfPregnancy} недель`): '';
     oPat.pkPostpartum ? oPat.pkGeneralListOfRF.push(` ранний послеродовый период`): '';
+
+    if ($('#liCC').hasClass('list-group-item-secondary')) {
+        let creatinVal = $('#inpCreatinineVal').val() ? $('#inpCreatinineVal').val() : 94,
+            creatinUnits = $('#slctCrUnitsGroup').val(),
+            vRace = ($('#chkRaceB').is(':checked')) ? 1 : 0;
+        oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, vRace, creatinVal, creatinUnits)[0];
+        oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, vRace, creatinVal, creatinUnits)[1];
+    } else {
+        $('#liGlomerFiltrRate30_59').hasClass('list-group-item-secondary') ? (oPat.pkGFR = 59, oPat.pkCC = 72) : $('#liGlomerFiltrRateLess30').hasClass('list-group-item-secondary') ? (oPat.pkGFR = 29, oPat.pkCC = 40) : (oPat.pkGFR = 80, oPat.pkCC = 94);
+    }
+
+    console.log(`GFR: ${oPat.pkGFR}, CC ${oPat.pkCC}`);
+    oPat.pkGFR < 30 ? aRFVal.push('1000001001000000'): '';
 
     let selectedRF = [];
     $.merge(selectedRF, $('#accListRF button.btn-secondary'));
@@ -203,18 +216,6 @@ function countRF() {
     });
 
     console.log(aRFVal, oPat.pkGeneralListOfRF, oPat);
-
-    if ($('#liCC').hasClass('list-group-item-secondary')) {
-        let creatinVal = $('#inpCreatinineVal').val() ? $('#inpCreatinineVal').val() : 94,
-            creatinUnits = $('#slctCrUnitsGroup').val(),
-            vRace = ($('#chkRaceB').is(':checked')) ? 1 : 0;
-        oPat.pkCC = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, vRace, creatinVal, creatinUnits)[0];
-        oPat.pkGFR = calcCCAndGFR(oPat.pkGender, oPat.pkAge, oPat.pkWeight, vRace, creatinVal, creatinUnits)[1];
-    } else {
-        $('#liGlomerFiltrRate30_59').hasClass('list-group-item-secondary') ? (oPat.pkGFR = 59, oPat.pkCC = 72) : $('#liGlomerFiltrRateLess30').hasClass('list-group-item-secondary') ? (oPat.pkGFR = 29, oPat.pkCC = 40) : (oPat.pkGFR = 80, oPat.pkCC = 94);
-    }
-
-    console.log(`GFR: ${oPat.pkGFR}, CC ${oPat.pkCC}`);
 
     let aForCounter = [oPat.pkAge, oPat.pkIsOrNoSurg, oPat.pkOperTimeMore60, oPat.pkGradeOfOper];
 

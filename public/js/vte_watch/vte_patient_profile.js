@@ -96,6 +96,7 @@ function goNext() {
     localStorage.setItem('Patient', serialObj);
     oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): $(location).attr('href', '/vte_patient_list_rf');
 
+
     // oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): $(location).attr('href', '/vte_patient_list_rf');
 
 }

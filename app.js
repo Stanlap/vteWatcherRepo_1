@@ -140,6 +140,11 @@ app.get('/vte_reference', auth, (req, res) => {
         title: 'vte Watcher Reference Page',
     });
 });
+app.get('/vte_scales', auth, (req, res) => {
+    res.render('vte_watch_ejs/vte_scales', {
+        title: 'vte Watcher Scales Page',
+    });
+});
 app.get('/vte_patient_profile', auth, (req, res) => {
     res.render('vte_watch_ejs/vte_patient_profile', {
         title: 'vte Watcher Patient Profile Page',

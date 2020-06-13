@@ -28,3 +28,4 @@ const printMessage = value => {
     }
 }
 ws.onmessage = response => printMessage(response.data);
+$('#btnTwo').on('click', ()=> window.close());

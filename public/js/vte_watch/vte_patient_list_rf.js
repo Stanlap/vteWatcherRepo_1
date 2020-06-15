@@ -1,6 +1,16 @@
-let oPat = JSON.parse(localStorage.getItem('Patient'));
-localStorage.removeItem('Patient')
-console.log(oPat);
+let aPat = [], aStepBack= [];
+aPat = JSON.parse(localStorage.getItem('Patient'));
+aStepBack = JSON.parse(localStorage.getItem('StepBack'));
+
+let oSc = JSON.parse(localStorage.getItem('objScalesVTE')),
+oPatProto = aPat[aPat.length - 1],
+oPat ={...oPatProto};
+console.log(aStepBack, aPat, oPat);
+
+$('#aStepBack').on('click', () => {
+    doStepBack(aPat, 'Patient');
+    doStepBack(aStepBack, 'StepBack');
+}).prop({'href': aStepBack[aStepBack.length - 1]});
 
 creatMirrorRF();
 $('#accListRF .card, #accListRF li,  #accListRF .btnSingleRF, span.reference').hide();
@@ -232,9 +242,17 @@ $.post('/count', {
 function (data) {
     localStorage.setItem('objScalesVTE', data);
 });
-serialObj = JSON.stringify(oPat);
-localStorage.setItem('Patient', serialObj);
+// aPat.push(oPat);
+// serialObj = JSON.stringify(aPat);
+// localStorage.setItem('Patient', serialObj);
+//     $(location).attr('href', '/vte_concl');
+aStepBack.push('/vte_patient_list_rf');
+localStorage.setItem('StepBack', JSON.stringify(aStepBack));
+    aPat.push(oPat);
+    localStorage.setItem('Patient', JSON.stringify(aPat));
     $(location).attr('href', '/vte_concl');
+
+
 }
 
 $('#btnOne').on('click', countRF);

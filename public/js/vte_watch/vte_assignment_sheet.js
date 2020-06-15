@@ -1,8 +1,24 @@
 $(document).ready(function () {
+
+    let aPat = [], aStepBack= [];
+    aPat = JSON.parse(localStorage.getItem('Patient'));
+    aStepBack = JSON.parse(localStorage.getItem('StepBack'));
+    
+    oPatProto = aPat[aPat.length - 1],
+    oPat ={...oPatProto};
+    
+    console.log(aStepBack, aPat, oPat);
+    
+    $('#aStepBack').on('click', () => {
+        doStepBack(aPat, 'Patient');
+        doStepBack(aStepBack, 'StepBack');
+    }).prop({'href': aStepBack[aStepBack.length - 1]});
+
+
+
     let aLineOfFuncs = [],
-        oPat = JSON.parse(localStorage.getItem('Patient')),
         oUsr = JSON.parse(localStorage.getItem('User'));
-    localStorage.removeItem('Patient');
+    // localStorage.removeItem('Patient');
     console.log(oPat, oUsr);
 
     $('<div class="modal" tabindex="-1" role="dialog" id="#divModal" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>Вы укажете ФИО, № палаты, № истории б-ни пациента?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnModalYes_1">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnModalNo_1">Нет</button></div></div></div></div>').modal('show');
@@ -12,16 +28,16 @@ $(document).ready(function () {
     let vAgreement = '',
         vTblAssignSheet = '';
 
-        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl)));
-        oPat.aOrdersContainer =[];
-    oPat.pkIsOrNoSurg ? (       
+    relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl)));
+    oPat.aOrdersContainer = [];
+    oPat.pkIsOrNoSurg ? (
         oPat.aOrdersContainer.push(['компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]),
         oPat.aOrdersContainer.push(['активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]])
     ) : '';
     console.log(oPat.aOrdersContainer);
     let aVTEPrPlan = [];
     $(oPat.aOrdersContainer).each((ind, el) => aVTEPrPlan.push(' ' + el[0]));
-
+console.log(oPat.aOrdersContainer);
     $('<h5/>').prop({
             id: 'invitToAct_1',
             class: 'invits'
@@ -36,7 +52,6 @@ $(document).ready(function () {
 
     clearValues();
     executeFuncsLine();
-
 
     function clearValues() {
         $('.invits').html('');
@@ -57,13 +72,13 @@ $(document).ready(function () {
             id: 'divDialog_0_0'
         }).appendTo('#dialog_0')
         $('<input/>').prop({
-                id: 'inpText_0',
-                type: 'text',
-                class: 'form-control',
-                placeholder: 'Фамилия, имя, отчество',
-                'aria-label': 'Имя пользователя',
-                'aria-describedby': 'basic-addon1'
-            }).appendTo('#divDialog_0_0');
+            id: 'inpText_0',
+            type: 'text',
+            class: 'form-control',
+            placeholder: 'Фамилия, имя, отчество',
+            'aria-label': 'Имя пользователя',
+            'aria-describedby': 'basic-addon1'
+        }).appendTo('#divDialog_0_0');
         $('<div/>').prop({
             class: 'input-group mb-3',
             id: 'divDialog_0_1'
@@ -110,7 +125,7 @@ $(document).ready(function () {
         $('#invitToAct_1').html('Проверьте лист назначений:');
         $('#dialog_0').show();
         $('<table/>').prop({
-            class: 'table table-bordered table-sm table-responsive table-striped table-hover',
+                class: 'table table-bordered table-sm table-responsive table-striped table-hover',
                 id: 'tblAssignSheet',
             })
             .appendTo('#dialog_0');
@@ -165,10 +180,9 @@ $(document).ready(function () {
 
     function defineAssignSheet() {
         console.log('defineAssignSheet');
-        $('header, a, p, footer, input, #invitToAct_1, button').hide();
-        // vTblAssignSheet = $('body').html();
+        $('header, footer, #invitToAct_1, #btnOne').hide();
         vTblAssignSheet = printDoc($('body').html(), 1);
-        $('header, a, p, footer, input, #invitToAct_1, button').show();
+        $('header, footer, #invitToAct_1, #btnOne').show();
         $('#dialog_0').empty();
         aLineOfFuncs = [askAgreement, askPrintAndSave];
         clearValues();
@@ -182,14 +196,15 @@ $(document).ready(function () {
         $('<div/>').prop({
             contenteditable: true,
             id: 'taDialog_0'
-        }).css({'overflow': 'auto'}).html(fillAgreement()).appendTo('#dialog_0');
+        }).css({
+            'overflow': 'auto'
+        }).html(fillAgreement()).appendTo('#dialog_0');
         $('#btnOne').on('click', defineAgreement);
     }
 
     function defineAgreement() {
         console.log('askAgreement');
         vAgreement = $('#taDialog_0').html();
-        // printDoc(vAgreement);
         $('#dialog_0').empty();
         clearValues();
         executeFuncsLine();
@@ -202,7 +217,7 @@ $(document).ready(function () {
         ${oPat.pkName ? oPat.pkName : '________________________________________________________'}
         получил  разъяснения  по  поводу  необходимости  профилактики тромбоэмболии
         легочной  артерии,  информацию  об  особенностях,  длительности  течения  и
-        прогнозе этого осложнения в послеоперационном периоде. ${oPat.pkGeneralListOfRF !== 'отсутствуют' ? 'У меня имеются риск-факторы развития ВТЭО: ' + oPat.pkGeneralListOfRF + '.': ''} ${oPat.pkAllChoosedOperations.length > 0 ? 'Мне предстоит оперативное вмешательство: ' + oPat.pkAllChoosedOperations + '.': ''} ${oPat.pkIsCentrAVAccess && !oPat.pkHasCentrAVAccess ? 'Мне планируется установка центрального венозного (артериального) катетера.': ''} ${oPat.pkIsSpinalAnesth ? 'Оперативное вмешательство будет выполнено под с/м анестезией.': ''} ${aVTEPrPlan.length > 0 ? `Краткий план назначенной мне профилактики ВТЭО: ${aVTEPrPlan}.`: ''}
+        прогнозе этого осложнения в послеоперационном периоде. ${oPat.pkGeneralListOfRF !== 'отсутствуют' ? 'У меня имеются риск-факторы развития ВТЭО: ' + oPat.pkGeneralListOfRF + '.': ''} ${oPat.pkAllChoosedOperations > 0 ? 'Мне предстоит оперативное вмешательство: ' + oPat.pkAllChoosedOperations + '.': ''} ${oPat.pkIsCentrAVAccess && !oPat.pkHasCentrAVAccess ? 'Мне планируется установка центрального венозного (артериального) катетера.': ''} ${oPat.pkIsSpinalAnesth ? 'Оперативное вмешательство будет выполнено под с/м анестезией.': ''} ${aVTEPrPlan.length > 0 ? `Краткий план назначенной мне профилактики ВТЭО: ${aVTEPrPlan}.`: ''}
         ${oPat.pkStartDateOfVTEProphyl ? 'Начало профилактики ВТЭО: ' + convertDateToRuFormat(new Date(oPat.pkStartDateOfVTEProphyl)) + ' г.': ''} 
         Мне даны полные разъяснения о ее целях и продолжительности, возможных неблагоприятных эффектах лекарственных средств, а также о том, что предстоит мне делать в случае их возникновения.
         Я извещен о необходимости соблюдать режим в ходе профилактики, немедленно сообщать врачу о любом ухудшении самочувствия.
@@ -213,7 +228,6 @@ $(document).ready(function () {
         Беседу провел врач ${oUsr.surnameAndInitials} (_______________)      ${convertDateToRuFormat(new Date())} г.
         <p>Пациент ${oPat.pkName ? oPat.pkName: '__________________________________'} (_______________)      ${convertDateToRuFormat(new Date())} г.</p>`;
     }
-
 
     function printDoc(item_1, pr = 0) {
         nick = 0;
@@ -228,28 +242,11 @@ $(document).ready(function () {
         return vWin;
     }
 
-
     function askPrintAndSave() {
         console.log('askPrintAndSave');
-        $('#invitToAct_1').html('Дальнейшие действия с документами:');
-        // $('#dialog_0').show();
-        // $('<label/>').attr({
-        //     for: 'chkB_0'
-        // }).html('Распечатать').appendTo('#dialog_0');
-        // $('<input/>').prop({
-        //     id: 'chkB_0',
-        //     type: 'checkbox',
-        //     checked: 'checked'
-        // }).appendTo('#dialog_0');
-        // $('<br>').appendTo('#dialog_0');
-        // $('<label/>').attr({
-        //     for: 'chkB_1'
-        // }).html('Сохранить').appendTo('#dialog_0');
-        // $('<input/>').prop({
-        //     id: 'chkB_1',
-        //     type: 'checkbox'
-        // }).appendTo('#dialog_0');
-        $('#btnOne').text('Печать');
+        $('#invitToAct_1').html('Распечатать документы?');
+        $('#dialog_0').show();
+        $('#btnOne').text('Принять');
         $('#btnOne').on('click', definePrintAndSave);
     }
 
@@ -258,69 +255,7 @@ $(document).ready(function () {
         vTblAssignSheet.print();
         printDoc(vAgreement);
         $('#if_1').remove();
-        // $('#chkB_1').prop('checked') ? '' : '';
-        // $('#dialog_0').empty();
         clearValues();
-        // executeFuncsLine();
         $(location).attr('href', '/vte_patient_profile');
     }
-    // $('<div/>').prop({
-    //     id: 'to_print',
-    // })
-    // .html('Probe to print')
-    // .appendTo('#dialogMain');
-
-
-    //     let html_to_print=vAgreement
-    // let iframe=$('<iframe id="if_1">'); // создаем iframe в переменную
-    // $('body').append(iframe); //добавляем эту переменную с iframe в наш body (в самый конец)
-    // let doc = $('#if_1')[0].contentDocument || $('#if_1')[0].contentWindow.document;
-    // let win = $('#if_1')[0].contentWindow || $('#if_1')[0];
-    // doc.getElementsByTagName('body')[0].innerHTML=html_to_print;
-    // win.print();
-
-    // $('iframe').remove();
-
-
-
-
-
-    // if (window.webkitRequestFileSystem) {
-    //     console.log("fileSystem api  поддерживается!");
-    // } else {
-    //     console.log("fileSystem api не поддерживается!");
-
-    //     function error(err) {
-    //         console.log(err);
-    //     }
-
-    //     function success(file) {
-    //         var fileSystem = file.root.createReader();
-    //         fileSystem.readEntries(function (results) {
-    //             console.log(results);
-    //         });
-
-    //     }
-
-    //     window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, success, error);
-    //     var fileSystem = file.root.createReader();
-
-    //     function createFile(name, content, type) {
-    //         window.webkitRequestFileSystem(window.TEMPORARY, 1024 * 1024, function (file) {
-    //             var strblob = new Blob([content], {
-    //                 type: type
-    //             });
-    //             file.root.getFile(name, {
-    //                 create: true
-    //             }, function (fileEntry) {
-    //                 fileEntry.createWriter(function (fileWriter) {
-    //                     fileWriter.write(strblob);
-    //                     console.log(fileEntry.toURL());
-    //                 }, error);
-    //             }, error);
-    //         }, error);
-    //     }
-
-    //     createFile("test.html", "<h1>Секретная страница fileSystem api! Тссс...</h1>", "text/html");
-    // }
 });

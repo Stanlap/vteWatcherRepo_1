@@ -1,7 +1,18 @@
-let oSc = JSON.parse(localStorage.getItem('objScalesVTE'));
-console.log(oSc);
-let oPat = JSON.parse(localStorage.getItem('Patient'));
-console.log(oPat);
+let aPat = [], aStepBack= [];
+aPat = JSON.parse(localStorage.getItem('Patient'));
+aStepBack = JSON.parse(localStorage.getItem('StepBack'));
+
+let oSc = JSON.parse(localStorage.getItem('objScalesVTE')),
+oPatProto = aPat[aPat.length - 1],
+oPat ={...oPatProto};
+
+console.log(aStepBack, aPat, oPat);
+
+$('#aStepBack').on('click', () => {
+    doStepBack(aPat, 'Patient');
+    doStepBack(aStepBack, 'StepBack');
+    localStorage.removeItem('objScalesVTE');
+}).prop({'href': aStepBack[aStepBack.length - 1]});
 
 const ballsEnding = item => {
     return item === 1 ? 'балл' : item > 1 && item < 5 ? 'балла' : 'баллов';
@@ -86,6 +97,11 @@ $('.textContainer p:contains("высокий")').addClass('text-danger');
 $('.textContainer p:contains("умеренный")').addClass('text-warning');
 
 $('#btnOne').on('click', function () {
+    aStepBack.push('/vte_concl');
+    localStorage.setItem('StepBack', JSON.stringify(aStepBack));
+        aPat.push(oPat);
+        localStorage.setItem('Patient', JSON.stringify(aPat));
+
     if (oPat.pkRiskVTE) {
         if (oPat.pkHighRiskOfBleed) {
             initModal('Риск кровотечения высокий. Отменить медикаментозную профилактику ВТЭО?', 1);

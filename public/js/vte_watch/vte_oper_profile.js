@@ -1,7 +1,26 @@
 'use strict';
-let oPat = JSON.parse(localStorage.getItem('Patient'));
-localStorage.removeItem('Patient')
-console.log(oPat);
+// let oPat = JSON.parse(localStorage.getItem('Patient'));
+// localStorage.removeItem('Patient')
+// console.log(oPat);
+
+let aPat = [], aStepBack= [];
+aPat = JSON.parse(localStorage.getItem('Patient'));
+aStepBack = JSON.parse(localStorage.getItem('StepBack'));
+console.log(aStepBack, aPat);
+
+let oPatProto = aPat[aPat.length - 1],
+oPat ={...oPatProto};
+
+console.log(aStepBack, aPat, oPat);
+
+$('#aStepBack').on('click', () => {
+    doStepBack(aPat, 'Patient');
+    doStepBack(aStepBack, 'StepBack');
+}).prop({'href': aStepBack[aStepBack.length - 1]});
+
+
+
+
 $('#divCreateOwnOpProf').hide();
 !oPat.pkIsOrNoSurg || !oPat.pkSurgProfiles ? $('#divOper').hide() : '';
 oPat.pkInvasions ? $('#txtInvasions').focus() : $('#txtInvasions').hide();
@@ -140,9 +159,14 @@ oPat.pkGradeOfOper = getMaxOfArray(aOperDifficultyGrades.map(Number));
 
 ($('#chkTimeOfSurg').is(':checked')) ? oPat.pkOperTimeMore60 = true: '';
 
-console.log(oPat);
-let serialObj = JSON.stringify(oPat);
-localStorage.setItem('Patient', serialObj);
+aPat.push(oPat);
+aStepBack.push('/vte_oper_profile');
+localStorage.setItem('StepBack', JSON.stringify(aStepBack));
+localStorage.setItem('Patient', JSON.stringify(aPat));
+
+// console.log(oPat);
+// let serialObj = JSON.stringify(oPat);
+// localStorage.setItem('Patient', serialObj);
 $(location).attr('href', '/vte_patient_list_rf');
 }
 

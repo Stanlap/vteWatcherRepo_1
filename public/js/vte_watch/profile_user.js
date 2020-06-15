@@ -28,7 +28,7 @@ $('#btn1').on('click', function () {
     this.form.reset();
 });
 
-$('#btn2').on('click', function () {
+// $('#btn2').on('click', function () {
     localStorage.getItem('User') ? (
         oUser = JSON.parse(localStorage.getItem('User')),
         $('#name').val(oUser.name),
@@ -40,14 +40,17 @@ $('#btn2').on('click', function () {
     ) : '';
     $("#success-alert").hide().html('');
 
-});
-$('#btn3').on('click', function () {
+// });
+
+$('#btn2').on('click', function () {
     $("#success-alert").hide().html('');
 });
+
+$("#btn3").click(function() {
+    window.close();
+  });
 
 $('#btn4').on('click', function () {
     $("#success-alert").show().html(`Пользователь ${oUser.surnameAndInitials} удален.`);
     localStorage.removeItem('User');
 });
-$("#btnAlert").click(function() {
-  });

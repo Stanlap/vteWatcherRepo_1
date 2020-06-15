@@ -1,5 +1,9 @@
 'use strict';
-let oPat = {
+localStorage.removeItem('Patient');
+
+let aPat = [],
+aStepBack= [],
+oPat = {
         pkBirthDateOfPatient: '',
         pkAge: 0,
         pkHeight: 0,
@@ -24,9 +28,6 @@ $('#slctMedicalProfileOfPatient').on('click', function () {
         $(el).prop('value') < 3 ? $('#lblIsOrNoSurg').hide() :
             ($(el).prop('value') > 2 && $(el).prop('value')) < 10 ? $('#lblIsOrNoSurg').show() : '';
     });
-});
-$('#btnTwo').on('click', function () {
-    $('#slctMedicalProfileOfPatient option').prop('selected') ? $('#chkMale').prop('disabled', true) : $('#chkMale').prop('disabled', false);
 });
 
 function getCurrentAge(date) {
@@ -92,9 +93,15 @@ function goNext() {
     oPat.pkCalculateRiskOfBleeding = $('#chkCalculateRiskOfBleeding').prop('checked') ? true : false;
     oPat.pkInvasions = $('#chkInvasions').prop('checked') ? true : false;
 
-    let serialObj = JSON.stringify(oPat);
-    localStorage.setItem('Patient', serialObj);
+    aPat.push(oPat);
+    aStepBack.push('/vte_patient_profile');
+    localStorage.setItem('StepBack', JSON.stringify(aStepBack));
+    localStorage.setItem('Patient', JSON.stringify(aPat));
     oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): $(location).attr('href', '/vte_patient_list_rf');
+
+    // let serialObj = JSON.stringify(oPat);
+    // localStorage.setItem('Patient', serialObj);
+    // oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): $(location).attr('href', '/vte_patient_list_rf');
 
 
     // oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile'): oPat.pkMedProfiles.includes(10) ? $(location).attr('href', '/vte_obst_profile'): $(location).attr('href', '/vte_patient_list_rf');

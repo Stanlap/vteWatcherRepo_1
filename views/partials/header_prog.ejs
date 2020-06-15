@@ -14,7 +14,7 @@
                             class="fa fa-home fa-2x" aria-hidden="true"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="tooltip" title="Назад на один шаг"><i
+                    <a class="nav-link" id="aStepBack" href="#" data-toggle="tooltip" title="Назад на один шаг"><i
                             class="fa fa-angle-left fa-2x" aria-hidden="true"></i></a>
                 </li>
                 <!-- <li class="nav-item">
@@ -22,7 +22,7 @@
                             class="fa fa-angle-right fa-2x" aria-hidden="true"></i></a>
                 </li> -->
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile_user" data-toggle="tooltip" title="Профиль пользователя программы"><i
+                    <a class="nav-link" href="/profile_user" data-toggle="tooltip" title="Профиль пользователя"  target="_blank"><i
                             class="fa fa-user-md fa-2x" aria-hidden="true"></i></a>
                 </li>
                 <li class="nav-item">
@@ -33,3 +33,9 @@
         </div>
     </nav>
 </header>
+<script>
+    const doStepBack = (item, title) => {
+    item.pop();
+    localStorage.setItem(title, JSON.stringify(item));
+};
+</script>

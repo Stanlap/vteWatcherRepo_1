@@ -1,8 +1,21 @@
 'use strict';
+let aPat = [], aStepBack= [];
+aPat = JSON.parse(localStorage.getItem('Patient'));
+aStepBack = JSON.parse(localStorage.getItem('StepBack'));
 
-let oPat = JSON.parse(localStorage.getItem('Patient'));
-localStorage.removeItem('Patient')
-console.log(oPat);
+let oSc = JSON.parse(localStorage.getItem('objScalesVTE')),
+oPatProto = aPat[aPat.length - 1],
+oPat ={...oPatProto};
+console.log(aStepBack, aPat, oPat);
+
+$('#aStepBack').on('click', () => {
+    doStepBack(aPat, 'Patient');
+    doStepBack(aStepBack, 'StepBack');
+}).prop({'href': aStepBack[aStepBack.length - 1]});
+
+// let oPat = JSON.parse(localStorage.getItem('Patient'));
+// localStorage.removeItem('Patient')
+// console.log(oPat);
 
 $("#inpWeekOfPregnancy, #inpDateOfChildbirth, #btnOne").hide();
 let vCounter = 0;
@@ -32,8 +45,14 @@ function goToRF() {
     oPat.pkPregnancyOrChildbirth = oPat.pkWeekOfPregnancy || oPat.pkDateOfChildbirth ? true : false;
     oPat.pkPostpartum= oPat.pkDateOfChildbirth? true: false;
     // console.log(oPat);
-    let serialObj = JSON.stringify(oPat);
-    localStorage.setItem('Patient', serialObj);
+
+    aPat.push(oPat);
+    aStepBack.push('/vte_obst_profile');
+    localStorage.setItem('StepBack', JSON.stringify(aStepBack));
+    localStorage.setItem('Patient', JSON.stringify(aPat));
+
+    // let serialObj = JSON.stringify(oPat);
+    // localStorage.setItem('Patient', serialObj);
     oPat.pkIsOrNoSurg || oPat.pkInvasions ? $(location).attr('href', '/vte_oper_profile') : $(location).attr('href', '/vte_patient_list_rf');
 }
 

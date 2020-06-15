@@ -12,8 +12,21 @@ $(document).ready(function () {
         vTakesVTEProph = true;
     });
 
-    let oPat = JSON.parse(localStorage.getItem('Patient')),
-        aPairs = [],
+    let aPat = [], aStepBack= [];
+    aPat = JSON.parse(localStorage.getItem('Patient'));
+    aStepBack = JSON.parse(localStorage.getItem('StepBack'));
+    
+    oPatProto = aPat[aPat.length - 1],
+    oPat ={...oPatProto};
+    
+    console.log(aStepBack, aPat, oPat);
+    
+    $('#aStepBack').on('click', () => {
+        doStepBack(aPat, 'Patient');
+        doStepBack(aStepBack, 'StepBack');
+    }).prop({'href': aStepBack[aStepBack.length - 1]});
+
+    let aPairs = [],
         oDrugsPairs = {},
         aChMeds = [],
         aLineOfFuncs = [],
@@ -31,8 +44,6 @@ $(document).ready(function () {
             'Bemiparinum natrium': 'Бемипарин натрия',
             'Heparin sodium': 'Гепарин натрия'
         };
-
-    console.log(oPat);
 
 
     oPat.pkINRDates = [];
@@ -895,9 +906,13 @@ $(document).ready(function () {
     }
 
     function goToAssignSheet() {
-        oPat.pkStartDateOfVTEProphyl = aStartDates[0];
-        let serialObj = JSON.stringify(oPat);
-        localStorage.setItem('Patient', serialObj);
+        aStepBack.push('/vte_drug');
+        localStorage.setItem('StepBack', JSON.stringify(aStepBack));
+            aPat.push(oPat);
+            localStorage.setItem('Patient', JSON.stringify(aPat));
+            oPat.pkStartDateOfVTEProphyl = aStartDates[0];
+        // let serialObj = JSON.stringify(oPat);
+        // localStorage.setItem('Patient', serialObj);
         $(location).prop('href', '/vte_assignment_sheet');
     }
 

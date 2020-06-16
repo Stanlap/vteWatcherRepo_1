@@ -14,11 +14,8 @@ $(document).ready(function () {
         doStepBack(aStepBack, 'StepBack');
     }).prop({'href': aStepBack[aStepBack.length - 1]});
 
-
-
     let aLineOfFuncs = [],
         oUsr = JSON.parse(localStorage.getItem('User'));
-    // localStorage.removeItem('Patient');
     console.log(oPat, oUsr);
 
     $('<div class="modal" tabindex="-1" role="dialog" id="#divModal" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>Вы укажете ФИО, № палаты, № истории б-ни пациента?</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnModalYes_1">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnModalNo_1">Нет</button></div></div></div></div>').modal('show');
@@ -28,12 +25,9 @@ $(document).ready(function () {
     let vAgreement = '',
         vTblAssignSheet = '';
 
-    relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl)));
-    oPat.aOrdersContainer = [];
-    oPat.pkIsOrNoSurg ? (
-        oPat.aOrdersContainer.push(['компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]),
-        oPat.aOrdersContainer.push(['активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]])
-    ) : '';
+    let relDayOfManipul = oPat.pkDateOfOper? 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(oPat.pkStartDateOfVTEProphyl))): 0;
+    oPat.aOrdersContainer.push(['компрессионный трикотаж на ноги', [relDayOfManipul, 1 + relDayOfManipul, 2 + relDayOfManipul]]);
+    oPat.pkIsOrNoSurg ? oPat.aOrdersContainer.push(['активизация пациента', [1 + relDayOfManipul, 2 + relDayOfManipul, 3 + relDayOfManipul]]) : '';
     console.log(oPat.aOrdersContainer);
     let aVTEPrPlan = [];
     $(oPat.aOrdersContainer).each((ind, el) => aVTEPrPlan.push(' ' + el[0]));

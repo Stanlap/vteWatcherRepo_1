@@ -1,11 +1,5 @@
 $(document).ready(function () {
     let vTakesVTEProph = false;
-    // const initModal = (quest, ind) => {
-    //     $(`<div class="modal" tabindex="-1" role="dialog" id="#divModal_${ind}" data-backdrop="static"><div class="modal-dialog" role="document" ><div class="modal-content"><div class="modal-body"><p>${quest}</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal"  id="btnMYes_${ind}">Да</button><button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnMNo_${ind}">Нет</button></div></div></div></div>`).modal('show');
-    // };
-
-    // const initAlert = msg => $(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${msg}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`);
-
 
     initModal('Пациент уже получает антикоагулянтную терапию?', 1);
     $('#btnMYes_1').on('click', () => {
@@ -19,7 +13,7 @@ $(document).ready(function () {
     oPatProto = aPat[aPat.length - 1],
     oPat ={...oPatProto};
     
-    console.log(aStepBack, aPat, oPat);
+    console.log(oPat);
     
     $('#aStepBack').on('click', () => {
         doStepBack(aPat, 'Patient');
@@ -44,19 +38,13 @@ $(document).ready(function () {
             'Bemiparinum natrium': 'Бемипарин натрия',
             'Heparin sodium': 'Гепарин натрия'
         };
-
-
+        
     oPat.pkINRDates = [];
     oPat.pkBridgeTherMedGroup = '';
     oPat.pkDaysSincePrevAnalysisToStartVTEProph = 0;
     oPat.aOrdersContainer = [];
 
     const vXaInhibitors = tGR => tGR === 'Эдоксабан' || tGR === 'Апиксабан' || tGR === 'Ривароксабан' || tGR === 'Дабигатрана этексилат';
-
-    localStorage.removeItem('Patient');
-
-
-
 
     $('<h5/>').prop({
             id: 'invitToAct_1',
@@ -125,24 +113,7 @@ $(document).ready(function () {
         .appendTo('#dialog_4');
     $('<br>').prop({}).appendTo('#divMainDialog');
 
-
-    // $(`${addDatePicker(formatDate(), 1)}`).appendTo('#divMainDialog');
-
-    // $('<input/>').prop({
-    //     id: 'dP_1',
-    //     type: 'date',
-    //     class: 'form-control',
-    //     value: correctDate(addDays(new Date(), 0))
-    // })
-    // .appendTo('#divMainDialog');
-
-    // console.log($('#dP_1').val());
-
-    // const addDatePicker = (vDate, ind) => `<input class="form-control" type="date" value= "${vDate}" id="inpDate_${ind}">`;
-
-
     oPat.pkStartDateOfVTEProphyl = oPat.pkDateOfOper ? oPat.pkDateOfOper : formatDate();
-    console.log(oPat.pkStartDateOfVTEProphyl);
 
     oPat.pkRiskVTE === 1 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 3500'] : oPat.pkRiskVTE === 2 ? delete oDrugsList['Bemiparinum natrium'].drugs['Zibor 2500'] : '';
 
@@ -312,8 +283,6 @@ $(document).ready(function () {
         executeFuncsLine();
     }
 
-
-
     function tryChooseDrugGroup() {
         console.log('tryChooseDrugGroup');
         if ($('#select_1').val() === 'Гепарин натрия' && oPat.pkPullOfSurg && tCtr[0] === 0) {
@@ -354,27 +323,6 @@ $(document).ready(function () {
             });
         };
     }
-
-    // function tryChooseDrugGroup() {
-    //     let vDec = false;
-    //     console.log('tryChooseDrugGroup');
-    //     if (!oPat.pkIsOrNoSurg && oPat.pkPullOfSurg && $('#select_1').val() === 'Гепарин натрия' && tCtr[0] === 0) {
-    //         vDec = confirm('Гепарин противопоказан при офтальмологических операциях. Отказаться от данного препарата?');
-    //         vDec ? ($('#select_1 :selected').remove()) : tCtr[0] = 1;
-    //     };
-    //     if ($('#select_1').val() === 'Гепарин натрия' && oPat.pkDiabetes && tCtr[1] === 0) {
-    //         vDec = confirm('Гепарин противопоказан при наличии диабетической ретинопатии. Отказаться от данного препарата?');
-    //         vDec ? ($('#select_1 :selected').remove()) : tCtr[1] = 0;
-    //     };
-    //     if ($('#select_1').val() === 'Ацетилсалициловая кислота' && tCtr[2] === 0) {
-    //         vDec = confirm('Ацетилсалициловая кислота противопоказана при приеме с метотрексатом в дозе 15 мг в неделю и более, бронх. астме, индуцированной приемом салицилатов. Отказаться от данного препарата?');
-    //         vDec ? ($('#select_1 :selected').remove()) : tCtr[2] = 1;
-    //     };
-    //     if ($('#select_1').val() === 'Ривароксабан' && tCtr[3] === 0) {
-    //         vDec = confirm('Ривароксабан противопоказан при врожденном дефиците лактозы. Отказаться от данного препарата?');
-    //         vDec ? ($('#select_1 :selected').remove(), $('#select_1').val('')) : tCtr[3] = 1;
-    //     };
-    // }
 
     function askNameOfMedicine() {
         console.log('askNameOfMedicine');
@@ -669,13 +617,13 @@ $(document).ready(function () {
 
     function defineEndDateMedicineTaking() {
         oPat.pkStartDateOfVTEProphyl = oChoosDrug.endDateOfVTEProphyl = $('#inpDate_4').val();
-        relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0])));
+        oPat.pkDateOfOper? relDayOfManipul = 1 + Math.round(diffDates(new Date(oPat.pkDateOfOper), new Date(aStartDates[0]))): 0;
         oChoosDrug.aLine = fillLine(aStartDates[0], oChoosDrug.startDateOfVTEProphyl, oChoosDrug.endDateOfVTEProphyl);
         console.log(oChoosDrug.aLine);
         if (oChoosDrug.titleGroupCyr === 'Варфарин' && oPat.pkIsOrNoSurg && oChoosDrug.startDateOfVTEProphyl < oPat.pkDateOfOper && oPat.pkIsOrNoSurg && oChoosDrug.endDateOfVTEProphyl > oPat.pkDateOfOper) {
             aLineOfFuncs.unshift(askOfBridgeTherUsage);
         } else {
-            sheduleMedicineTaking();
+            sheduleSplitPeriod();
         };
         interactOfXaInhibAndVKA();
         $().alert('dispose');
@@ -732,12 +680,6 @@ $(document).ready(function () {
         executeFuncsLine();
     }
 
-    function sheduleMedicineTaking() {
-        if (oPat.pkIsOrNoSurg) {
-            sheduleSplitPeriod();
-        };
-    }
-
     function sheduleSplitPeriod() {
         aSplitPeriod = [relDayOfManipul, relDayOfManipul];
         console.log(oPat.pkDateOfOper, aStartDates[0], aSplitPeriod);
@@ -767,27 +709,10 @@ $(document).ready(function () {
             };
         };
         console.log(oChoosDrug.aLine);
-        oChoosDrug_2 = {
-            titleGroupCyr: oChoosDrug.titleGroupCyr,
-            titleGroupLat: oChoosDrug.titleGroupLat,
-            titleDrugLat: oChoosDrug.titleDrugLat,
-            titleDrugCyr: oChoosDrug.titleDrugCyr,
-            officDose: oChoosDrug.officDose,
-            singleDoseOfAspirin: oChoosDrug.singleDoseOfAspirin,
-            sheduleAspirinTakingDaily: oChoosDrug.sheduleAspirinTakingDaily,
-            singleProphDose: oChoosDrug.singleProphDose,
-            signature: oChoosDrug.signature,
-            realSingleDose: oChoosDrug.realSingleDose,
-            numberOfOfficDose: oChoosDrug.numberOfOfficDose,
-            frequencyOfDrugTaking: oChoosDrug.frequencyOfDrugTaking,
-            startDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
-            endDateOfVTEProphyl: oChoosDrug.startDateOfVTEProphyl,
-            minTreatPeriod: oChoosDrug.minTreatPeriod,
-            aLine: oChoosDrug.aLine
-        };
+        const oChoosDrug_2 = { ...oChoosDrug };
+        console.log(oChoosDrug_2);
         aChMeds.push(oChoosDrug_2);
-        // interactOfXaInhibAndVKA();
-        console.log(aChMeds);
+        console.log('aChMeds:' + aChMeds);
 
     }
 
@@ -856,7 +781,9 @@ $(document).ready(function () {
         $('#btnOne').on('click', function () {
             defineAnotherDrug();
         });
+
         $('#btnTwo').on('click', () => {
+            console.log(aChMeds);
             $(aChMeds).each((ind, el) => {
                 oPat.aOrdersContainer.push([el.signature, el.aLine]);
             });
@@ -906,13 +833,11 @@ $(document).ready(function () {
     }
 
     function goToAssignSheet() {
+        oPat.pkStartDateOfVTEProphyl = aStartDates[0];
         aStepBack.push('/vte_drug');
         localStorage.setItem('StepBack', JSON.stringify(aStepBack));
             aPat.push(oPat);
             localStorage.setItem('Patient', JSON.stringify(aPat));
-            oPat.pkStartDateOfVTEProphyl = aStartDates[0];
-        // let serialObj = JSON.stringify(oPat);
-        // localStorage.setItem('Patient', serialObj);
         $(location).prop('href', '/vte_assignment_sheet');
     }
 
@@ -922,7 +847,6 @@ let vBridge = false;
         $('#btnMYes_8').on('click', () => {
             vBridge = true;
         });
-        // vBridge = confirm('Планируется периоперационная мост-терапия?');
         !vBridge ? (clearValues(), executeFuncsLine()) : (
             oPat.pkIsSpinalAnesth ? initAlert('При спинальной анестезии предпочтительно использовать НМГ.').prependTo('#divDialogMain') : '',
             $('#invitToAct_1').html('Выберите группу препарата для мост-терапии:'),
@@ -944,7 +868,7 @@ let vBridge = false;
         $().alert('dispose');
         oPat.pkBridgeTherMedGroup = $('#select_1 :selected').val();
         console.log(oPat.pkBridgeTherMedGroup);
-        sheduleMedicineTaking();
+        sheduleSplitPeriod();
         oBridgeTherDrugsList = {};
         $('#select_1 option').remove();
         aLineOfFuncs.unshift(askNameOfMedicineForBridgeTher);
@@ -1062,14 +986,6 @@ let vBridge = false;
         $('<br>').appendTo('#dialog_5');
         $('#btnOne').on('click', definePrevLabExams);
     }
-
-
-
-
-
-
-
-
 
     function definePrevLabExams() {
         console.log('definePrevLabExams');
